@@ -1,9 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700&display=swap');
+
 .app {
-  width: 500px;
-  margin: 1em auto;
-  text-align: center;
+  margin: 0;
+  font-family: 'Plus Jakarta Sans';
 }
 
-.app img {
-  max-width: 150px;
+// =============================
+// Responsive
+// =============================
+
+@media screen and (max-width: 768px) {
+  .container {
+      width: 343px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+      width: 716px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .container {
+      width: 1376px;
+  }
 }
