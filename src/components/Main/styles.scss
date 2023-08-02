@@ -33,3 +33,13 @@
         font-weight: 700;
     }
 }
+
+// Swiper 
+.swiper-horizontal {
+    width: calc(100% + 30px);
+}
+
+.swiper-slide {
+    width: 280px!important;
+    margin-right: 30px;
+}
