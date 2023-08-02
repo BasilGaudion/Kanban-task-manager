@@ -1,0 +1,53 @@
+.header {
+    background: var(--white, #FFF);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 64px;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
+    
+    
+    &__container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__left-group {
+        display: flex;
+        align-items: center;
+    }
+
+    &__logo {
+        margin-right: 16px;
+    }
+
+    &__board-name {
+        margin-right: 8px;
+        color: var(--black, #000112);
+        font-size: 1.125rem;
+        font-weight: 700;
+    }
+
+    &__right-group {
+        display: flex;
+        align-items: center;
+    }
+
+    &__ellipsis {
+        cursor: pointer;
+        margin-left: 16px;
+    }
+
+    &__add-task {
+        width: 48px;
+        height: 32px;
+        background-color: #635FC7;
+        border-radius: 48px;
+        border: none;
+        color: #FFF;
+        font-size: 1.4rem;
+        opacity: 0.25;
+        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    }
+}
