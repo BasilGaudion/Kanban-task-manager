@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './styles.scss';
 import { LogoMobile, IconChevronDown, IconCross, IconVerticalEllipsis } from '../../assets';
 const Header = () => {
 
   return (
+    
     <header className='header'>
       <div className='header__container container'>
         <div className='header__left-group'>
@@ -12,10 +13,13 @@ const Header = () => {
           <img src={IconChevronDown} alt="" />
         </div>
         <div className='header__right-group'>
-          <button type='button' className='header__add-task'>
+          <button type='button' className='header__add-task header__add-task--disable'>
             +
           </button>
+          <button type='button' className='header__settings'>
           <img src={IconVerticalEllipsis} className='header__ellipsis'alt="" />
+          </button>
+          
         </div>
 
       </div>

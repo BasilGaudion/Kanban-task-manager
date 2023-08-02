@@ -1,13 +1,15 @@
 import React from 'react';
 import './styles.scss';
 import Header from '../../components/Header'
+import Main from '../../components/Main';
 
-const Home = () => {
+const Board = () => {
   return (
-    <div className="home">
+    <div className="Board">
       <Header />
+      <Main />
     </div>
   );
 };
 
-export default Home;
+export default Board;
