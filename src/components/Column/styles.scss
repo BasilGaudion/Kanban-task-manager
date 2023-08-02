@@ -1,0 +1,32 @@
+.column {
+    margin-top: 24px;
+
+    &__title-group {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    &__color {
+        display: block;
+        width: 15px;
+        height: 15px;
+        background-color: #49C4E5;
+        border-radius: 50%;
+    }
+
+    &__title {
+        color: var(--medium-grey, #828FA3);
+        font-size: .75rem;
+        font-weight: 700;
+        line-height: normal;
+        letter-spacing: 2.4px;
+        text-transform: uppercase;
+    }
+
+    &__tasks {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+}
