@@ -1,17 +1,18 @@
+// App.tsx
 import React from 'react';
 import AppRoutes from '../../utils/AppRoutes';
-import useDefaultProvider, { DefaultContext } from '../../utils/providers/useDefaultProvider';
+import { useModalProvider, ModalContext } from '../../utils/providers/useModalProvider';
 
 import './styles.scss';
 
 function App() {
-  const dataDefaultContext = useDefaultProvider();
+  const dataModalContext = useModalProvider();
 
   return (
     <div className="app">
-      <DefaultContext.Provider value={dataDefaultContext}>
+      <ModalContext.Provider value={dataModalContext}>
         <AppRoutes />
-      </DefaultContext.Provider>
+      </ModalContext.Provider>
     </div>
   );
 }
