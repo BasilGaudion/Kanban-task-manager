@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './styles.scss';
-import { IconVerticalEllipsis } from '../../assets';
+import { IconVerticalEllipsis } from '../../../assets';
 
 interface ModalViewTaskProps {
     handleClose: () => void;

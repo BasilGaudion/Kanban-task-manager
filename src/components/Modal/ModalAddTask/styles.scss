@@ -1,24 +1,6 @@
-@keyframes modal-open {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-}
+@import '../animations';
 
-@keyframes modal-closed {
-    0% { opacity: 1; }
-    100% { opacity: 0; }
-}
-
-@keyframes pop-in {
-    0% { transform: scale(0); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes pop-out {
-    0% { transform: scale(1); opacity: 1; }
-    100% { transform: scale(0); opacity: 0; }
-}
-
-.vt {
+.at {
     position: fixed;
     top: 0;
     left: 0;
@@ -43,11 +25,16 @@
     }
 
     &__container {
-        max-width: 343px;
+        width: 343px;
         border-radius: 6px;
         background: var(--white, #FFF);
         opacity: 1;
-        padding: 24px 24px 32px 24px;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+
+        // TODO bug blur when input are focused in responsive view 
 
         &.pop-in {
             animation-name: pop-in;
@@ -62,73 +49,98 @@
         }
     }
 
-    &__title-group {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 24px;
+    &__action {
+        color: var(--black, #000112);
+        font-family: Plus Jakarta Sans;
+        font-size: 1.125rem;
+        font-weight: 700;
+        line-height: normal;
     }
 
     &__title {
-        width: 274px;
-        color: var(--black, #000112);
-        font-size: 1.125rem;
-        font-style: normal;
-        font-weight: 700;
-        line-height: normal;
-    }
-
-    &__text {
-        width: 295px;
+        margin-bottom: 8px;
         color: var(--medium-grey, #828FA3);
-        font-size: .8125rem;
-        font-weight: 500;
-        line-height: 23px;
-        margin-bottom: 24px;
-    }
-
-    &__subtitle {
         font-size: .75rem;
-        color: var(--medium-grey, #828FA3);
-        font-weight: 700;
-        line-height: normal;
-        
-        &:first-of-type {
-            margin-bottom: 16px;
+    }
+
+    &__input {
+        border-radius: 4px;
+        border: 1px solid rgba(130, 143, 163, 0.25);
+        resize: none;
+        font-size: .8125rem;
+        line-height: 23px;
+        font-family: Plus Jakarta Sans;
+        padding: 8px 16px;
+
+        &::placeholder {
+            opacity: 0.5;
+            font-size: .8125rem;
+            line-height: 23px;
+            font-family: Plus Jakarta Sans;
         }
 
-        &:nth-of-type(2) {
-            margin-bottom: 8px;
+        &:focus {
+            outline: none;
+        }
+
+        &--title {
+            width: 295px;
+            height: 40px;
+        }
+
+        &--description {
+            width: 295px;
+            height: 112px;
+        }
+
+        &--subtask {
+            height: 40px;
+            width: 264px;
         }
     }
 
-    &__checkgroup {
+    &__subtasks {
         display: flex;
         flex-direction: column;
-        gap: 8px;
-        margin-bottom: 24px;
+        gap: 12px;
+        margin-bottom: 12px;
     }
 
-    &__check-item {
-        height: 59px;
-        border-radius: 4px;
-        background: var(--light-grey-light-bg, #F4F7FD);
+    &__subtask {
         display: flex;
-        align-items: center;
-        padding: 13px;
         gap: 16px;
-
-        label {
-            font-size: .75rem;
-            color: var(--black, #000112);
-            font-weight: 700;
-            line-height: normal;
-        }
+        align-items: center;
     }
 
-    &__checkbox:checked ~ label { 
-        text-decoration-line: line-through;
-        opacity: 0.5;
+    &__button {
+        width: 295px;
+        height: 40px;
+        border: none;
+        border-radius: 20px;
+        font-size: .8125rem;
+        font-family: Plus Jakarta Sans;
+        text-align: center;
+        font-weight: 700;
+        line-height: 23px;
+        transition: background-color 0.25s ease;
+
+        &--add {
+            background: rgba(99, 95, 199, 0.10);
+            color: var(--main-purple, #635FC7);
+
+            &:hover {
+                background: rgba(99, 95, 199, 0.20);
+            }
+        }
+
+        &--create {
+            background: var(--main-purple, #635FC7);
+            color: var(--white, #FFF);
+
+            &:hover {
+                background: var(--main-purple, #7672e2);
+            }
+        }
     }
 
     &__select {
@@ -151,9 +163,7 @@
             line-height: 23px;
         }
     }
-
 }
-
 
 .visuallyhidden { 
     position: absolute;
