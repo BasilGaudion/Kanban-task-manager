@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import './styles.scss';
 import { IconVerticalEllipsis } from '../../../assets';
+import { ModalContext } from "../../../utils/providers/useModalProvider";
 
 interface ModalViewTaskProps {
     handleClose: () => void;
@@ -11,6 +12,22 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
     const ref = useRef<HTMLDivElement>(null);
     const [containerAnimation, setContainerAnimation] = useState('pop-in');
     const [modalAnimation, setModalAnimation] = useState('modal-open');
+    const modalContext = useContext(ModalContext);
+
+    if (!modalContext) {
+        throw new Error("Task must be used within a ModalProvider");
+      }
+    
+      const { showEditTask, setShowEditTask } = modalContext;
+    
+      const handleShowEditTask = () => {
+        setContainerAnimation('pop-out');
+        setModalAnimation('modal-closed');
+        setTimeout(() => {
+        setShowEditTask(!showEditTask);
+        handleClose();
+        }, 250);
+    }
 
     useEffect(() => {
         if (isOpen) {
@@ -44,7 +61,7 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
         <section className={`vt__container ${containerAnimation}`} ref={ref}>
         <div className='vt__title-group'>
             <h2 className='vt__title'>Researche pricing points of various competitors and trial differents business models </h2>
-            <img src={IconVerticalEllipsis} className="vt__ellipsis" alt="" />
+            <img src={IconVerticalEllipsis} className="vt__ellipsis" alt="" onClick={handleShowEditTask}/>
         </div>
         <p className='vt__text'>We know what we're planning to build for version one. Now we need to finalise the first pricing model we'll use. Keep iterating the subtasks until we have a coherent proposition.</p>
         <h4 className='vt__subtitle'>Subtasks (2 of 3)</h4>

@@ -1,6 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import ModalViewTask from '../Modal/ModalViewTask';
+import ModalAddTask from '../Modal/ModalAddTask';
+import ModalEditTask from '../Modal/ModalEditTask';
 import { ModalContext } from "../../utils/providers/useModalProvider";
 
 // Import Swiper styles
@@ -11,7 +13,6 @@ import './styles.scss';
 import Column from '../Column';
 
 import { Pagination } from 'swiper/modules';
-import ModalAddTask from '../Modal/ModalAddTask';
 
 const Main = () => {
   const [haveColums, setHaveColums] = useState(true);
@@ -21,7 +22,7 @@ const Main = () => {
     throw new Error("Task must be used within a ModalProvider");
   }
 
-  const { showViewTask, setShowViewTask, showAddTask, setShowAddTask } = modalContext;
+  const { showViewTask, setShowViewTask, showAddTask, setShowAddTask, showEditTask, setShowEditTask } = modalContext;
 
   return (
     <main className='main'>
@@ -42,6 +43,7 @@ const Main = () => {
             </Swiper>
             {showViewTask && <ModalViewTask handleClose={() => setShowViewTask(false)} isOpen/>}
             {showAddTask && <ModalAddTask handleClose={() => setShowAddTask(false)} isOpen />}
+            {showEditTask && <ModalEditTask handleClose={() => setShowEditTask(false)} isOpen />}
           </div>
 
           : 
