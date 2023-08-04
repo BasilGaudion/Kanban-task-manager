@@ -9,19 +9,23 @@ const Header = () => {
     throw new Error("Task must be used within a ModalProvider");
   }
 
-  const { showAddTask, setShowAddTask } = modalContext;
+  const { showAddTask, setShowAddTask, showViewBoard, setShowViewBoard } = modalContext;
 
   const handleShowAddTask = () => {
     setShowAddTask(!showAddTask);
   }
 
+  const handleShowViewBoard = () => {
+    setShowViewBoard(!showViewBoard);
+  }
+
   return (
     <header className='header'>
       <div className='header__container container'>
-        <div className='header__left-group'>
+        <div className='header__left-group' onClick={handleShowViewBoard}>
           <img src={LogoMobile} className="header__logo" alt="Logo Mobile" />
           <h2 className='header__board-name'>Platform Launch</h2>
-          <img src={IconChevronDown} alt="" />
+          <img src={IconChevronDown} alt=""/>
         </div>
         <div className='header__right-group'>
           <button 

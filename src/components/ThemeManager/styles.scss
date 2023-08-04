@@ -1,0 +1,48 @@
+.theme {
+    width: 235px;
+    height: 48px;
+    background-color: #F4F7FD;
+    margin: 0 13px 16px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+
+    &__toggle {
+        height: 0;
+        width: 0;
+        visibility: hidden;
+        display: none;
+    }
+
+    &__label {
+        cursor: pointer;
+        text-indent: -9999px;
+        width: 40px;
+        height: 20px;
+        background: grey;
+        display: block;
+        border-radius: 100px;
+        position: relative;
+
+        &:after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 14px;
+            height: 14px;
+            background: #fff;
+            border-radius: 90px;
+            transition: 0.3s;
+        }
+    }
+    
+    &__toggle:checked + &__label {
+        background: #635FC7;
+
+        &:after {
+            left: 23px;
+        }
+    }
+}

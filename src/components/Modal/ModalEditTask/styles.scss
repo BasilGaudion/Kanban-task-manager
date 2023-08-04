@@ -14,13 +14,13 @@
 
     &.modal-open {
         animation-name: modal-open;
-        animation-duration: 0.3s;
+        animation-duration: 0.5s;
         animation-fill-mode: both;
     }
 
     &.modal-closed {
         animation-name: modal-closed;
-        animation-duration: 0.3s;
+        animation-duration: 0.5s;
         animation-fill-mode: both;
     }
 

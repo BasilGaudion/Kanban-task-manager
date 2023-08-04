@@ -17,3 +17,14 @@
     0% { transform: scale(1); opacity: 1; }
     100% { transform: scale(0.01); opacity: 0; }
 }
+
+@keyframes go-up {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-100px); }
+}
+
+@keyframes go-down {
+    0% { transform: translateY(-100px); }
+    100% { transform: translateY(0); }
+}
+
