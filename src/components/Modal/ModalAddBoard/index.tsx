@@ -50,13 +50,13 @@ const ModalAddBoard: React.FC<ModalAddBoardProps> = ({handleClose, isOpen }) => 
                 name="ab__title"
                 id="ab__title"
                 className='ab__input ab__input--title'
-                placeholder='e.g. Take coffee break'
+                placeholder='e.g. Web Design'
                 />
             </div>
             <div className='ab__columns-group'>
                 <h3 className='ab__title'>Board Columns</h3>
-                <ul className='ab__subtasks'>
-                    <li className='ab__subtask'>
+                <ul className='ab__columns'>
+                    <li className='ab__column'>
                         <label htmlFor="ab__column1" className="visuallyhidden">Enter the first subtask</label>
                         <input
                         type="text"

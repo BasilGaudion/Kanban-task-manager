@@ -1,7 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import './styles.scss';
-import { IconBoard, IconBoardPurple, IconDarkTheme, IconLightTheme, LogoDark, LogoLight } from "../../../assets";
+import { IconBoard, IconBoardPurple } from "../../../assets";
 import ThemeManager from '../../ThemeManager';
+import { ModalContext } from "../../../utils/providers/useModalProvider";
+
 
 interface ModalViewBoardProps {
     handleClose: () => void;
@@ -12,6 +14,13 @@ const ModalViewBoard: React.FC<ModalViewBoardProps> = ({handleClose, isOpen }) =
     const ref = useRef<HTMLDivElement>(null);
     const [containerAnimation, setContainerAnimation] = useState('go-down');
     const [modalAnimation, setModalAnimation] = useState('modal-open');
+    const modalContext = useContext(ModalContext);
+
+    if (!modalContext) {
+        throw new Error("Task must be used within a ModalProvider");
+      }
+    
+      const { showAddBoard, setShowAddBoard } = modalContext;
 
     useEffect(() => {
         if (isOpen) {
@@ -39,6 +48,15 @@ const ModalViewBoard: React.FC<ModalViewBoardProps> = ({handleClose, isOpen }) =
         }
     }, [handleClose]);
 
+    const handleShowAddBoard = () => {
+        setContainerAnimation('go-up');
+        setModalAnimation('modal-closed');
+        setTimeout(() => {
+        setShowAddBoard(!showAddBoard);
+        handleClose();
+        }, 250);
+    }
+
   return (
     <div className={`vb ${modalAnimation}`}>
         <section className={`vb__container ${containerAnimation}`} ref={ref}>
@@ -56,7 +74,7 @@ const ModalViewBoard: React.FC<ModalViewBoardProps> = ({handleClose, isOpen }) =
                     <img src={IconBoard} alt="" />
                     <p className='vb__item-title'>Roadmap</p>
                 </li>
-                <li className='vb__item vb__item--create'>
+                <li className='vb__item vb__item--create' onClick={handleShowAddBoard}>
                     <img src={IconBoardPurple} alt="" />
                     <p className='vb__item-title vb__item-title--create'>+ Create New Board</p>
                 </li>
