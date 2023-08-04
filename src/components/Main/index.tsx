@@ -13,6 +13,7 @@ import './styles.scss';
 import Column from '../Column';
 
 import { Pagination } from 'swiper/modules';
+import CreateColumn from '../CreateColumn';
 
 const Main = () => {
   const [haveColums, setHaveColums] = useState(true);
@@ -40,6 +41,7 @@ const Main = () => {
               <SwiperSlide><Column/></SwiperSlide>
               <SwiperSlide><Column/></SwiperSlide>
               <SwiperSlide><Column/></SwiperSlide>
+              <SwiperSlide><CreateColumn/></SwiperSlide>
             </Swiper>
             {showViewTask && <ModalViewTask handleClose={() => setShowViewTask(false)} isOpen/>}
             {showAddTask && <ModalAddTask handleClose={() => setShowAddTask(false)} isOpen />}

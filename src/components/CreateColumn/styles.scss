@@ -1,0 +1,20 @@
+.create-column {
+    width: 280px;
+    height: 80vh;
+    border-radius: 6px;
+    background: linear-gradient(180deg, #E9EFFA 0%, rgba(233, 239, 250, 0.50) 100%);
+    margin-top: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &__title {
+        color: var(--medium-grey, #828FA3);
+        font-family: Plus Jakarta Sans;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: normal;
+        text-align: center;
+    }
+}
