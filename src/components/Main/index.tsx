@@ -5,6 +5,7 @@ import ModalAddTask from '../Modal/ModalAddTask';
 import ModalEditTask from '../Modal/ModalEditTask';
 import ModalViewBoard from '../Modal/ModalViewBoard';
 import { ModalContext } from "../../utils/providers/useModalProvider";
+import { ThemeContext } from "../../utils/providers/useThemeProvider";
 
 // Import Swiper styles
 import 'swiper/scss';
@@ -21,6 +22,13 @@ import ModalEditBoard from '../Modal/ModalEditBoard';
 const Main = () => {
   const [haveColums, setHaveColums] = useState(true);
   const modalContext = useContext(ModalContext);
+  const themeContext = useContext(ThemeContext);
+
+  if (!themeContext) {
+    throw new Error("Task must be used within a themeProvider");
+  }
+
+  const {isDarkTheme} = themeContext;
 
   if (!modalContext) {
     throw new Error("Task must be used within a ModalProvider");
@@ -29,7 +37,7 @@ const Main = () => {
   const { showViewTask, setShowViewTask, showAddTask, setShowAddTask, showEditTask, setShowEditTask, showViewBoard, setShowViewBoard, showAddBoard, setShowAddBoard, showEditBoard, setShowEditBoard } = modalContext;
 
   return (
-    <main className='main'>
+    <main className={`main ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
         {haveColums 
         
           ? 

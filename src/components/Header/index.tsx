@@ -2,14 +2,23 @@ import React, { useState, useContext } from 'react';
 import './styles.scss';
 import { LogoMobile, IconChevronDown, IconCross, IconVerticalEllipsis } from '../../assets';
 import { ModalContext } from "../../utils/providers/useModalProvider";
+import { ThemeContext } from "../../utils/providers/useThemeProvider";
+
 const Header = () => {
   const modalContext = useContext(ModalContext);
+  const themeContext = useContext(ThemeContext);
 
   if (!modalContext) {
     throw new Error("Task must be used within a ModalProvider");
   }
 
+  if (!themeContext) {
+    throw new Error("Task must be used within a themeProvider");
+  }
+
   const { showAddTask, setShowAddTask, showViewBoard, setShowViewBoard, showEditBoard, setShowEditBoard } = modalContext;
+
+  const {isDarkTheme} = themeContext;
 
   const handleShowAddTask = () => {
     setShowAddTask(!showAddTask);
@@ -24,7 +33,7 @@ const Header = () => {
   }
 
   return (
-    <header className='header'>
+    <header className={`header ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
       <div className='header__container container'>
         <div className='header__left-group' onClick={handleShowViewBoard}>
           <img src={LogoMobile} className="header__logo" alt="Logo Mobile" />

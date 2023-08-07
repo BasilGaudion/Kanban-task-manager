@@ -1,5 +1,5 @@
 .header {
-    background: var(--white, #FFF);
+    background: var(--background-modal);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -24,7 +24,7 @@
 
     &__board-name {
         margin-right: 8px;
-        color: var(--black, #000112);
+        color: var(--title);
         font-size: 1.125rem;
         font-weight: 700;
     }
@@ -41,7 +41,7 @@
         align-items: center;
         margin-left: 16px;
         border: none;
-        background-color: #FFF;
+        background-color: var(--background-modal);
     }
 
     &__add-task {
