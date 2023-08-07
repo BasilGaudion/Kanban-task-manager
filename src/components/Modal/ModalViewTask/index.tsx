@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useContext } from 'react';
 import './styles.scss';
 import { IconVerticalEllipsis } from '../../../assets';
 import { ModalContext } from "../../../utils/providers/useModalProvider";
+import { ThemeContext } from "../../../utils/providers/useThemeProvider";
 
 interface ModalViewTaskProps {
     handleClose: () => void;
@@ -19,6 +20,14 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
       }
     
       const { showEditTask, setShowEditTask } = modalContext;
+
+      const themeContext = useContext(ThemeContext);
+
+    if (!themeContext) {
+      throw new Error("Task must be used within a themeProvider");
+    }
+  
+    const {isDarkTheme} = themeContext;
     
       const handleShowEditTask = () => {
         setContainerAnimation('pop-out');
@@ -57,7 +66,7 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
 
   return (
     
-    <div className={`vt ${modalAnimation}`}>
+    <div className={`vt ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
         <section className={`vt__container ${containerAnimation}`} ref={ref}>
         <div className='vt__title-group'>
             <h2 className='vt__title'>Researche pricing points of various competitors and trial differents business models </h2>

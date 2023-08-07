@@ -1,12 +1,13 @@
 .theme {
     width: 235px;
     height: 48px;
-    background-color: #F4F7FD;
+    background-color: var(--background-theme-switch);
     margin: 0 13px 16px 16px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 24px;
+    border-radius: 8px;
 
     &__toggle {
         height: 0;

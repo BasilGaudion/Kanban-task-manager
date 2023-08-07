@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import './styles.scss';
 import { IconCross } from "../../../assets";
+import { ThemeContext } from "../../../utils/providers/useThemeProvider";
 
 interface ModalEditBoardProps {
     handleClose: () => void;
@@ -11,6 +12,15 @@ const ModalEditBoard: React.FC<ModalEditBoardProps> = ({handleClose, isOpen }) =
     const ref = useRef<HTMLDivElement>(null);
     const [containerAnimation, setContainerAnimation] = useState('pop-in');
     const [modalAnimation, setModalAnimation] = useState('modal-open');
+
+    const themeContext = useContext(ThemeContext);
+
+    if (!themeContext) {
+      throw new Error("Task must be used within a themeProvider");
+    }
+  
+    const {isDarkTheme} = themeContext;
+
 
     useEffect(() => {
         if (isOpen) {
@@ -39,9 +49,9 @@ const ModalEditBoard: React.FC<ModalEditBoardProps> = ({handleClose, isOpen }) =
     }, [handleClose]);
 
   return (
-    <div className={`eb ${modalAnimation}`}>
+    <div className={`eb ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
         <section className={`eb__container ${containerAnimation}`} ref={ref}>
-            <h2 className='eb__action'>Add New Board</h2>
+            <h2 className='eb__action'>Edit Board</h2>
             <div className='eb__title-group'>
                 <h3 className='eb__title'>Board Name</h3>
                 <label htmlFor="eb__title" className="visuallyhidden">Enter the title of the Board</label>

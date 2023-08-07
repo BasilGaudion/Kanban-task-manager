@@ -25,9 +25,9 @@
     }
 
     &__container {
-        max-width: 343px;
+        width: 343px;
         border-radius: 6px;
-        background: var(--white, #FFF);
+        background: var(--background-modal);
         opacity: 1;
         padding: 24px 24px 32px 24px;
 
@@ -53,7 +53,7 @@
 
     &__title {
         width: 274px;
-        color: var(--black, #000112);
+        color: var(--title);
         font-size: 1.125rem;
         font-style: normal;
         font-weight: 700;
@@ -71,7 +71,7 @@
 
     &__subtitle {
         font-size: .75rem;
-        color: var(--medium-grey, #828FA3);
+        color: var(--subtitle);
         font-weight: 700;
         line-height: normal;
         
@@ -94,7 +94,7 @@
     &__check-item {
         height: 59px;
         border-radius: 4px;
-        background: var(--light-grey-light-bg, #F4F7FD);
+        background-color: var(--background-board);
         display: flex;
         align-items: center;
         padding: 13px;
@@ -102,7 +102,7 @@
 
         label {
             font-size: .75rem;
-            color: var(--black, #000112);
+            color: var(--title);
             font-weight: 700;
             line-height: normal;
         }
@@ -124,6 +124,8 @@
         font-style: normal;
         font-weight: 500;
         line-height: 23px;
+        background-color: var(--background-modal);
+        color: var(--title);
 
         option {
             font-family: Plus Jakarta Sans;
@@ -135,6 +137,39 @@
     }
 
 }
+
+// =============================
+// Responsive
+// =============================
+
+@media screen and (min-width: 768px) {
+    .vt {
+
+        &__container {
+            width: 480px;
+            padding: 32px;
+        }
+
+        &__title {
+            width: 387px;
+        }
+
+        &__text {
+            width: 416px;
+        }
+
+        &__select {
+            width: 416px;
+        }
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    
+}
+
+
+
 
 
 .visuallyhidden { 

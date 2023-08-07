@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import './styles.scss';
 import { IconCross } from "../../../assets";
+import { ThemeContext } from "../../../utils/providers/useThemeProvider";
 
 interface ModalAddTaskProps {
     handleClose: () => void;
@@ -11,6 +12,14 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({handleClose, isOpen }) => {
     const ref = useRef<HTMLDivElement>(null);
     const [containerAnimation, setContainerAnimation] = useState('pop-in');
     const [modalAnimation, setModalAnimation] = useState('modal-open');
+
+    const themeContext = useContext(ThemeContext);
+
+    if (!themeContext) {
+      throw new Error("Task must be used within a themeProvider");
+    }
+  
+    const {isDarkTheme} = themeContext;
 
     useEffect(() => {
         if (isOpen) {
@@ -39,7 +48,7 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({handleClose, isOpen }) => {
     }, [handleClose]);
 
   return (
-    <div className={`at ${modalAnimation}`}>
+    <div className={`at ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
         <section className={`at__container ${containerAnimation}`} ref={ref}>
             <h2 className='at__action'>Add New Task</h2>
             <div className='at__title-group'>

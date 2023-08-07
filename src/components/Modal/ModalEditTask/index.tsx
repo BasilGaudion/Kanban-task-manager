@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useContext } from 'react';
 import './styles.scss';
 import { IconCross } from "../../../assets";
 import { ModalContext } from "../../../utils/providers/useModalProvider";
+import { ThemeContext } from "../../../utils/providers/useThemeProvider";
 
 interface ModalEditTaskProps {
     handleClose: () => void;
@@ -13,6 +14,14 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({handleClose, isOpen }) => 
     const [containerAnimation, setContainerAnimation] = useState('pop-in');
     const [modalAnimation, setModalAnimation] = useState('modal-open');
     const modalContext = useContext(ModalContext);
+
+    const themeContext = useContext(ThemeContext);
+
+    if (!themeContext) {
+      throw new Error("Task must be used within a themeProvider");
+    }
+  
+    const {isDarkTheme} = themeContext;
 
     if (!modalContext) {
         throw new Error("Task must be used within a ModalProvider");
@@ -57,7 +66,7 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({handleClose, isOpen }) => 
     }, [handleClose]);
 
   return (
-    <div className={`et ${modalAnimation}`}>
+    <div className={`et ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
         <section className={`et__container ${containerAnimation}`} ref={ref}>
             <h2 className='et__action'>Edit Task</h2>
             <div className='et__title-group'>

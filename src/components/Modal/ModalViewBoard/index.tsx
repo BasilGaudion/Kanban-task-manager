@@ -3,6 +3,8 @@ import './styles.scss';
 import { IconBoard, IconBoardPurple } from "../../../assets";
 import ThemeManager from '../../ThemeManager';
 import { ModalContext } from "../../../utils/providers/useModalProvider";
+import { ThemeContext } from "../../../utils/providers/useThemeProvider";
+
 
 
 interface ModalViewBoardProps {
@@ -21,6 +23,14 @@ const ModalViewBoard: React.FC<ModalViewBoardProps> = ({handleClose, isOpen }) =
       }
     
       const { showAddBoard, setShowAddBoard } = modalContext;
+
+      const themeContext = useContext(ThemeContext);
+
+    if (!themeContext) {
+      throw new Error("Task must be used within a themeProvider");
+    }
+  
+    const {isDarkTheme} = themeContext;
 
     useEffect(() => {
         if (isOpen) {
@@ -58,7 +68,7 @@ const ModalViewBoard: React.FC<ModalViewBoardProps> = ({handleClose, isOpen }) =
     }
 
   return (
-    <div className={`vb ${modalAnimation}`}>
+    <div className={`vb ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
         <section className={`vb__container ${containerAnimation}`} ref={ref}>
             <h3 className='vb__title'>All Boards (3)</h3>
             <ul className='vb__list'>

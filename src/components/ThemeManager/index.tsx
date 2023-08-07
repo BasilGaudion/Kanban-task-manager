@@ -22,7 +22,7 @@ const ThemeManager = () => {
   }, [isDarkTheme]);
 
   return (
-    <div className='theme'>
+    <div className={`theme ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
         <img src={IconLightTheme} alt="" />
         <input 
             type="checkbox" 

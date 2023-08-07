@@ -15,6 +15,7 @@
   --background-modal: #2B2C37;
   --subtitle: #FFFFFF;
   --add-button-background: #FFFFFF;
+  --background-theme-switch: #20212C;
 }
 
 .isLightTheme {
@@ -24,6 +25,7 @@
   --background-modal: #FFFFFF;
   --subtitle: #828FA3;
   --add-button-background: rgba(99, 95, 199, 0.10);
+  --background-theme-switch: #FFF;
 }
 
 // =============================
@@ -40,12 +42,16 @@
 
 @media screen and (min-width: 768px) {
   .container {
-      width: 716px;
+    width: 100%;
+    padding: 0 30px;
+    margin: auto;
   }
 }
 
 @media screen and (min-width: 1440px) {
   .container {
-      width: 1376px;
+    width: 100%;
+    padding: 0 30px;
+    margin: auto;
   }
 }

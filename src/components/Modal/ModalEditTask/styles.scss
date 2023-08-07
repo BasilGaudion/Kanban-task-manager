@@ -27,7 +27,7 @@
     &__container {
         width: 343px;
         border-radius: 6px;
-        background: var(--white, #FFF);
+        background: var(--background-modal);
         opacity: 1;
         padding: 24px;
         display: flex;
@@ -50,7 +50,7 @@
     }
 
     &__action {
-        color: var(--black, #000112);
+        color: var(--title);
         font-family: Plus Jakarta Sans;
         font-size: 1.125rem;
         font-weight: 700;
@@ -59,7 +59,7 @@
 
     &__title {
         margin-bottom: 8px;
-        color: var(--medium-grey, #828FA3);
+        color: var(--subtitle);
         font-size: .75rem;
     }
 
@@ -71,6 +71,8 @@
         line-height: 23px;
         font-family: Plus Jakarta Sans;
         padding: 8px 16px;
+        background-color: var(--background-modal);
+        color: var(--title);
 
         &::placeholder {
             opacity: 0.5;
@@ -125,12 +127,8 @@
         transition: background-color 0.25s ease;
 
         &--add {
-            background: rgba(99, 95, 199, 0.10);
+            background: var(--add-button-background);
             color: var(--main-purple, #635FC7);
-
-            &:hover {
-                background: rgba(99, 95, 199, 0.20);
-            }
         }
 
         &--create {
@@ -154,6 +152,8 @@
         font-style: normal;
         font-weight: 500;
         line-height: 23px;
+        background-color: var(--background-modal);
+        color: var(--title);
 
         option {
             font-family: Plus Jakarta Sans;
@@ -163,6 +163,39 @@
             line-height: 23px;
         }
     }
+}
+
+// =============================
+// Responsive
+// =============================
+
+@media screen and (min-width: 768px) {
+    .et {
+
+        &__container {
+            width: 480px;
+        }
+
+        &__input {
+            width: 416px;
+
+            &--subtask {
+                width: 385px;
+            }
+        }
+
+        &__select {
+            width: 416px;
+        }
+
+        &__button {
+            width: 416px;
+        }
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    
 }
 
 .visuallyhidden { 

@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import './styles.scss';
 import { IconCross } from "../../../assets";
+import { ThemeContext } from "../../../utils/providers/useThemeProvider";
 
 interface ModalAddBoardProps {
     handleClose: () => void;
@@ -11,6 +12,14 @@ const ModalAddBoard: React.FC<ModalAddBoardProps> = ({handleClose, isOpen }) => 
     const ref = useRef<HTMLDivElement>(null);
     const [containerAnimation, setContainerAnimation] = useState('pop-in');
     const [modalAnimation, setModalAnimation] = useState('modal-open');
+
+    const themeContext = useContext(ThemeContext);
+
+    if (!themeContext) {
+      throw new Error("Task must be used within a themeProvider");
+    }
+  
+    const {isDarkTheme} = themeContext;
 
     useEffect(() => {
         if (isOpen) {
@@ -39,7 +48,8 @@ const ModalAddBoard: React.FC<ModalAddBoardProps> = ({handleClose, isOpen }) => 
     }, [handleClose]);
 
   return (
-    <div className={`ab ${modalAnimation}`}>
+    <div className={`ab ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}
+    >
         <section className={`ab__container ${containerAnimation}`} ref={ref}>
             <h2 className='ab__action'>Add New Board</h2>
             <div className='ab__title-group'>
