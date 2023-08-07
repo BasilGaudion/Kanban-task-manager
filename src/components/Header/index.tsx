@@ -9,7 +9,7 @@ const Header = () => {
     throw new Error("Task must be used within a ModalProvider");
   }
 
-  const { showAddTask, setShowAddTask, showViewBoard, setShowViewBoard } = modalContext;
+  const { showAddTask, setShowAddTask, showViewBoard, setShowViewBoard, showEditBoard, setShowEditBoard } = modalContext;
 
   const handleShowAddTask = () => {
     setShowAddTask(!showAddTask);
@@ -17,6 +17,10 @@ const Header = () => {
 
   const handleShowViewBoard = () => {
     setShowViewBoard(!showViewBoard);
+  }
+
+  const handleShowEditBoard = () => {
+    setShowEditBoard(!showEditBoard);
   }
 
   return (
@@ -35,7 +39,7 @@ const Header = () => {
           >
             +
           </button>
-          <button type='button' className='header__settings'>
+          <button type='button' className='header__settings' onClick={handleShowEditBoard}>
           <img src={IconVerticalEllipsis} className='header__ellipsis'alt="" />
           </button>
         </div>

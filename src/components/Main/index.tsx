@@ -16,6 +16,7 @@ import Column from '../Column';
 import { Pagination } from 'swiper/modules';
 import CreateColumn from '../CreateColumn';
 import ModalAddBoard from '../Modal/ModalAddBoard';
+import ModalEditBoard from '../Modal/ModalEditBoard';
 
 const Main = () => {
   const [haveColums, setHaveColums] = useState(true);
@@ -25,7 +26,7 @@ const Main = () => {
     throw new Error("Task must be used within a ModalProvider");
   }
 
-  const { showViewTask, setShowViewTask, showAddTask, setShowAddTask, showEditTask, setShowEditTask, showViewBoard, setShowViewBoard, showAddBoard, setShowAddBoard } = modalContext;
+  const { showViewTask, setShowViewTask, showAddTask, setShowAddTask, showEditTask, setShowEditTask, showViewBoard, setShowViewBoard, showAddBoard, setShowAddBoard, showEditBoard, setShowEditBoard } = modalContext;
 
   return (
     <main className='main'>
@@ -45,6 +46,7 @@ const Main = () => {
               <SwiperSlide><Column/></SwiperSlide>
               <SwiperSlide><CreateColumn/></SwiperSlide>
             </Swiper>
+            {showEditBoard && <ModalEditBoard handleClose={() => setShowEditBoard(false)} isOpen/>}
             {showViewBoard && <ModalViewBoard handleClose={() => setShowViewBoard(false)} isOpen/>}
             {showAddBoard && <ModalAddBoard handleClose={() => setShowAddBoard(false)} isOpen/>}
             {showViewTask && <ModalViewTask handleClose={() => setShowViewTask(false)} isOpen/>}

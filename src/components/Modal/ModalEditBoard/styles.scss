@@ -1,0 +1,147 @@
+@import '../animations';
+
+.eb {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.modal-open {
+        animation-name: modal-open;
+        animation-duration: 0.5s;
+        animation-fill-mode: both;
+    }
+
+    &.modal-closed {
+        animation-name: modal-closed;
+        animation-duration: 0.5s;
+        animation-fill-mode: both;
+    }
+
+    &__container {
+        width: 343px;
+        border-radius: 6px;
+        background: var(--white, #FFF);
+        opacity: 1;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+
+        // TODO bug blur when input are focused in the browser responsive view 
+
+        &.pop-in {
+            animation-name: pop-in;
+            animation-duration: 0.3s;
+            animation-fill-mode: both;
+        }
+
+        &.pop-out {
+            animation-name: pop-out;
+            animation-duration: 0.3s;
+            animation-fill-mode: both;
+        }
+    }
+
+    &__action {
+        color: var(--black, #000112);
+        font-family: Plus Jakarta Sans;
+        font-size: 1.125rem;
+        font-weight: 700;
+        line-height: normal;
+    }
+
+    &__title {
+        margin-bottom: 8px;
+        color: var(--medium-grey, #828FA3);
+        font-size: .75rem;
+    }
+
+    &__input {
+        width: 295px;
+        height: 40px;
+        border-radius: 4px;
+        border: 1px solid rgba(130, 143, 163, 0.25);
+        resize: none;
+        font-size: .8125rem;
+        line-height: 23px;
+        font-family: Plus Jakarta Sans;
+        padding: 8px 16px;
+
+        &::placeholder {
+            opacity: 0.5;
+            font-size: .8125rem;
+            line-height: 23px;
+            font-family: Plus Jakarta Sans;
+        }
+
+        &:focus {
+            outline: none;
+        }
+
+        &--column {
+            width: 264px;
+        }
+    }
+
+    &__columns {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    &__column {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+    }
+
+    &__button {
+        width: 295px;
+        height: 40px;
+        border: none;
+        border-radius: 20px;
+        font-size: .8125rem;
+        font-family: Plus Jakarta Sans;
+        text-align: center;
+        font-weight: 700;
+        line-height: 23px;
+        transition: background-color 0.25s ease;
+
+        &--add {
+            background: rgba(99, 95, 199, 0.10);
+            color: var(--main-purple, #635FC7);
+
+            &:hover {
+                background: rgba(99, 95, 199, 0.20);
+            }
+        }
+
+        &--create {
+            background: var(--main-purple, #635FC7);
+            color: var(--white, #FFF);
+
+            &:hover {
+                background: var(--main-purple, #7672e2);
+            }
+        }
+    }
+}
+
+.visuallyhidden { 
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+}
