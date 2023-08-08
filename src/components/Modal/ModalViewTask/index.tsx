@@ -69,6 +69,7 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
 
     useEffect(() => {
         const checkIfClickedOutsideSettings = (e: MouseEvent) => {
+
             if (isSettingsOpen && !settingsRef.current?.contains(e.target as Node) && !iconRef.current?.contains(e.target as Node)) {
                 setIsSettingsOpen(false);
             }

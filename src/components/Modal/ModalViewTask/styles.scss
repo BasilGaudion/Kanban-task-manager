@@ -36,19 +36,6 @@
         font-size: .8125rem;
         color: #828FA3;
         cursor: pointer;
-        animation: all 0.3s ease;
-
-        &.pop-in {
-            animation-name: pop-in;
-            animation-duration: 0.3s;
-            animation-fill-mode: both;
-        }
-
-        &.pop-out {
-            animation-name: pop-out;
-            animation-duration: 0.3s;
-            animation-fill-mode: both;
-        }
 
         &--delete {
             color: #EA5555;

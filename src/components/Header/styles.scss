@@ -27,12 +27,42 @@
         color: var(--title);
         font-size: 1.125rem;
         font-weight: 700;
+        cursor: pointer;
     }
 
     &__right-group {
         display: flex;
         align-items: center;
+        position: relative;
     }
+
+    &__options {
+        width: 150px;
+        height: 94px;
+        background: var(--background-theme-switch);
+        border-radius: 8px;
+        box-shadow: 0px 10px 20px 0px rgba(54, 78, 126, 0.10);
+        position: absolute;
+        right: 0;
+        top: 40px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+    }
+
+    &__option {
+        font-size: .8125rem;
+        color: #828FA3;
+        cursor: pointer;
+
+        &--delete {
+            color: #EA5555;
+            cursor: pointer;
+        }
+    }
+
 
     &__settings {
          cursor: pointer;
@@ -54,8 +84,41 @@
         font-size: 1.4rem;
         filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 
+        &--large {
+            width: 164px;
+            height: 48px;
+            font-size: .9375rem;
+        }
+
         &--disable {
             opacity: 0.25;
         }
     }
+}
+
+// =============================
+// Responsive
+// =============================
+
+@media screen and (min-width: 768px) {
+    .header {
+        height: 80px;
+
+        &__options {
+            width: 192px;
+            height: 94px;
+            top: 56px;
+        }
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .header {
+        height: 96px;
+
+        &__options {
+            top: 65px;
+        }
+    }
+    
 }

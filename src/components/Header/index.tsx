@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import './styles.scss';
 import { LogoMobile, IconChevronDown, IconCross, IconVerticalEllipsis } from '../../assets';
 import { ModalContext } from "../../utils/providers/useModalProvider";
@@ -6,8 +6,21 @@ import { ThemeContext } from "../../utils/providers/useThemeProvider";
 import useWindowSize from '../../hooks/useWindowSize';
 
 const Header = () => {
+  const settingsRef = useRef<HTMLDivElement>(null);
+    const iconRef = useRef<HTMLImageElement>(null);
   const modalContext = useContext(ModalContext);
   const themeContext = useContext(ThemeContext);
+  const [largeWindow, setLargeWindow] = useState(true);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const screenWidth = useWindowSize().width;
+
+  useEffect(() => {
+    if (screenWidth && screenWidth >= 768) {
+      setLargeWindow(true);
+    } else {
+      setLargeWindow(false);
+    }
+  }, [screenWidth]);
 
   if (!modalContext) {
     throw new Error("Task must be used within a ModalProvider");
@@ -33,7 +46,20 @@ const Header = () => {
     setShowEditBoard(!showEditBoard);
   }
 
-  const screenSize = useWindowSize();
+  useEffect(() => {
+    const checkIfClickedOutsideSettings = (e: MouseEvent) => {
+
+        if (isSettingsOpen && !settingsRef.current?.contains(e.target as Node) && !iconRef.current?.contains(e.target as Node)) {
+            setIsSettingsOpen(false);
+        }
+    }
+
+    document.addEventListener("mousedown", checkIfClickedOutsideSettings);
+
+    return () => {
+        document.removeEventListener("mousedown", checkIfClickedOutsideSettings);
+    }
+}, [isSettingsOpen]);
 
   return (
     <header className={`header ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
@@ -44,16 +70,32 @@ const Header = () => {
           <img src={IconChevronDown} alt=""/>
         </div>
         <div className='header__right-group'>
+        {
+          largeWindow 
+          ? 
           <button 
-          type='button'
-          className='header__add-task header__add-task--disable'
-          onClick={handleShowAddTask}
+              type='button'
+              className='header__add-task header__add-task--large header__add-task--disable'
+              onClick={handleShowAddTask}
+          >
+            + Add New Task
+          </button>
+          : 
+          <button 
+              type='button'
+              className='header__add-task header__add-task--disable'
+              onClick={handleShowAddTask}
           >
             +
           </button>
-          <button type='button' className='header__settings' onClick={handleShowEditBoard}>
+        }
+          <div className='header__settings' onClick= {() => setIsSettingsOpen(!isSettingsOpen)} ref={iconRef}>
           <img src={IconVerticalEllipsis} className='header__ellipsis'alt="" />
-          </button>
+          </div>
+          <div className={`header__options ${isSettingsOpen ? '' : 'disable'}`} ref={settingsRef}>
+              <p className='header__option' onClick={handleShowEditBoard}>Edit Board</p>
+              <p className='header__option header__option--delete'>Delete Board</p>
+          </div>
         </div>
       </div>
     </header>
