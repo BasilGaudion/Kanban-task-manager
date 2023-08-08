@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700&display=swap');
-@import '../../styles/vars';
+// @import '../../styles/vars';
 // @import 'swiper/swiper.min.css';
 
 
@@ -7,6 +7,10 @@
   margin: 0;
   font-family: 'Plus Jakarta Sans';
 }
+
+// ===================
+// DARK/LIGHT 
+// ===================
 
 .isDarkTheme {
   --background-board: #20212C;

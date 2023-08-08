@@ -3,6 +3,7 @@ import './styles.scss';
 import { LogoMobile, IconChevronDown, IconCross, IconVerticalEllipsis } from '../../assets';
 import { ModalContext } from "../../utils/providers/useModalProvider";
 import { ThemeContext } from "../../utils/providers/useThemeProvider";
+import useWindowSize from '../../hooks/useWindowSize';
 
 const Header = () => {
   const modalContext = useContext(ModalContext);
@@ -31,6 +32,8 @@ const Header = () => {
   const handleShowEditBoard = () => {
     setShowEditBoard(!showEditBoard);
   }
+
+  const screenSize = useWindowSize();
 
   return (
     <header className={`header ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>

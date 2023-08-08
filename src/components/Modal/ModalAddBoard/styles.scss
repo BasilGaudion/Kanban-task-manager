@@ -1,52 +1,11 @@
 @import '../animations';
+@import '../../../styles/placeholders';
 
 .ab {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    &.modal-open {
-        animation-name: modal-open;
-        animation-duration: 0.5s;
-        animation-fill-mode: both;
-    }
-
-    &.modal-closed {
-        animation-name: modal-closed;
-        animation-duration: 0.5s;
-        animation-fill-mode: both;
-    }
+    @extend %modalBgDefaultStyle;
 
     &__container {
-        width: 343px;
-        border-radius: 6px;
-        background: var(--background-modal);
-        opacity: 1;
-        padding: 24px;
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-
-        // TODO bug blur when input are focused in the browser responsive view 
-
-        &.pop-in {
-            animation-name: pop-in;
-            animation-duration: 0.3s;
-            animation-fill-mode: both;
-        }
-
-        &.pop-out {
-            animation-name: pop-out;
-            animation-duration: 0.3s;
-            animation-fill-mode: both;
-        }
+        @extend %modalContainer
     }
 
     &__action {
@@ -105,16 +64,7 @@
     }
 
     &__button {
-        width: 295px;
-        height: 40px;
-        border: none;
-        border-radius: 20px;
-        font-size: .8125rem;
-        font-family: Plus Jakarta Sans;
-        text-align: center;
-        font-weight: 700;
-        line-height: 23px;
-        transition: background-color 0.25s ease;
+        @extend %modalButton;
 
         &--add {
             background: var(--add-button-background);

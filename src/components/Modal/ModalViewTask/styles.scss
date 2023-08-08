@@ -1,35 +1,42 @@
 @import '../animations';
+@import '../../../styles/placeholders';
 
 .vt {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    &.modal-open {
-        animation-name: modal-open;
-        animation-duration: 0.3s;
-        animation-fill-mode: both;
-    }
-
-    &.modal-closed {
-        animation-name: modal-closed;
-        animation-duration: 0.3s;
-        animation-fill-mode: both;
-    }
+    @extend %modalBgDefaultStyle;
 
     &__container {
-        width: 343px;
-        border-radius: 6px;
-        background: var(--background-modal);
-        opacity: 1;
-        padding: 24px 24px 32px 24px;
+        @extend %modalContainer
+    }
+
+    &__title-group {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+        position: relative;
+    }
+
+    &__options {
+        width: 150px;
+        height: 94px;
+        background: var(--background-theme-switch);
+        border-radius: 8px;
+        box-shadow: 0px 10px 20px 0px rgba(54, 78, 126, 0.10);
+        position: absolute;
+        right: -50px;
+        top: calc(98px - 32px);
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px;
+    }
+
+    &__option {
+        font-size: .8125rem;
+        color: #828FA3;
+        cursor: pointer;
+        animation: all 0.3s ease;
 
         &.pop-in {
             animation-name: pop-in;
@@ -42,13 +49,14 @@
             animation-duration: 0.3s;
             animation-fill-mode: both;
         }
+
+        &--delete {
+            color: #EA5555;
+        }
     }
 
-    &__title-group {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 24px;
+    &__ellipsis {
+        cursor: pointer;
     }
 
     &__title {
@@ -99,6 +107,7 @@
         align-items: center;
         padding: 13px;
         gap: 16px;
+        cursor: pointer;
 
         label {
             font-size: .75rem;
@@ -108,31 +117,20 @@
         }
     }
 
+    &__checkbox {
+        cursor: pointer;
+    }
+
     &__checkbox:checked ~ label { 
         text-decoration-line: line-through;
         opacity: 0.5;
     }
 
     &__select {
-        width: 295px;
-        height: 40px;
-        border: 1px solid rgba(130, 143, 163, 0.25);
-        border-radius: 4px;
-        padding: 8px 16px;
-        font-family: Plus Jakarta Sans;
-        font-size: .8125rem;
-        font-style: normal;
-        font-weight: 500;
-        line-height: 23px;
-        background-color: var(--background-modal);
-        color: var(--title);
+        @extend %modalSelect;
 
         option {
-            font-family: Plus Jakarta Sans;
-            font-size: .8125rem;
-            font-style: normal;
-            font-weight: 500;
-            line-height: 23px;
+            @extend %modalOption;
         }
     }
 
@@ -148,6 +146,12 @@
         &__container {
             width: 480px;
             padding: 32px;
+        }
+
+        &__options {
+            width: 192px;
+            height: 94px;
+            right: calc(-65px + -32px);
         }
 
         &__title {
@@ -169,9 +173,6 @@
 }
 
 
-
-
-
 .visuallyhidden { 
     position: absolute;
     width: 1px;
@@ -181,4 +182,8 @@
     padding: 0;
     clip: rect(0 0 0 0);
     overflow: hidden;
+}
+
+.disable {
+    display: none;
 }

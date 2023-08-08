@@ -4,6 +4,7 @@
     border-radius: 8px;
     box-shadow: 0px 4px 6px 0px rgba(54, 78, 126, 0.10);
     background: var(--background-modal);
+    cursor: pointer;
 
     &__container {
         padding: 23px 16px;
@@ -17,6 +18,11 @@
         font-size: .9375rem;
         font-weight: 700;
         line-height: normal;
+        transition: color 0.2s ease;
+    }
+
+    &:hover &__title {
+        color: #635FC7;
     }
 
     &__subtitle {

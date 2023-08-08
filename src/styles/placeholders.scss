@@ -1,0 +1,88 @@
+// Use : @extend %modalDefaultStyle;
+%modalBgDefaultStyle {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &.modal-open {
+        animation-name: modal-open;
+        animation-duration: 0.5s;
+        animation-fill-mode: both;
+    }
+
+    &.modal-closed {
+        animation-name: modal-closed;
+        animation-duration: 0.5s;
+        animation-fill-mode: both;
+    }
+}
+
+%modalContainer {
+    width: 343px;
+    border-radius: 6px;
+    background: var(--background-modal);
+    opacity: 1;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+        // TODO bug blur when input are focused in the browser responsive view 
+
+    &.pop-in {
+        animation-name: pop-in;
+        animation-duration: 0.3s;
+        animation-fill-mode: both;
+    }
+
+    &.pop-out {
+        animation-name: pop-out;
+        animation-duration: 0.3s;
+        animation-fill-mode: both;
+    }
+}
+
+%modalButton {
+    width: 295px;
+    height: 40px;
+    border: none;
+    border-radius: 20px;
+    font-size: .8125rem;
+    font-family: Plus Jakarta Sans;
+    text-align: center;
+    font-weight: 700;
+    line-height: 23px;
+    transition: background-color 0.25s ease;
+}
+
+%modalSelect {
+    width: 295px;
+    height: 40px;
+    border: 1px solid rgba(130, 143, 163, 0.25);
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-family: Plus Jakarta Sans;
+    font-size: .8125rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 23px;
+    background-color: var(--background-modal);
+    color: var(--title);
+    cursor: pointer;
+}
+
+%modalOption {
+    font-family: Plus Jakarta Sans;
+    font-size: .8125rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 23px;
+    cursor: pointer;
+}

@@ -11,8 +11,11 @@ interface ModalViewTaskProps {
 
 const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) => {
     const ref = useRef<HTMLDivElement>(null);
+    const settingsRef = useRef<HTMLDivElement>(null);
+    const iconRef = useRef<HTMLImageElement>(null);
     const [containerAnimation, setContainerAnimation] = useState('pop-in');
     const [modalAnimation, setModalAnimation] = useState('modal-open');
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const modalContext = useContext(ModalContext);
 
     if (!modalContext) {
@@ -64,13 +67,33 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
         }
     }, [handleClose]);
 
+    useEffect(() => {
+        const checkIfClickedOutsideSettings = (e: MouseEvent) => {
+            if (isSettingsOpen && !settingsRef.current?.contains(e.target as Node) && !iconRef.current?.contains(e.target as Node)) {
+                setIsSettingsOpen(false);
+            }
+        }
+    
+        document.addEventListener("mousedown", checkIfClickedOutsideSettings);
+    
+        return () => {
+            document.removeEventListener("mousedown", checkIfClickedOutsideSettings);
+        }
+    }, [isSettingsOpen]);
+    
+    
+
   return (
     
     <div className={`vt ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
         <section className={`vt__container ${containerAnimation}`} ref={ref}>
         <div className='vt__title-group'>
             <h2 className='vt__title'>Researche pricing points of various competitors and trial differents business models </h2>
-            <img src={IconVerticalEllipsis} className="vt__ellipsis" alt="" onClick={handleShowEditTask}/>
+            <img ref={iconRef} src={IconVerticalEllipsis} className="vt__ellipsis" alt="" onClick= {() => setIsSettingsOpen(!isSettingsOpen)} />
+            <div className={`vt__options ${isSettingsOpen ? '' : 'disable'}`} ref={settingsRef}>
+                <p className='vt__option' onClick={handleShowEditTask}>Edit Task</p>
+                <p className='vt__option vt__option--delete'>Delete Task</p>
+            </div>
         </div>
         <p className='vt__text'>We know what we're planning to build for version one. Now we need to finalise the first pricing model we'll use. Keep iterating the subtasks until we have a coherent proposition.</p>
         <h4 className='vt__subtitle'>Subtasks (2 of 3)</h4>
