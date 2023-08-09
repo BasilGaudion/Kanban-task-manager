@@ -11,6 +11,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    z-index: 1;
 }
 
 .aside {
@@ -18,6 +19,14 @@
     height: 100vh;
     padding-bottom: 47px;
     border-right: 1px solid var(--line-separator);
+    position: absolute;
+    transition: transform 0.3s ease;
+    transform: translateX(0);
+    z-index: 10;
+
+    &.hidden {
+        transform: translateX(-265px);
+    }
     
     &__container {
         height: 100%;

@@ -6,10 +6,13 @@
     height: 64px;
     box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
     position: relative;
+    width: 100vw;
+    transition: width 0.3s ease;
 
     &--reduct {
-        max-width: calc(100vw - 264px);
+        width: calc(100vw - 264px);  /* Valeur finale */
     }
+
 
     &__container {
         display: flex;

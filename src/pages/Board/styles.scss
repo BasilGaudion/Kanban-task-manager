@@ -5,5 +5,11 @@
 
     &__container {
         width: 100%;
+        transition: transform 0.3s ease;
+        transform: translateX(0);
+
+        &.settings {
+            transform: translateX(265px);
+        }
     }
 }

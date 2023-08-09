@@ -3,9 +3,11 @@
     height: calc(100vh - 64px);
     display: flex;
     justify-content: center;
+    width: 100vw;
+    transition: width 0.3s ease;
 
     &--reduct {
-        max-width: calc(100vw - 264px);
+        width: calc(100vw - 264px);  /* Valeur finale */
     }
     
     &__container--empty {

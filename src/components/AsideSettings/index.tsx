@@ -37,10 +37,7 @@ const AsideSettings = () => {
 
   return (
     <>
-      {
-        asideOpen 
-        ? 
-        <aside className={`aside ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
+        <aside className={`aside ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'} ${asideOpen ? '' : 'hidden'}`}>
           <section className='aside__container'>
             <div className='aside__top-group'>
             <img className='aside__logo' src={isDarkTheme ? LogoLight : LogoDark} alt="" />
@@ -73,11 +70,9 @@ const AsideSettings = () => {
             </div>
         </section>
         </aside>
-        : 
         <aside className='icon__container' onClick={() => setAsideOpen(true)} >
           <img src={IconShowSidebar} alt="" />
         </aside>
-      }
     </>
   );
 };
