@@ -11,6 +11,7 @@ const AsideSettings = () => {
   const modalContext = useContext(ModalContext);
   const themeContext = useContext(ThemeContext);
 
+
   if (!modalContext) {
     throw new Error("Task must be used within a ModalProvider");
   }

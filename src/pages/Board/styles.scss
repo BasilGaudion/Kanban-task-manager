@@ -1,4 +1,9 @@
 .board {
     display: flex;
     flex-direction: row;
+    overflow: hidden;
+
+    &__container {
+        width: 100%;
+    }
 }

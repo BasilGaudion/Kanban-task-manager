@@ -7,6 +7,10 @@
     box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
     position: relative;
 
+    &--reduct {
+        max-width: calc(100vw - 264px);
+    }
+
     &__container {
         display: flex;
         justify-content: space-between;
@@ -102,6 +106,7 @@
 
 @media screen and (min-width: 768px) {
     .header {
+        // max-width: 70vw;
         height: 80px;
 
         &__options {

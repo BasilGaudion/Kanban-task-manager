@@ -3,6 +3,10 @@
     height: calc(100vh - 64px);
     display: flex;
     justify-content: center;
+
+    &--reduct {
+        max-width: calc(100vw - 264px);
+    }
     
     &__container--empty {
         display: flex;
@@ -39,6 +43,10 @@
 @media screen and (min-width: 768px) {
     .main {
         height: calc(100vh - 80px);
+
+        &__container {
+            margin-top: -50px;
+        }
     }
 }
 

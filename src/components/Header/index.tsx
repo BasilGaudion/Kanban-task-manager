@@ -38,6 +38,7 @@ const Header = () => {
 
   const { asideOpen, setAsideOpen } = asideContext;
 
+
   const { showAddTask, setShowAddTask, showViewBoard, setShowViewBoard, showEditBoard, setShowEditBoard } = modalContext;
 
   const {isDarkTheme} = themeContext;
@@ -70,7 +71,7 @@ const Header = () => {
 }, [isSettingsOpen]);
 
   return (
-    <header className={`header ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
+    <header className={`header ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'} ${asideOpen && largeWindow ? 'header--reduct' : ''}`}>
       <div className='header__container container'>
         <div className='header__left-group' onClick={handleShowViewBoard}>
         {

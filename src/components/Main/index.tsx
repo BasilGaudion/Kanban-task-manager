@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import ModalViewTask from '../Modal/ModalViewTask';
 import ModalAddTask from '../Modal/ModalAddTask';
@@ -6,6 +6,8 @@ import ModalEditTask from '../Modal/ModalEditTask';
 import ModalViewBoard from '../Modal/ModalViewBoard';
 import { ModalContext } from "../../utils/providers/useModalProvider";
 import { ThemeContext } from "../../utils/providers/useThemeProvider";
+import { AsideContext } from "../../utils/providers/useAsideProvider";
+import useWindowSize from '../../hooks/useWindowSize';
 
 // Import Swiper styles
 import 'swiper/scss';
@@ -23,6 +25,17 @@ const Main = () => {
   const [haveColums, setHaveColums] = useState(true);
   const modalContext = useContext(ModalContext);
   const themeContext = useContext(ThemeContext);
+  const asideContext = useContext(AsideContext);
+  const [largeWindow, setLargeWindow] = useState(true);
+  const screenWidth = useWindowSize().width;
+
+  useEffect(() => {
+    if (screenWidth && screenWidth >= 768) {
+      setLargeWindow(true);
+    } else {
+      setLargeWindow(false);
+    }
+  }, [screenWidth]);
 
   if (!themeContext) {
     throw new Error("Task must be used within a themeProvider");
@@ -34,10 +47,16 @@ const Main = () => {
     throw new Error("Task must be used within a ModalProvider");
   }
 
+  if (!asideContext) {
+    throw new Error("Task must be used within a asideProvider");
+  }
+
+  const { asideOpen, setAsideOpen } = asideContext;
+
   const { showViewTask, setShowViewTask, showAddTask, setShowAddTask, showEditTask, setShowEditTask, showViewBoard, setShowViewBoard, showAddBoard, setShowAddBoard, showEditBoard, setShowEditBoard } = modalContext;
 
   return (
-    <main className={`main ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
+    <main className={`main ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'} ${asideOpen && largeWindow ? 'main--reduct' : ''}`}>
         {haveColums 
         
           ? 
