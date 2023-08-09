@@ -32,6 +32,21 @@
     }
 }
 
+// =============================
+// Responsive
+// =============================
+
+@media screen and (min-width: 768px) {
+    .main {
+        height: calc(100vh - 80px);
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .main {
+        height: calc(100vh - 96px);
+    }
+}
 // Swiper 
 .swiper-horizontal {
     width: calc(100% + 30px);
