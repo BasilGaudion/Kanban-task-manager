@@ -109,6 +109,19 @@
             height: 94px;
             top: 56px;
         }
+
+        &__board-name {
+            font-size: 1.25rem;
+        }
+
+        &__logo-container {
+            width: 174px;
+            height: 80px;
+            border-right: 1px solid var(--line-separator);
+            display: flex;
+            align-items: center;
+            margin-right: 24px;
+        }
     }
 }
 
@@ -118,6 +131,16 @@
 
         &__options {
             top: 65px;
+        }
+
+        &__logo-container {
+            width: 182px;
+            height: 96px;
+            margin-right: 32px;
+        }
+
+        &__board-name {
+            font-size: 1.5rem;
         }
     }
     

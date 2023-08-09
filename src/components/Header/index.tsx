@@ -1,8 +1,9 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import './styles.scss';
-import { LogoMobile, IconChevronDown, IconCross, IconVerticalEllipsis } from '../../assets';
+import { LogoMobile, IconChevronDown, IconCross, IconVerticalEllipsis, LogoLight, LogoDark } from '../../assets';
 import { ModalContext } from "../../utils/providers/useModalProvider";
 import { ThemeContext } from "../../utils/providers/useThemeProvider";
+import { AsideContext } from "../../utils/providers/useAsideProvider";
 import useWindowSize from '../../hooks/useWindowSize';
 
 const Header = () => {
@@ -10,6 +11,7 @@ const Header = () => {
     const iconRef = useRef<HTMLImageElement>(null);
   const modalContext = useContext(ModalContext);
   const themeContext = useContext(ThemeContext);
+  const asideContext = useContext(AsideContext);
   const [largeWindow, setLargeWindow] = useState(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const screenWidth = useWindowSize().width;
@@ -29,6 +31,12 @@ const Header = () => {
   if (!themeContext) {
     throw new Error("Task must be used within a themeProvider");
   }
+
+  if (!asideContext) {
+    throw new Error("Task must be used within a asideProvider");
+  }
+
+  const { asideOpen, setAsideOpen } = asideContext;
 
   const { showAddTask, setShowAddTask, showViewBoard, setShowViewBoard, showEditBoard, setShowEditBoard } = modalContext;
 
@@ -65,9 +73,32 @@ const Header = () => {
     <header className={`header ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
       <div className='header__container container'>
         <div className='header__left-group' onClick={handleShowViewBoard}>
-          <img src={LogoMobile} className="header__logo" alt="Logo Mobile" />
+        {
+          asideOpen 
+          ? 
+          (
+            <>
+            </>
+          )
+          : 
+          (
+            largeWindow 
+            ? 
+            <div className='header__logo-container'>
+              <img src={isDarkTheme ? LogoLight : LogoDark} className="header__logoXl" alt="Logo Mobile" />
+            </div>
+            : 
+            <img src={LogoMobile} className="header__logo" alt="Logo Mobile" />
+          )
+        }
           <h2 className='header__board-name'>Platform Launch</h2>
+        {
+          largeWindow 
+          ? 
+          <></>
+          : 
           <img src={IconChevronDown} alt=""/>
+        }
         </div>
         <div className='header__right-group'>
         {
