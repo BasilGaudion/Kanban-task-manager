@@ -9,6 +9,13 @@
     justify-content: center;
     cursor: pointer;
 
+    &:hover {
+
+        .create-column__title {
+            color: #635FC7;
+        }
+    }
+
     &__title {
         color: var(--medium-grey, #828FA3);
         font-family: Plus Jakarta Sans;
@@ -16,5 +23,6 @@
         font-weight: 700;
         line-height: normal;
         text-align: center;
+        transition: color 0.2s ease;
     }
 }

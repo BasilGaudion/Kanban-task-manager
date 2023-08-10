@@ -95,12 +95,21 @@
         padding: 13px;
         gap: 16px;
         cursor: pointer;
+        transition: background-color 0.2s ease;
 
         label {
             font-size: .75rem;
             color: var(--title);
             font-weight: 700;
             line-height: normal;
+        }
+
+        &:hover {
+            background-color: rgba(99, 95, 199, 0.25);
+
+            label {
+                color: var(--title);
+            }
         }
     }
 

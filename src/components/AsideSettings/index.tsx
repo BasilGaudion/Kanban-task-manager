@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import './styles.scss';
-import { IconBoard, IconBoardPurple, IconHideSidebar, IconShowSidebar, LogoDark, LogoLight } from '../../assets';
+import { IconBoard, IconBoardPurple, IconHidePurple, IconHideSidebar, IconShowSidebar, LogoDark, LogoLight } from '../../assets';
 import ThemeManager from '../ThemeManager';
 import { ModalContext } from "../../utils/providers/useModalProvider";
 import { ThemeContext } from "../../utils/providers/useThemeProvider";
@@ -64,7 +64,8 @@ const AsideSettings = () => {
             <div className='aside__bottom-group'>
                 <ThemeManager />
                 <div className='aside__hide-group' onClick={() => setAsideOpen(false)} >
-                    <img src={IconHideSidebar} alt="" />
+                  <img className="aside__icon-default" src={IconHideSidebar} alt="" />
+                  <img className="aside__icon-hover" src={IconHidePurple} alt="" />
                     <p className='aside__hide-text'>Hide Sidebar</p>
                 </div>
             </div>

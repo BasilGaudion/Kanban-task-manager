@@ -12,6 +12,11 @@
     justify-content: center;
     cursor: pointer;
     z-index: 1;
+    transition: opacity 0.1s ease;
+
+    &:hover {
+        opacity: 0.5;
+    }
 }
 
 .aside {
@@ -59,8 +64,20 @@
     &__item {
         display: flex;
         padding: 16px 24px;
+        width: 240px;
+        height: 48px;
         gap: 12px;
         cursor: pointer;
+        border-radius: 0px 100px 100px 0px;
+        transition: background-color 0.2s ease;
+
+        &:not(&--current):hover {
+            background-color: var(--item-hover);
+
+            .aside__item-title {
+                color: #635FC7;
+            }
+        }
 
         &--current {
             width: 240px;
@@ -87,9 +104,36 @@
 
     &__hide-group {
         display: flex;
-        margin-left: 24px;
         cursor: pointer;
         margin-top: 30px;
+        padding: 16px 24px;
+        width: 240px;
+        height: 48px;
+        border-radius: 0px 100px 100px 0px;
+        transition: background-color 0.2s ease, opacity 0.2s ease;
+        position: relative;
+
+        &:hover {
+            background-color: var(--item-hover);
+            
+            .aside__hide-text {
+                color: #635FC7;
+            }
+
+            .aside__icon-default {
+                opacity: 0;
+            }
+            
+            .aside__icon-hover {
+                opacity: 1;
+                position: relative;
+                left: -18px;
+            }
+        }
+    }
+
+    &__icon-hover {
+        opacity: 0;
     }
 
     &__hide-text {
