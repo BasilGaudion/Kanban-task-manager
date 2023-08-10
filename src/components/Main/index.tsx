@@ -16,7 +16,7 @@ import 'swiper/scss/pagination';
 import './styles.scss';
 import Column from '../Column';
 
-import { Pagination } from 'swiper/modules';
+import { Scrollbar } from 'swiper/modules';
 import CreateColumn from '../CreateColumn';
 import ModalAddBoard from '../Modal/ModalAddBoard';
 import ModalEditBoard from '../Modal/ModalEditBoard';
@@ -64,8 +64,11 @@ const Main = () => {
           <div className='main__container container'>
             <Swiper
               slidesPerView={'auto'}
+              simulateTouch={false}
               // spaceBetween={35}
               className="mySwiper"
+              modules={[Scrollbar]}
+              scrollbar={{ draggable: true }}
             >
               <SwiperSlide><Column/></SwiperSlide>
               <SwiperSlide><Column/></SwiperSlide>

@@ -36,6 +36,8 @@
         font-size: .9375rem;
         font-weight: 700;
     }
+
+
 }
 
 // =============================
@@ -65,4 +67,17 @@
 .swiper-slide {
     width: 280px!important;
     margin-right: 30px;
+}
+
+.swiper-scrollbar {
+    background-color: #FFF;
+    height: 8px;
+    border-radius: 100px;
+    width: 90%;
+}
+
+.swiper-scrollbar-drag {
+    background-color: #828FA3;
+    height: 8px;
+    border-radius: 100px;
 }
