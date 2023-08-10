@@ -1,39 +1,46 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './styles.scss';
 import { IconBoard, IconBoardPurple, IconHidePurple, IconHideSidebar, IconShowSidebar, LogoDark, LogoLight } from '../../assets';
 import ThemeManager from '../ThemeManager';
 import { ModalContext } from "../../utils/providers/useModalProvider";
 import { ThemeContext } from "../../utils/providers/useThemeProvider";
 import { AsideContext } from "../../utils/providers/useAsideProvider";
+import { BoardContext } from "../../utils/providers/useBoardProvider";
 
 const AsideSettings = () => {
   const asideContext = useContext(AsideContext);
   const modalContext = useContext(ModalContext);
   const themeContext = useContext(ThemeContext);
+  const boardContext = useContext(BoardContext);
 
-
+// ====== Modal Context ==========
   if (!modalContext) {
     throw new Error("Task must be used within a ModalProvider");
   }
-
-  if (!themeContext) {
-    throw new Error("Task must be used within a themeProvider");
-  }
-
-  if (!asideContext) {
-    throw new Error("Task must be used within a asideProvider");
-  }
-
-  const { asideOpen, setAsideOpen } = asideContext;
-
-
-  const {isDarkTheme} = themeContext;
-
   const { setShowAddBoard, showAddBoard } = modalContext;
 
   const handleShowAddBoard = () => {
     setShowAddBoard(true)
   }
+
+  // ====== Theme Context ==========
+  if (!themeContext) {
+    throw new Error("Task must be used within a themeProvider");
+  }
+  const {isDarkTheme} = themeContext;
+
+  // ====== Aside Context ==========
+  if (!asideContext) {
+    throw new Error("Task must be used within a asideProvider");
+  }
+  const { asideOpen, setAsideOpen } = asideContext;
+
+  // ====== Board Context ==========
+  if (!boardContext) {
+    throw new Error("Task must be used within a asideProvider");
+  }
+
+  const {allBoardsName, setCurrentBoard} = boardContext;
 
   return (
     <>
@@ -43,18 +50,18 @@ const AsideSettings = () => {
             <img className='aside__logo' src={isDarkTheme ? LogoLight : LogoDark} alt="" />
                 <h3 className='aside__title'>All Boards (3)</h3>
                 <ul className='aside__list'>
-                    <li className='aside__item aside__item--current'>
-                        <img src={IconBoard} alt="" />
-                        <p className='aside__item-title aside__item-title--current'>Platform Launch</p>
-                    </li>
-                    <li className='aside__item'>
-                        <img src={IconBoard} alt="" />
-                        <p className='aside__item-title'>Marketing Plan</p>
-                    </li>
-                    <li className='aside__item'>
-                        <img src={IconBoard} alt="" />
-                        <p className='aside__item-title'>Roadmap</p>
-                    </li>
+
+                {allBoardsName.map((item, index) => {
+                    return (
+                        <li 
+                        className={`aside__item ${index === 0 ? 'aside__item--current' : ''}`} 
+                        key={index} 
+                        onClick={() => setCurrentBoard(item)}>
+                            <img src={IconBoard} alt="" />
+                            <p className={`aside__item-title ${index === 0 ? 'aside__item-title--current' : ''}`}>{item}</p>
+                        </li>
+                    );
+                })}
                     <li className='aside__item aside__item--create' onClick={handleShowAddBoard}>
                         <img src={IconBoardPurple} alt="" />
                         <p className='aside__item-title aside__item-title--create'>+ Create New Board</p>

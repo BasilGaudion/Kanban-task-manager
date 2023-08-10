@@ -4,12 +4,14 @@ import { LogoMobile, IconChevronDown, IconCross, IconVerticalEllipsis, LogoLight
 import { ModalContext } from "../../utils/providers/useModalProvider";
 import { ThemeContext } from "../../utils/providers/useThemeProvider";
 import { AsideContext } from "../../utils/providers/useAsideProvider";
+import { BoardContext } from "../../utils/providers/useBoardProvider";
 import useWindowSize from '../../hooks/useWindowSize';
 
 const Header = () => {
   const settingsRef = useRef<HTMLDivElement>(null);
     const iconRef = useRef<HTMLImageElement>(null);
   const modalContext = useContext(ModalContext);
+  const boardContext = useContext(BoardContext);
   const themeContext = useContext(ThemeContext);
   const asideContext = useContext(AsideContext);
   const [largeWindow, setLargeWindow] = useState(true);
@@ -24,24 +26,19 @@ const Header = () => {
     }
   }, [screenWidth]);
 
+    // ====== Board Context ==========
+    if (!boardContext) {
+      throw new Error("Task must be used within a asideProvider");
+    }
+  
+    const {currentBoardData} = boardContext;
+
+    // ====== Modal Context ==========
   if (!modalContext) {
     throw new Error("Task must be used within a ModalProvider");
   }
 
-  if (!themeContext) {
-    throw new Error("Task must be used within a themeProvider");
-  }
-
-  if (!asideContext) {
-    throw new Error("Task must be used within a asideProvider");
-  }
-
-  const { asideOpen, setAsideOpen } = asideContext;
-
-
   const { showAddTask, setShowAddTask, showViewBoard, setShowViewBoard, showEditBoard, setShowEditBoard } = modalContext;
-
-  const {isDarkTheme} = themeContext;
 
   const handleShowAddTask = () => {
     setShowAddTask(!showAddTask);
@@ -54,6 +51,19 @@ const Header = () => {
   const handleShowEditBoard = () => {
     setShowEditBoard(!showEditBoard);
   }
+
+  if (!themeContext) {
+    throw new Error("Task must be used within a themeProvider");
+  }
+
+  const {isDarkTheme} = themeContext;
+
+    // ====== Aside Context ==========
+  if (!asideContext) {
+    throw new Error("Task must be used within a asideProvider");
+  }
+
+  const { asideOpen, setAsideOpen } = asideContext;
 
   useEffect(() => {
     const checkIfClickedOutsideSettings = (e: MouseEvent) => {
@@ -92,7 +102,7 @@ const Header = () => {
             <img src={LogoMobile} className="header__logo" alt="Logo Mobile" />
           )
         }
-          <h2 className='header__board-name'>Platform Launch</h2>
+          <h2 className='header__board-name'>{currentBoardData.name}</h2>
         {
           largeWindow 
           ? 
@@ -107,7 +117,7 @@ const Header = () => {
           ? 
           <button 
               type='button'
-              className='header__add-task header__add-task--large header__add-task--disable'
+              className={`header__add-task header__add-task--large ${currentBoardData.columns.length > 0 ? '' : 'header__add-task--disable'}`}
               onClick={handleShowAddTask}
           >
             + Add New Task
@@ -115,7 +125,7 @@ const Header = () => {
           : 
           <button 
               type='button'
-              className='header__add-task header__add-task--disable'
+              className={`header__add-task header__add-task--large ${currentBoardData.columns.length > 0 ? '' : 'header__add-task--disable'}`}
               onClick={handleShowAddTask}
           >
             +
