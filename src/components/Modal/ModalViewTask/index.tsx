@@ -3,6 +3,7 @@ import './styles.scss';
 import { IconVerticalEllipsis } from '../../../assets';
 import { ModalContext } from "../../../utils/providers/useModalProvider";
 import { ThemeContext } from "../../../utils/providers/useThemeProvider";
+import { BoardContext } from "../../../utils/providers/useBoardProvider";
 
 interface ModalViewTaskProps {
     handleClose: () => void;
@@ -17,6 +18,14 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
     const [modalAnimation, setModalAnimation] = useState('modal-open');
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const modalContext = useContext(ModalContext);
+    const boardContext = useContext(BoardContext);
+
+    if (!boardContext) {
+      throw new Error("Task must be used within a themeProvider");
+    }
+  
+    const {currentTask, setCurrentTask} = boardContext;
+    if (!currentTask) return null; 
 
     if (!modalContext) {
         throw new Error("Task must be used within a ModalProvider");
@@ -82,35 +91,29 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
         }
     }, [isSettingsOpen]);
     
-    
+    const completedSubtasks = currentTask.subtasks.filter(subtask => subtask.isCompleted).length;
 
   return (
     
     <div className={`vt ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
         <section className={`vt__container ${containerAnimation}`} ref={ref}>
         <div className='vt__title-group'>
-            <h2 className='vt__title'>Researche pricing points of various competitors and trial differents business models </h2>
+        <h2 className='vt__title'>{currentTask?.title}</h2>
             <img ref={iconRef} src={IconVerticalEllipsis} className="vt__ellipsis" alt="" onClick= {() => setIsSettingsOpen(!isSettingsOpen)} />
             <div className={`vt__options ${isSettingsOpen ? '' : 'disable'}`} ref={settingsRef}>
                 <p className='vt__option' onClick={handleShowEditTask}>Edit Task</p>
                 <p className='vt__option vt__option--delete'>Delete Task</p>
             </div>
         </div>
-        <p className='vt__text'>We know what we're planning to build for version one. Now we need to finalise the first pricing model we'll use. Keep iterating the subtasks until we have a coherent proposition.</p>
-        <h4 className='vt__subtitle'>Subtasks (2 of 3)</h4>
+        <p className='vt__text'>{currentTask?.description}</p>
+        <h4 className='vt__subtitle'>Subtasks ({completedSubtasks} of {currentTask?.subtasks.length})</h4>
         <ul className='vt__checkgroup'>
+        {currentTask.subtasks.map(subtask => (
         <li className='vt__check-item'>
             <input type="checkbox" name="one" id="one" className='vt__checkbox' />
             <label htmlFor="one">Research competitor pricing and business models</label>
         </li>
-        <li className='vt__check-item'>
-            <input type="checkbox" name="two" id="two" className='vt__checkbox' />
-            <label htmlFor="two">Research competitor pricing and business models</label>
-        </li>
-        <li className='vt__check-item'>
-            <input type="checkbox" name="three" id="three" className='vt__checkbox' />
-            <label htmlFor="three">Research competitor pricing and business models</label>
-        </li>
+        ))}
         </ul>
         <h4 className='vt__subtitle'>Subtasks (2 of 3)</h4>
         <div className="vt__select-block">

@@ -82,7 +82,7 @@ const Main = () => {
             >
               {currentBoardData.columns.map((column, index) => (
                 <SwiperSlide key={index}>
-                  <Column data={column} />
+                  <Column column={column} />
                 </SwiperSlide>
               ))}
               <SwiperSlide><CreateColumn/></SwiperSlide>
