@@ -2,7 +2,11 @@ import React from 'react';
 import './styles.scss';
 import Task from '../Task';
 
-const Column = () => {
+interface ColumnProps {
+  data: any;
+}
+
+const Column: React.FC<ColumnProps> = ({ data }) => {
   return (
     <section className='column'>
       <div className='column__title-group'>

@@ -43,12 +43,25 @@ interface IBoardContext {
 export const BoardContext = createContext<IBoardContext | undefined>(undefined);
 
 export const useBoardProvider = (): IBoardContext => {
+  const localStorageKeyBoardData = "boardData";
+  const localStorageKeyAllBoards = "allBoardsName";
+  const storedBoardData = localStorage.getItem(localStorageKeyBoardData);
+  const storedAllBoardsName = localStorage.getItem(localStorageKeyAllBoards);
+  const initialBoardData = storedBoardData ? JSON.parse(storedBoardData) : boardsData.boards[0];
+  const initialAllBoardsName = storedAllBoardsName ? JSON.parse(storedAllBoardsName) : boardsData.boards.map((board: Board) => board.name);
+  
+  const [currentBoardData, setCurrentBoardData] = useState<Board>(initialBoardData);
+  const [allBoardsName, setAllBoardsName] = useState<string[]>(initialAllBoardsName);
   const [currentBoard, setCurrentBoard] = useState<string>('');
-  const [currentBoardData, setCurrentBoardData] = useState<Board>(boardsData.boards[0]);
-  const [allBoardsName, setAllBoardsName] = useState<string[]>(boardsData.boards.map((board: Board) => board.name));
   const [columnByBoard, setColumnByBoard] = useState<Column[]>([]);
   const [tasksByColumn, setTasksByColumn] = useState<Task[]>([]);
   const [subTasksByTask, setSubTasksByTask] = useState<Subtask[]>([]);
+
+  useEffect(() => {
+    if (!localStorage.getItem("BoardData")) {
+      localStorage.setItem("BoardData", JSON.stringify(boardsData));
+    }
+  }, []);
 
   useEffect(() => {
     const result = boardsData.boards.find(board => board.name === currentBoard);

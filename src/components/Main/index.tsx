@@ -7,6 +7,7 @@ import ModalViewBoard from '../Modal/ModalViewBoard';
 import { ModalContext } from "../../utils/providers/useModalProvider";
 import { ThemeContext } from "../../utils/providers/useThemeProvider";
 import { AsideContext } from "../../utils/providers/useAsideProvider";
+import { BoardContext } from "../../utils/providers/useBoardProvider";
 import useWindowSize from '../../hooks/useWindowSize';
 
 // Import Swiper styles
@@ -21,11 +22,13 @@ import CreateColumn from '../CreateColumn';
 import ModalAddBoard from '../Modal/ModalAddBoard';
 import ModalEditBoard from '../Modal/ModalEditBoard';
 
+
 const Main = () => {
   const [haveColums, setHaveColums] = useState(true);
   const modalContext = useContext(ModalContext);
   const themeContext = useContext(ThemeContext);
   const asideContext = useContext(AsideContext);
+  const boardContext = useContext(BoardContext);
   const [largeWindow, setLargeWindow] = useState(true);
   const screenWidth = useWindowSize().width;
 
@@ -55,6 +58,13 @@ const Main = () => {
 
   const { showViewTask, setShowViewTask, showAddTask, setShowAddTask, showEditTask, setShowEditTask, showViewBoard, setShowViewBoard, showAddBoard, setShowAddBoard, showEditBoard, setShowEditBoard } = modalContext;
 
+    // ====== Board Context ==========
+    if (!boardContext) {
+      throw new Error("Task must be used within a asideProvider");
+    }
+  
+    const {currentBoardData} = boardContext;
+
   return (
     <main className={`main ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'} ${asideOpen && largeWindow ? 'main--reduct' : ''}`}>
         {haveColums 
@@ -70,10 +80,11 @@ const Main = () => {
               modules={[Scrollbar]}
               scrollbar={{ draggable: true }}
             >
-              <SwiperSlide><Column/></SwiperSlide>
-              <SwiperSlide><Column/></SwiperSlide>
-              <SwiperSlide><Column/></SwiperSlide>
-              <SwiperSlide><Column/></SwiperSlide>
+              {currentBoardData.columns.map((column, index) => (
+                <SwiperSlide key={index}>
+                  <Column data={column} />
+                </SwiperSlide>
+              ))}
               <SwiperSlide><CreateColumn/></SwiperSlide>
             </Swiper>
             {showEditBoard && <ModalEditBoard handleClose={() => setShowEditBoard(false)} isOpen/>}
