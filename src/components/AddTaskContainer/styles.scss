@@ -1,0 +1,25 @@
+.addTask {
+    width: 280px;
+    min-height: 88px;
+    border-radius: 8px;
+    background: var(--new-column);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+
+    &:hover {
+
+        .addTask__title {
+            color: #635FC7;
+        }
+    }
+
+    &__title {
+        color: var(--medium-grey, #828FA3);
+        font-family: Plus Jakarta Sans;
+        font-size: 14px;
+        font-weight: 700;
+        transition: color 0.2s ease;
+    }
+}

@@ -3,6 +3,7 @@ import './styles.scss';
 import Task from '../Task';
 // Dans votre fichier de composant
 import { Column as ColumnType, Task as TaskType } from '../../utils/providers/useBoardProvider';
+import AddTaskContainer from '../AddTaskContainer/AddTaskContainer';
 
 // ... Utilisez les interfaces comme d'habitude dans votre composant
 interface ColumnProps {
@@ -20,6 +21,7 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column }) => {
       {column.tasks.map((task: TaskType, index: number) => (
           <Task key={index} task={task} />
         ))}
+        <AddTaskContainer/>
       </section>
     </section>
   );
