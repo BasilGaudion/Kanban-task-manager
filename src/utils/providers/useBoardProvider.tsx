@@ -63,6 +63,7 @@ interface IBoardContext {
     currentSubtask: Subtask | null;
     setCurrentSubtask: React.Dispatch<React.SetStateAction<Subtask | null>>;
     updateSubtask: (subtaskTitle: string) => void;
+    createTask: (newTask: Task) => void;
 }
 
 export const BoardContext = createContext<IBoardContext | undefined>(undefined);
@@ -156,7 +157,7 @@ export const useBoardProvider = (): IBoardContext => {
     }
   }, [currentTask]);
 
-  function updateSubtask(subtaskTitle: string) {
+  const updateSubtask = (subtaskTitle: string) => {
     if(!currentTask) return;
 
     const subtaskIndex = currentTask.subtasks.findIndex(st => st.title === subtaskTitle);
@@ -182,6 +183,35 @@ export const useBoardProvider = (): IBoardContext => {
     localStorage.setItem('boardAppData', JSON.stringify({ boardData: boardCopy, allBoards: allBoardsName }));
   }
 
+  const createTask = (newTask: Task) => {
+    // Clone des données actuelles pour éviter des mutations directes
+    const currentData = {...currentBoardData};
+
+    if (!currentData || !currentData.columns) {
+      console.error("currentData ou currentData.columns est indéfini");
+      return;
+  }
+    // Trover la colonne correspondante basée sur le statut de la nouvelle tâche
+    const targetColumn = currentData.columns.filter(column => column).find(column => column.name === newTask.status);
+  
+    if (!targetColumn) return; // Gérer l'erreur, par exemple avec un message ou une notification
+
+    // Ajouter la nouvelle tâche à cette colonne
+    targetColumn.tasks.push(newTask);
+
+    const boardCopy = {...currentData}; 
+    const allBoardsName = currentBoard;
+
+    // Mise à jour du contexte pour refléter les changements dans l'application
+    setCurrentBoardData(currentData);
+
+    localStorage.setItem('boardAppData', JSON.stringify({ boardData: boardCopy, allBoards: allBoardsName }));
+
+    // Stocker les données dans le localStorage
+    // localStorage.setItem("boardAppData", JSON.stringify(currentData));
+  }
+  
+
   return {
     currentBoard,
     setCurrentBoard,
@@ -200,6 +230,7 @@ export const useBoardProvider = (): IBoardContext => {
     updateSubtask,
     currentSubtask,
     setCurrentSubtask,
+    createTask,
   };
 };
 

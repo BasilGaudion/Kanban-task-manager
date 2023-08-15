@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import './styles.scss';
 import { IconCross } from "../../../assets";
 import { ThemeContext } from "../../../utils/providers/useThemeProvider";
+import { BoardContext, Subtask, Task } from "../../../utils/providers/useBoardProvider";
+import { v4 as uuidv4 } from 'uuid';
 
 interface ModalAddTaskProps {
     handleClose: () => void;
@@ -12,7 +14,68 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({handleClose, isOpen }) => {
     const ref = useRef<HTMLDivElement>(null);
     const [containerAnimation, setContainerAnimation] = useState('pop-in');
     const [modalAnimation, setModalAnimation] = useState('modal-open');
+    const boardContext = useContext(BoardContext);
 
+    if (!boardContext) {
+        throw new Error("Task must be used within a themeProvider");
+    }
+
+    const {currentBoardData,
+         createTask
+        } = boardContext;
+
+    const initialTask: Task = {
+        id: uuidv4(),
+        title: "",
+        description: "",
+        status: "",
+        subtasks: []
+    };
+
+    const [inCreationtask, setInCreationTask] = useState<Task>(initialTask);
+
+        const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInCreationTask(prev => ({ ...prev!, title: e.target.value }));
+    }
+    
+    const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setInCreationTask(prev => ({ ...prev!, description: e.target.value }));
+    }
+    
+    const handleSubtaskChange = (index: number, value: string) => {
+        const newSubtasks = [...inCreationtask!.subtasks];
+        newSubtasks[index].title = value;
+        setInCreationTask(prev => ({ ...prev!, subtasks: newSubtasks }));
+    }
+
+    const handleAddSubtask = () => {
+        const newSubtask: Subtask = { 
+            id: uuidv4(),
+            title: "", 
+            isCompleted: false 
+        };
+        setInCreationTask(prev => ({
+            ...prev!,
+            subtasks: [...prev!.subtasks, newSubtask]
+        }));
+    }    
+
+    const handleDeleteSubtask = (indexToDelete: number) => {
+        setInCreationTask(prev => ({
+            ...prev!,
+            subtasks: prev!.subtasks.filter((_, index) => index !== indexToDelete)
+        }));
+    }
+    
+    
+    const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedStatus = e.target.value;
+    
+        setInCreationTask(prev => ({
+            ...prev!,
+            status: selectedStatus
+        }));
+    }
     const themeContext = useContext(ThemeContext);
 
     if (!themeContext) {
@@ -47,6 +110,16 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({handleClose, isOpen }) => {
         }
     }, [handleClose]);
 
+    const handleCreateTask = () => {
+        if (!inCreationtask.status) {
+            alert("Veuillez sélectionner un statut pour la tâche.");
+            return;
+        }
+    
+        createTask(inCreationtask);
+        handleClose();
+    }
+
   return (
     <div className={`at ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
         <section className={`at__container ${containerAnimation}`} ref={ref}>
@@ -60,6 +133,8 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({handleClose, isOpen }) => {
                 id="at__title"
                 className='at__input at__input--title'
                 placeholder='e.g. Take coffee break'
+                value={inCreationtask?.title}
+                onChange={handleTitleChange}
                 />
             </div>
             <div className='at__description-group'>
@@ -70,58 +145,58 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({handleClose, isOpen }) => {
                 id="at__description"
                 className='at__input at__input--description'
                 placeholder='e.g. It’s always good to take a break. This 15 minute break will  recharge the batteries a little.'
+                value={inCreationtask?.description}
+                onChange={handleDescriptionChange}
                 />
             </div>
             <div className='at__subtasks-group'>
                 <h3 className='at__title'>Subtasks</h3>
                 <ul className='at__subtasks'>
-                    <li className='at__subtask'>
-                        <label htmlFor="at__subtask1" className="visuallyhidden">Enter the first subtask</label>
+                {inCreationtask?.subtasks.map((subtask, key) => (
+                    <li className='et__subtask'>
+                        <label htmlFor="et__subtask1" className="visuallyhidden">Enter the first subtask</label>
                         <input
-                        type="text"
-                        name="at__subtask1"
-                        id="at__subtask1"
-                        className='at__input at__input--subtask'
-                        placeholder='e.g. Make coffee'
+                            type="text"
+                            name={subtask.title}
+                            id={subtask.title}
+                            className='et__input et__input--subtask'
+                            placeholder='e.g. Make coffee'
+                            value={subtask.title}
+                            onChange={(e) => handleSubtaskChange(key, e.target.value)}
                         />
-                        <img src={IconCross} alt="" className='at__subtask-delete'/>
-                    </li>
-                    <li className='at__subtask'>
-                        <label htmlFor="at__subtask2" className="visuallyhidden">Enter the second subtask</label>
-                        <input
-                        type="text"
-                        name="at__subtask2"
-                        id="at__subtask2"
-                        className='at__input at__input--subtask'
-                        placeholder='e.g. Drink coffee & smile'
+                        <img 
+                            src={IconCross} 
+                            alt="Delete Subtask" 
+                            className='et__subtask-delete'
+                            onClick={() => handleDeleteSubtask(key)}
                         />
-                        <img src={IconCross} alt="" className='at__subtask-delete'/>
                     </li>
-                    <li className='at__subtask'>
-                        <label htmlFor="at__subtask3" className="visuallyhidden">Enter the third subtask</label>
-                        <input
-                        type="text"
-                        name="at__subtask3"
-                        id="at__subtask3"
-                        className='at__input at__input--subtask'
-                        placeholder='e.g. Drink coffee & smile'
-                        />
-                        <img src={IconCross} alt="" className='at__subtask-delete'/>
-                    </li>
+                ))}
                 </ul>
-                <button type='button' className='at__button at__button--add'>+ Add New Subtask</button>
+                <button 
+                    type='button' 
+                    className='et__button et__button--add'
+                    onClick={handleAddSubtask}
+                >
+                    + Add New Subtask
+                </button>
             </div>
             <div className='at__status-group'>
                 <h3 className='at__title'>Status</h3>
                 <label htmlFor="subtasks" className="visuallyhidden">Select status of the task</label>
-                <select className='at__select' id='subtasks'>
-                    <option value="0">Doing</option>
-                    <option value="1">Todo</option>
-                    <option value="2">Finished</option>
-                    <option value="3">Bug report</option>
+                <select 
+                    className='et__select' 
+                    id='subtasks' 
+                    onChange={handleStatusChange} 
+                    value={inCreationtask.status}
+                >
+                    <option value="">Sélectionnez un statut</option>
+                    {currentBoardData.columns.map((column, key) => (
+                        <option key={key} value={column.name}>{column.name}</option>
+                    ))}
                 </select>
             </div>
-            <button type='button' className='at__button at__button--create'>Create Task</button>
+            <button type='button' className='at__button at__button--create' onClick={handleCreateTask}>Create Task</button>
         </section>
     </div>
   );

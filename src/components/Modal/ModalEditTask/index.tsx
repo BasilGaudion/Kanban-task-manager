@@ -4,7 +4,7 @@ import { IconCross } from "../../../assets";
 import { ModalContext } from "../../../utils/providers/useModalProvider";
 import { ThemeContext } from "../../../utils/providers/useThemeProvider";
 import { BoardContext, Subtask, Task } from "../../../utils/providers/useBoardProvider";
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4 } from 'uuid';
 
 interface ModalEditTaskProps {
     handleClose: () => void;
@@ -24,11 +24,6 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({handleClose, isOpen }) => 
 
     const {currentTask, setCurrentTask, currentBoardData} = boardContext;
     const [editingTask, setEditingTask] = useState<Task | null>(currentTask);
-
-    useEffect(() => {
-        console.log(editingTask);
-        
-    }, [editingTask]);
 
     const themeContext = useContext(ThemeContext);
 

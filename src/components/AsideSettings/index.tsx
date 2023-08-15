@@ -40,7 +40,7 @@ const AsideSettings = () => {
     throw new Error("Task must be used within a asideProvider");
   }
 
-  const {allBoardsName, setCurrentBoard} = boardContext;
+  const {allBoardsName, setCurrentBoard, currentBoard} = boardContext;
 
   return (
     <>
@@ -54,11 +54,11 @@ const AsideSettings = () => {
                 {allBoardsName.map((item, index) => {
                     return (
                         <li 
-                        className={`aside__item ${index === 0 ? 'aside__item--current' : ''}`} 
+                        className={`aside__item ${item === currentBoard ? 'aside__item--current' : ''}`} 
                         key={index} 
                         onClick={() => setCurrentBoard(item)}>
                             <img src={IconBoard} alt="" />
-                            <p className={`aside__item-title ${index === 0 ? 'aside__item-title--current' : ''}`}>{item}</p>
+                            <p className={`aside__item-title ${item === currentBoard ? 'aside__item-title--current' : ''}`}>{item}</p>
                         </li>
                     );
                 })}
