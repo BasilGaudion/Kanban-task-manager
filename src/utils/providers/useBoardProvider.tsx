@@ -39,8 +39,10 @@ interface IBoardContext {
     setSubTasksByTask: React.Dispatch<React.SetStateAction<Subtask[]>>;
     currentTask: Task | null;
     setCurrentTask: React.Dispatch<React.SetStateAction<Task | null>>;
+    currentSubtask: Subtask | null;
+    setCurrentSubtask: React.Dispatch<React.SetStateAction<Subtask | null>>;
+    updateSubtask: (subtaskTitle: string) => void;
 }
-
 
 export const BoardContext = createContext<IBoardContext | undefined>(undefined);
 
@@ -63,6 +65,7 @@ export const useBoardProvider = (): IBoardContext => {
   const [columnByBoard, setColumnByBoard] = useState<Column[]>(dataFromStorage.boardData.columns);
   const [tasksByColumn, setTasksByColumn] = useState<Task[]>([]);
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
+  const [currentSubtask, setCurrentSubtask] = useState<Subtask | null>(null);
   const [subTasksByTask, setSubTasksByTask] = useState<Subtask[]>([]);
 
   useEffect(() => {
@@ -86,6 +89,32 @@ export const useBoardProvider = (): IBoardContext => {
     localStorage.setItem(localStorageKey, JSON.stringify({ boardData: currentBoardData, allBoards: allBoardsName }));
   }, [currentBoardData, allBoardsName]);
 
+  function updateSubtask(subtaskTitle: string) {
+    if(!currentTask) return;
+
+    const subtaskIndex = currentTask.subtasks.findIndex(st => st.title === subtaskTitle);
+
+    if (subtaskIndex === -1) return;
+
+    const updatedSubtasks = [...currentTask.subtasks];
+    updatedSubtasks[subtaskIndex].isCompleted = !updatedSubtasks[subtaskIndex].isCompleted;
+
+    const updatedTask = { ...currentTask, subtasks: updatedSubtasks };
+    setCurrentTask(updatedTask);
+
+    const boardCopy = { ...currentBoardData };
+    const columnIdx = boardCopy.columns.findIndex(col => col.tasks.includes(currentTask));
+    const taskIdx = boardCopy.columns[columnIdx].tasks.findIndex(task => task === currentTask);
+
+    boardCopy.columns[columnIdx].tasks[taskIdx] = updatedTask;
+    setCurrentBoardData(boardCopy);
+
+    localStorage.setItem('boardAppData', JSON.stringify({ boardData: boardCopy, allBoards: allBoardsName }));
+
+  }
+
+  
+
   return {
     currentBoard,
     setCurrentBoard,
@@ -101,6 +130,9 @@ export const useBoardProvider = (): IBoardContext => {
     setSubTasksByTask,
     currentTask,
     setCurrentTask,
+    updateSubtask,
+    currentSubtask,
+    setCurrentSubtask,
   };
 };
 

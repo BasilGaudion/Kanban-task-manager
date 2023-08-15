@@ -24,7 +24,8 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
       throw new Error("Task must be used within a themeProvider");
     }
   
-    const {currentTask, setCurrentTask} = boardContext;
+    const {currentTask, setCurrentTask, updateSubtask, currentBoardData} = boardContext;
+
     if (!currentTask) return null; 
 
     if (!modalContext) {
@@ -108,21 +109,27 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
         <p className='vt__text'>{currentTask?.description}</p>
         <h4 className='vt__subtitle'>Subtasks ({completedSubtasks} of {currentTask?.subtasks.length})</h4>
         <ul className='vt__checkgroup'>
-        {currentTask.subtasks.map(subtask => (
-        <li className='vt__check-item'>
-            <input type="checkbox" name="one" id="one" className='vt__checkbox' />
-            <label htmlFor="one">Research competitor pricing and business models</label>
-        </li>
+        {currentTask?.subtasks.map((subtask, key) => (
+            <li className='vt__check-item' key={key}>
+                <input 
+                    type="checkbox" 
+                    name={subtask.title} 
+                    id={subtask.title} 
+                    className='vt__checkbox' 
+                    checked={subtask.isCompleted} 
+                    onChange={() => updateSubtask(subtask.title)}
+                />
+                <label htmlFor={subtask.title}>{subtask.title}</label>
+            </li>
         ))}
         </ul>
-        <h4 className='vt__subtitle'>Subtasks (2 of 3)</h4>
+        <h4 className='vt__subtitle'>Current status</h4>
         <div className="vt__select-block">
             <label htmlFor="subtasks" className="visuallyhidden">Select status</label>
             <select className='vt__select' id='subtasks'>
-                <option value="0">Doing</option>
-                <option value="1">Todo</option>
-                <option value="2">Finished</option>
-                <option value="3">Bug report</option>
+            {currentBoardData.columns.map((column, key) => (
+                <option value={key}>{column.name}</option>
+            ))}
             </select>
         </div>
       </section>
