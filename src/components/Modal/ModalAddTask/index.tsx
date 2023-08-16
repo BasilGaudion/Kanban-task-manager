@@ -34,7 +34,7 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({handleClose, isOpen }) => {
 
     const [inCreationtask, setInCreationTask] = useState<Task>(initialTask);
 
-        const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInCreationTask(prev => ({ ...prev!, title: e.target.value }));
     }
     

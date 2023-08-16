@@ -55,9 +55,6 @@ const Task: React.FC<TaskProps> = ({ task, index }) => {
           {...provided.dragHandleProps}
           className={`task ${isDarkTheme ?'isDarkTheme' : 'isLightTheme'}`}
           onClick={handleShowTask}
-          style={{
-            ...provided.draggableProps.style,
-          }}
         >
           <div className='task__container'>
             <h2 className='task__title'>{task.title}</h2>

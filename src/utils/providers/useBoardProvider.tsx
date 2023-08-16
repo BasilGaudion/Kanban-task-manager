@@ -64,6 +64,7 @@ interface IBoardContext {
     setCurrentSubtask: React.Dispatch<React.SetStateAction<Subtask | null>>;
     updateSubtask: (subtaskTitle: string) => void;
     createTask: (newTask: Task) => void;
+    createColumn: (newColumn: Column) => void;
     moveTaskToColumn: (taskId: string, newStatus: string, sourceIndex: number, targetIndex: number) => void; 
 }
 
@@ -185,7 +186,6 @@ export const useBoardProvider = (): IBoardContext => {
   }
 
   const createTask = (newTask: Task) => {
-    // Clone des données actuelles pour éviter des mutations directes
     const currentData = {...currentBoardData};
 
     if (!currentData || !currentData.columns) {
@@ -196,6 +196,25 @@ export const useBoardProvider = (): IBoardContext => {
   
     if (!targetColumn) return; 
     targetColumn.tasks.push(newTask);
+
+    const boardCopy = {...currentData}; 
+    const allBoardsName = currentBoard;
+
+    // Mise à jour du contexte pour refléter les changements dans l'application
+    setCurrentBoardData(currentData);
+
+    localStorage.setItem('boardAppData', JSON.stringify({ boardData: boardCopy, allBoards: allBoardsName }));
+  }
+
+  const createColumn = (newColumn: Column) => {
+    const currentData = {...currentBoardData};
+
+    if (!currentData) {
+      console.error("currentData ou currentData.columns est indéfini");
+      return;
+  }
+    
+    currentData.columns.push(newColumn);
 
     const boardCopy = {...currentData}; 
     const allBoardsName = currentBoard;
@@ -248,6 +267,7 @@ export const useBoardProvider = (): IBoardContext => {
     setCurrentSubtask,
     createTask,
     moveTaskToColumn,
+    createColumn,
   };
 };
 

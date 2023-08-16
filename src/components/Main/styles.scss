@@ -9,6 +9,25 @@
     &__container {
         display: flex;
         overflow-x: auto;
+        scroll-padding: 50px;
+        padding-bottom: 10px !important;
+
+        &::-webkit-scrollbar {
+            height: 8px;
+        }
+    
+        &::-webkit-scrollbar-track {
+            background: var(--background-board);
+        }
+    
+        &::-webkit-scrollbar-thumb {
+            background: #828FA3;
+            border-radius: 4px;
+        }
+    
+        &::-webkit-scrollbar-thumb:hover {
+            background: #606a79;
+        }
     }
 
     &__columns {

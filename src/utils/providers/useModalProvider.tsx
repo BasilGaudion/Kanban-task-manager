@@ -14,6 +14,8 @@ interface IModalContext {
   setShowAddBoard: React.Dispatch<React.SetStateAction<boolean>>;
   showEditBoard: boolean;
   setShowEditBoard: React.Dispatch<React.SetStateAction<boolean>>;
+  showAddColumn: boolean;
+  setShowAddColumn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ModalContext = createContext<IModalContext | undefined>(undefined);
@@ -25,6 +27,7 @@ export const useModalProvider = (): IModalContext => {
   const [showViewBoard, setShowViewBoard] = useState(false);
   const [showAddBoard, setShowAddBoard] = useState(false);
   const [showEditBoard, setShowEditBoard] = useState(false);
+  const [showAddColumn, setShowAddColumn] = useState(false);
 
   return {
     showViewTask,
@@ -38,6 +41,8 @@ export const useModalProvider = (): IModalContext => {
     showAddBoard,
     setShowAddBoard,
     showEditBoard,
-    setShowEditBoard
+    setShowEditBoard,
+    showAddColumn,
+    setShowAddColumn,
   };
 };
