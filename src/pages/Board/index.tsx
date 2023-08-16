@@ -5,6 +5,7 @@ import Main from '../../components/Main';
 import AsideSettings from '../../components/AsideSettings';
 import useWindowSize from '../../hooks/useWindowSize';
 import { AsideContext } from "../../utils/providers/useAsideProvider";
+import AllModals from '../../components/AllModals';
 
 const Board = () => {
   const [largeWindow, setLargeWindow] = useState(true);
@@ -37,6 +38,7 @@ const Board = () => {
       <div className={`board__container ${asideOpen ? 'settings' : ''}`}>
         <Header />
         <Main />
+        <AllModals/>
       </div>
     </div>
   );

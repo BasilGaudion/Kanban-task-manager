@@ -191,12 +191,9 @@ export const useBoardProvider = (): IBoardContext => {
       console.error("currentData ou currentData.columns est indéfini");
       return;
   }
-    // Trover la colonne correspondante basée sur le statut de la nouvelle tâche
     const targetColumn = currentData.columns.filter(column => column).find(column => column.name === newTask.status);
   
-    if (!targetColumn) return; // Gérer l'erreur, par exemple avec un message ou une notification
-
-    // Ajouter la nouvelle tâche à cette colonne
+    if (!targetColumn) return; 
     targetColumn.tasks.push(newTask);
 
     const boardCopy = {...currentData}; 
@@ -206,9 +203,6 @@ export const useBoardProvider = (): IBoardContext => {
     setCurrentBoardData(currentData);
 
     localStorage.setItem('boardAppData', JSON.stringify({ boardData: boardCopy, allBoards: allBoardsName }));
-
-    // Stocker les données dans le localStorage
-    // localStorage.setItem("boardAppData", JSON.stringify(currentData));
   }
   
 

@@ -1,11 +1,9 @@
 import React from 'react';
 import './styles.scss';
 import Task from '../Task';
-// Dans votre fichier de composant
 import { Column as ColumnType, Task as TaskType } from '../../utils/providers/useBoardProvider';
 import AddTaskContainer from '../AddTaskContainer/AddTaskContainer';
 
-// ... Utilisez les interfaces comme d'habitude dans votre composant
 interface ColumnProps {
   column: ColumnType;
 }
@@ -17,12 +15,19 @@ const ColumnComponent: React.FC<ColumnProps> = ({ column }) => {
         <span className='column__color'></span>
         <h3 className='column__title'>{column.name} ({column.tasks.length})</h3>
       </div>
-      <section className='column__tasks'>
-      {column.tasks.map((task: TaskType, index: number) => (
-          <Task key={index} task={task} />
-        ))}
-        <AddTaskContainer/>
-      </section>
+      {
+        column.tasks.length < 1 
+        ? 
+          <></>
+        : 
+          <div className='column__scrollable'>
+            {column.tasks.map((task: TaskType, index: number) => (
+                <Task key={index} task={task} />
+            ))}
+          </div>
+      }
+      
+      <AddTaskContainer />
     </section>
   );
 };
