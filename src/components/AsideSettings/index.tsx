@@ -6,12 +6,14 @@ import { ModalContext } from "../../utils/providers/useModalProvider";
 import { ThemeContext } from "../../utils/providers/useThemeProvider";
 import { AsideContext } from "../../utils/providers/useAsideProvider";
 import { BoardContext } from "../../utils/providers/useBoardProvider";
+import useWindowSize from '../../hooks/useWindowSize';
 
 const AsideSettings = () => {
   const asideContext = useContext(AsideContext);
   const modalContext = useContext(ModalContext);
   const themeContext = useContext(ThemeContext);
   const boardContext = useContext(BoardContext);
+  const screenWidth = useWindowSize().width;
 
 // ====== Modal Context ==========
   if (!modalContext) {
@@ -34,6 +36,14 @@ const AsideSettings = () => {
     throw new Error("Task must be used within a asideProvider");
   }
   const { asideOpen, setAsideOpen } = asideContext;
+
+  useEffect(() => {
+    if(screenWidth) {
+      if (screenWidth < 768) {
+        setAsideOpen(false)
+      }
+    }
+  }, [screenWidth]);
 
   // ====== Board Context ==========
   if (!boardContext) {

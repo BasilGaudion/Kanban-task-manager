@@ -18,14 +18,6 @@ interface DraggedTaskItem {
 }
 
 const Column: React.FC<ColumnProps> = ({ column }) => {
-  const boardContext = useContext(BoardContext);
-
-  if (!boardContext) {
-    throw new Error("Task must be used within a themeProvider");
-  }
-
-  const {moveTaskToColumn} = boardContext;
-
   return (
     <section className='column'>
       <div className='column__title-group'>

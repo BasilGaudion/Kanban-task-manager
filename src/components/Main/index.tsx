@@ -25,6 +25,7 @@ const Main = () => {
   const boardContext = useContext(BoardContext);
   const [largeWindow, setLargeWindow] = useState(true);
   const screenWidth = useWindowSize().width;
+  const containerRef = useRef(null);
 
   useEffect(() => {
     if (screenWidth && screenWidth >= 768) {
@@ -73,8 +74,8 @@ const Main = () => {
   return (
     <main className={`main ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'} ${asideOpen && largeWindow ? 'main--reduct' : ''}`}>
         {haveColums ? (
-          <div className='main__container container'>
-            <DragDropContext key={currentBoardData.id} onDragEnd={onDragEnd} >
+          <div className='main__container container' ref={containerRef}>
+            <DragDropContext key={currentBoardData.id} onDragEnd={onDragEnd}>
               {currentBoardData.columns.map((column, index) => (
                 <div className='main__columns' key={index}>
                   <Column key={column.id} column={column} />
