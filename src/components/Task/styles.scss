@@ -5,6 +5,7 @@
     box-shadow: 0px 4px 6px 0px rgba(54, 78, 126, 0.10);
     background: var(--background-modal);
     cursor: pointer;
+    left: auto !important;
 
     &__container {
         padding: 23px 16px;

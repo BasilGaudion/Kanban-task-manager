@@ -6,6 +6,15 @@
     width: 100vw;
     transition: width 0.3s ease;
 
+    &__container {
+        display: flex;
+        overflow-x: auto;
+    }
+
+    &__columns {
+        margin-right: 20px;
+    }
+
     &--reduct {
         width: calc(100vw - 264px);  /* Valeur finale */
     }
@@ -58,26 +67,4 @@
     .main {
         height: calc(100vh - 96px);
     }
-}
-// Swiper 
-.swiper-horizontal {
-    width: calc(100% + 30px);
-}
-
-.swiper-slide {
-    width: 280px!important;
-    margin-right: 30px;
-}
-
-.swiper-scrollbar {
-    background: var(--background-board);
-    height: 8px;
-    border-radius: 100px;
-    width: 90%;
-}
-
-.swiper-scrollbar-drag {
-    background-color: #828FA3;
-    height: 8px;
-    border-radius: 100px;
 }

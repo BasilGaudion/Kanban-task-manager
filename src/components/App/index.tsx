@@ -16,15 +16,15 @@ function App() {
 
   return (
     <div className="app">
-      <ThemeContext.Provider value={dataThemeContext}>
-        <BoardContext.Provider value={dataBoardContext}>
-          <AsideContext.Provider value={dataAsideContext}>
-            <ModalContext.Provider value={dataModalContext}>
-              <AppRoutes />
-            </ModalContext.Provider>
-          </AsideContext.Provider>
-        </BoardContext.Provider>
-      </ThemeContext.Provider>
+        <ThemeContext.Provider value={dataThemeContext}>
+          <BoardContext.Provider value={dataBoardContext}>
+            <AsideContext.Provider value={dataAsideContext}>
+              <ModalContext.Provider value={dataModalContext}>
+                <AppRoutes />
+              </ModalContext.Provider>
+            </AsideContext.Provider>
+          </BoardContext.Provider>
+        </ThemeContext.Provider>
     </div>
   );
 }

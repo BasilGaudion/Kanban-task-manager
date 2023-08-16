@@ -64,6 +64,7 @@ interface IBoardContext {
     setCurrentSubtask: React.Dispatch<React.SetStateAction<Subtask | null>>;
     updateSubtask: (subtaskTitle: string) => void;
     createTask: (newTask: Task) => void;
+    moveTaskToColumn: (taskId: string, newStatus: string, sourceIndex: number, targetIndex: number) => void; 
 }
 
 export const BoardContext = createContext<IBoardContext | undefined>(undefined);
@@ -204,7 +205,28 @@ export const useBoardProvider = (): IBoardContext => {
 
     localStorage.setItem('boardAppData', JSON.stringify({ boardData: boardCopy, allBoards: allBoardsName }));
   }
-  
+
+  // ==============DRAG AND DROP====================
+
+  const moveTaskToColumn = (
+    taskId: string,
+    newStatus: string,
+    sourceIndex: number,
+    targetIndex: number
+) => {
+    const boardCopy = { ...currentBoardData };
+    const sourceColumn = boardCopy.columns.find(column => column.tasks.some(task => task.id === taskId));
+    const destinationColumn = boardCopy.columns.find(column => column.name === newStatus);
+
+    if (sourceColumn && destinationColumn) {
+        const [movedTask] = sourceColumn.tasks.splice(sourceIndex, 1);
+        movedTask.status = newStatus;
+        destinationColumn.tasks.splice(targetIndex, 0, movedTask);
+    }
+
+    setCurrentBoardData(boardCopy);
+    localStorage.setItem('boardAppData', JSON.stringify({ boardData: boardCopy, allBoards: allBoardsName }));
+};
 
   return {
     currentBoard,
@@ -225,6 +247,7 @@ export const useBoardProvider = (): IBoardContext => {
     currentSubtask,
     setCurrentSubtask,
     createTask,
+    moveTaskToColumn,
   };
 };
 

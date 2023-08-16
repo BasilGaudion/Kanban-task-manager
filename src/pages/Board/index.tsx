@@ -38,8 +38,8 @@ const Board = () => {
       <div className={`board__container ${asideOpen ? 'settings' : ''}`}>
         <Header />
         <Main />
-        <AllModals/>
       </div>
+      <AllModals/>
     </div>
   );
 };

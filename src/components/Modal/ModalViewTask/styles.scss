@@ -12,7 +12,6 @@
         display: flex;
         align-items: center;
         gap: 16px;
-        margin-bottom: 24px;
         position: relative;
     }
 
@@ -68,15 +67,7 @@
         font-size: .75rem;
         color: var(--subtitle);
         font-weight: 700;
-        line-height: normal;
-        
-        &:first-of-type {
-            margin-bottom: 16px;
-        }
-
-        &:nth-of-type(2) {
-            margin-bottom: 8px;
-        }
+    
     }
 
     &__checkgroup {
