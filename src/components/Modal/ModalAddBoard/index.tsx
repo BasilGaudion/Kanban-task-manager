@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import './styles.scss';
 import { IconCross } from "../../../assets";
 import { ThemeContext } from "../../../utils/providers/useThemeProvider";
+import { BoardContext, Board, Column } from "../../../utils/providers/useBoardProvider";
+import { v4 as uuidv4 } from 'uuid';
 
 interface ModalAddBoardProps {
     handleClose: () => void;
@@ -12,6 +14,55 @@ const ModalAddBoard: React.FC<ModalAddBoardProps> = ({handleClose, isOpen }) => 
     const ref = useRef<HTMLDivElement>(null);
     const [containerAnimation, setContainerAnimation] = useState('pop-in');
     const [modalAnimation, setModalAnimation] = useState('modal-open');
+    const boardContext = useContext(BoardContext);
+
+    if (!boardContext) {
+        throw new Error("Task must be used within a themeProvider");
+    }
+
+    const {createBoard} = boardContext;
+
+    const initialBoard: Board = {
+        id: uuidv4(),
+        name: "",
+        columns: []
+    };
+    const [inCreationBoard, setInCreationBoard] = useState<Board>(initialBoard);
+
+    const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInCreationBoard(prev => ({ ...prev!, name: e.target.value }));
+    }
+
+    const handleColumnsChange = (index: number, value: string) => {
+        const newColumns = [...inCreationBoard!.columns];
+        newColumns[index].name = value;
+        setInCreationBoard(prev => ({ ...prev!, columns: newColumns }));
+    }
+
+    const handleAddColumns = () => {
+        const newColumns: Column = { 
+            id: uuidv4(),
+            name: "", 
+            tasks: []
+        };
+        setInCreationBoard(prev => ({
+            ...prev!,
+            columns: [...prev!.columns, newColumns]
+        }));
+    }    
+
+    const handleDeleteColumns = (indexToDelete: number) => {
+        setInCreationBoard(prev => ({
+            ...prev!,
+            columns: prev!.columns.filter((_, index) => index !== indexToDelete)
+        }));
+    }
+
+    const handleCreateBoard = () => {    
+        createBoard(inCreationBoard);
+        handleClose();
+    }
+
 
     const themeContext = useContext(ThemeContext);
 
@@ -61,48 +112,46 @@ const ModalAddBoard: React.FC<ModalAddBoardProps> = ({handleClose, isOpen }) => 
                 id="ab__title"
                 className='ab__input ab__input--title'
                 placeholder='e.g. Web Design'
+                value={inCreationBoard?.name}
+                onChange={handleTitleChange}
                 />
             </div>
             <div className='ab__columns-group'>
                 <h3 className='ab__title'>Board Columns</h3>
                 <ul className='ab__columns'>
+                    {inCreationBoard?.columns.map((column, key) => (
                     <li className='ab__column'>
-                        <label htmlFor="ab__column1" className="visuallyhidden">Enter the first subtask</label>
+                        <label htmlFor="ab__column1" className="visuallyhidden">Enter the first column</label>
                         <input
                         type="text"
-                        name="ab__column1"
-                        id="ab__column1"
+                        name={column.name}
+                        id={column.name}
                         className='ab__input ab__input--column'
                         placeholder='e.g. Make coffee'
+                        value={column.name}
+                        onChange={(e) => handleColumnsChange(key, e.target.value)}
                         />
-                        <img src={IconCross} alt="" className='ab__column-delete'/>
-                    </li>
-                    <li className='ab__column'>
-                        <label htmlFor="ab__column2" className="visuallyhidden">Enter the second column</label>
-                        <input
-                        type="text"
-                        name="ab__column2"
-                        id="ab__column2"
-                        className='ab__input ab__input--column'
-                        placeholder='e.g. Drink coffee & smile'
+                        <img 
+                            src={IconCross}
+                            alt=""
+                            className='ab__column-delete'
+                            onClick={() => handleDeleteColumns(key)}
                         />
-                        <img src={IconCross} alt="" className='ab__column-delete'/>
                     </li>
-                    <li className='ab__column'>
-                        <label htmlFor="ab__column3" className="visuallyhidden">Enter the third column</label>
-                        <input
-                        type="text"
-                        name="ab__column3"
-                        id="ab__column3"
-                        className='ab__input ab__input--column'
-                        placeholder='e.g. Drink coffee & smile'
-                        />
-                        <img src={IconCross} alt="" className='ab__column-delete'/>
-                    </li>
+                    ))}
                 </ul>
-                <button type='button' className='ab__button ab__button--add'>+ Add New column</button>
+                <button
+                type='button'
+                className='ab__button ab__button--add'
+                onClick={handleAddColumns}>
+                    + Add New column
+                </button>
             </div>
-            <button type='button' className='ab__button ab__button--create'>Create New Board</button>
+            <button
+            type='button'
+            className='ab__button ab__button--create'
+            onClick={handleCreateBoard}
+            >Create New Board</button>
         </section>
     </div>
   );

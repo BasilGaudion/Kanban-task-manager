@@ -8,6 +8,10 @@
     justify-content: center;
     cursor: pointer;
 
+    &--empty {
+        margin-top: -20px;
+    }
+
     &:hover {
 
         .addTask__title {

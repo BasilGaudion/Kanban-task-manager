@@ -38,7 +38,7 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
           </div>
         )}
       </Droppable>
-      <AddTaskContainer />
+      <AddTaskContainer column={column}/>
     </section>
   );
 };

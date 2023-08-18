@@ -23,7 +23,7 @@ export interface Column {
   tasks: Task[];
 }
 
-interface Board {
+export interface Board {
     id: string;
     name: string;
     columns: Column[];
@@ -65,6 +65,7 @@ interface IBoardContext {
     updateSubtask: (subtaskTitle: string) => void;
     createTask: (newTask: Task) => void;
     createColumn: (newColumn: Column) => void;
+    createBoard: (newBoard: Board) => void;
     moveTaskToColumn: (taskId: string, newStatus: string, sourceIndex: number, targetIndex: number) => void; 
 }
 
@@ -212,17 +213,24 @@ export const useBoardProvider = (): IBoardContext => {
     if (!currentData) {
       console.error("currentData ou currentData.columns est indéfini");
       return;
-  }
+    }
     
     currentData.columns.push(newColumn);
 
     const boardCopy = {...currentData}; 
     const allBoardsName = currentBoard;
 
-    // Mise à jour du contexte pour refléter les changements dans l'application
     setCurrentBoardData(currentData);
 
     localStorage.setItem('boardAppData', JSON.stringify({ boardData: boardCopy, allBoards: allBoardsName }));
+  }
+
+  const createBoard = (newBoard: Board) => {
+    generatedBoards.push(newBoard);
+    setCurrentBoardData(newBoard);
+    setAllBoardsName([...allBoardsName, newBoard.name]);
+    setCurrentBoard(newBoard.name);
+    localStorage.setItem('boardAppData', JSON.stringify({ boardData: newBoard, allBoards: allBoardsName }));
   }
 
   // ==============DRAG AND DROP====================
@@ -268,6 +276,7 @@ export const useBoardProvider = (): IBoardContext => {
     createTask,
     moveTaskToColumn,
     createColumn,
+    createBoard
   };
 };
 
