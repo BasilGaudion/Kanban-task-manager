@@ -8,6 +8,7 @@ import ModalViewBoard from '../Modal/ModalViewBoard';
 import ModalAddBoard from '../Modal/ModalAddBoard';
 import ModalEditBoard from '../Modal/ModalEditBoard';
 import ModalAddColumn from '../Modal/ModalAddColumn';
+import ModalDeleteTask from '../Modal/ModalDeleteTask';
 
 
 const AllModals = () => {
@@ -17,7 +18,7 @@ const AllModals = () => {
         throw new Error("Task must be used within a ModalProvider");
       }
 
-    const { showViewTask, setShowViewTask, showAddTask, setShowAddTask, showEditTask, setShowEditTask, showViewBoard, setShowViewBoard, showAddBoard, setShowAddBoard, showEditBoard, setShowEditBoard, showAddColumn, setShowAddColumn } = modalContext;
+    const { showViewTask, setShowViewTask, showAddTask, setShowAddTask, showEditTask, setShowEditTask, showViewBoard, setShowViewBoard, showAddBoard, setShowAddBoard, showEditBoard, setShowEditBoard, showAddColumn, setShowAddColumn, showDeleteTask, setShowDeleteTask } = modalContext;
   return (
     <>
             {showEditBoard && <ModalEditBoard handleClose={() => setShowEditBoard(false)} isOpen/>}
@@ -27,6 +28,7 @@ const AllModals = () => {
             {showAddTask && <ModalAddTask handleClose={() => setShowAddTask(false)} isOpen />}
             {showEditTask && <ModalEditTask handleClose={() => setShowEditTask(false)} isOpen />}
             {showAddColumn && <ModalAddColumn handleClose={() => setShowAddColumn(false)} isOpen />}
+            {showDeleteTask && <ModalDeleteTask handleClose={() => setShowDeleteTask(false)} isOpen />}
     </>
   );
 };

@@ -43,7 +43,9 @@ const ModalAddColumn: React.FC<ModalAddColumnProps> = ({handleClose, isOpen }) =
             return;
         }
         createColumn(inCreationColumn);
-        handleClose();
+        setContainerAnimation('pop-out');
+        setModalAnimation('modal-closed');
+        setTimeout(handleClose, 300);
     }
 
     useEffect(() => {

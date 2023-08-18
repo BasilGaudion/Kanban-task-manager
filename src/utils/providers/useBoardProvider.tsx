@@ -2,7 +2,8 @@ import React, { useState, createContext, useEffect } from 'react';
 import boardsData from '../Data/data.json';
 import { v4 as uuidv4 } from 'uuid';
 
-// Types definition
+// ===================== TYPES DEFINITION =====================
+
 export interface Subtask {
   id: string;
   title: string;
@@ -66,99 +67,94 @@ interface IBoardContext {
     createTask: (newTask: Task) => void;
     createColumn: (newColumn: Column) => void;
     createBoard: (newBoard: Board) => void;
+    deleteTask: (task: Task) => void;
     moveTaskToColumn: (taskId: string, newStatus: string, sourceIndex: number, targetIndex: number) => void; 
 }
 
 export const BoardContext = createContext<IBoardContext | undefined>(undefined);
 
+// ===================== MAIN BOARD PROVIDER =====================
+
 export const useBoardProvider = (): IBoardContext => {
+  const localStorageKey = "boardAppData";
+
+  // --------------- Initialization ---------------
 
   const generateIdForBoards = (boards: RawBoard[]): Board[] => {
     return boards.map(board => ({
-        ...board,
+      ...board,
+      id: uuidv4(),
+      columns: board.columns.map(column => ({
+        ...column,
         id: uuidv4(),
-        columns: board.columns.map(column => ({
-            ...column,
-            id: uuidv4(),
-            tasks: column.tasks.map(task => ({
-                ...task,
-                id: uuidv4(),
-                subtasks: task.subtasks.map(subtask => ({
-                    ...subtask,
-                    id: uuidv4()
-                }))
-            }))
+        tasks: column.tasks.map(task => ({
+          ...task,
+          id: uuidv4(),
+          subtasks: task.subtasks.map(subtask => ({
+            ...subtask,
+            id: uuidv4()
+          }))
         }))
+      }))
     }));
   };
-  const generatedBoards = generateIdForBoards(boardsData.boards);
 
-  const localStorageKey = "boardAppData";
-  const storedData = localStorage.getItem(localStorageKey);
-
-  let initializedData;
-  if (storedData) {
-    initializedData = JSON.parse(storedData);
-} else {
-    const generatedBoards = generateIdForBoards(boardsData.boards);
-    initializedData = {
+  const getStoredData = () => {
+    const storedData = localStorage.getItem(localStorageKey);
+    if (storedData) {
+      return JSON.parse(storedData);
+    } else {
+      const generatedBoards = generateIdForBoards(boardsData.boards);
+      const defaultData = {
         boardData: generatedBoards[0],
         allBoards: generatedBoards.map((board: Board) => board.name)
-    };
-    localStorage.setItem(localStorageKey, JSON.stringify(initializedData));
-}
+      };
+      localStorage.setItem(localStorageKey, JSON.stringify(defaultData));
+      return defaultData;
+    }
+  };
+
+  const initializedData = getStoredData();
+
+  // --------------- States ---------------
 
   const [currentBoardData, setCurrentBoardData] = useState<Board>(initializedData.boardData);
   const [allBoardsName, setAllBoardsName] = useState<string[]>(initializedData.allBoards);
   const [currentBoard, setCurrentBoard] = useState<string>(initializedData.boardData.name);
-  const [columnByBoard, setColumnByBoard] = useState<Column[]>(initializedData.boardData.columns);  
+  const [columnByBoard, setColumnByBoard] = useState<Column[]>(initializedData.boardData.columns);
   const [tasksByColumn, setTasksByColumn] = useState<Task[]>([]);
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
   const [currentSubtask, setCurrentSubtask] = useState<Subtask | null>(null);
   const [subTasksByTask, setSubTasksByTask] = useState<Subtask[]>([]);
 
+  // --------------- Effects & LocalStorage Sync ---------------
+
   useEffect(() => {
     localStorage.setItem(localStorageKey, JSON.stringify({ boardData: currentBoardData, allBoards: allBoardsName }));
   }, [currentBoardData, allBoardsName]);
 
   useEffect(() => {
-    const result = generatedBoards.find(board => board.name === currentBoard);
+    const result = generateIdForBoards(boardsData.boards).find(board => board.name === currentBoard);
     if (result) {
       setCurrentBoardData(result);
       setColumnByBoard(result.columns);
-      if(result.columns.length) {
-          setTasksByColumn(result.columns[0].tasks);
+      if (result.columns.length) {
+        setTasksByColumn(result.columns[0].tasks);
       }
     }
   }, [currentBoard]);
 
-  useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify({ boardData: currentBoardData, allBoards: allBoardsName }));
-  }, [currentBoardData, allBoardsName]);
+  // --------------- Helper Functions ---------------
 
   const findColumnAndTaskIndices = (task: Task) => {
     const columnIdx = currentBoardData.columns.findIndex(col => col.tasks.some(t => t.id === task.id));
-
     if (columnIdx === -1) return { columnIdx: -1, taskIdx: -1 };
-
     const taskIdx = currentBoardData.columns[columnIdx].tasks.findIndex(t => t.id === task.id);
     return { columnIdx, taskIdx };
-  }
+  };
 
-  useEffect(() => {
-    if (currentTask) {
-        const { columnIdx, taskIdx } = findColumnAndTaskIndices(currentTask);
-        
-        if (columnIdx === -1 || taskIdx === -1) {
-            console.error("Couldn't locate the task or column");
-            return;
-        }
+  // --------------- Actions ---------------
 
-        const boardCopy = { ...currentBoardData };
-        boardCopy.columns[columnIdx].tasks[taskIdx] = currentTask;
-        setCurrentBoardData(boardCopy);
-    }
-  }, [currentTask]);
 
   const updateSubtask = (subtaskTitle: string) => {
     if(!currentTask) return;
@@ -201,7 +197,6 @@ export const useBoardProvider = (): IBoardContext => {
     const boardCopy = {...currentData}; 
     const allBoardsName = currentBoard;
 
-    // Mise à jour du contexte pour refléter les changements dans l'application
     setCurrentBoardData(currentData);
 
     localStorage.setItem('boardAppData', JSON.stringify({ boardData: boardCopy, allBoards: allBoardsName }));
@@ -226,12 +221,37 @@ export const useBoardProvider = (): IBoardContext => {
   }
 
   const createBoard = (newBoard: Board) => {
-    generatedBoards.push(newBoard);
-    setCurrentBoardData(newBoard);
-    setAllBoardsName([...allBoardsName, newBoard.name]);
-    setCurrentBoard(newBoard.name);
-    localStorage.setItem('boardAppData', JSON.stringify({ boardData: newBoard, allBoards: allBoardsName }));
+      // Ajout du nouveau tableau à la liste actuelle des tableaux
+      const updatedBoards = [...allBoardsName, newBoard.name];
+      
+      setCurrentBoardData(newBoard);
+      setAllBoardsName(updatedBoards);
+      setCurrentBoard(newBoard.name);
+
+      // Mettre à jour le stockage local
+      localStorage.setItem('boardAppData', JSON.stringify({ boardData: newBoard, allBoards: updatedBoards }));
   }
+
+  const deleteTask = (task: Task) => {
+    const boardCopy = { ...currentBoardData };
+    const columnContainingTask = boardCopy.columns.find(column => column.tasks.some(t => t.id === task.id));
+    if (!columnContainingTask) {
+        console.error("Couldn't find column containing the task");
+        return;
+    }
+
+    const taskIndex = columnContainingTask.tasks.findIndex(t => t.id === task.id);
+    if (taskIndex === -1) {
+        console.error("Couldn't find the task");
+        return;
+    }
+
+    columnContainingTask.tasks.splice(taskIndex, 1);
+
+    setCurrentBoardData(boardCopy);
+
+    localStorage.setItem(localStorageKey, JSON.stringify({ boardData: boardCopy, allBoards: allBoardsName }));
+};
 
   // ==============DRAG AND DROP====================
 
@@ -276,7 +296,8 @@ export const useBoardProvider = (): IBoardContext => {
     createTask,
     moveTaskToColumn,
     createColumn,
-    createBoard
+    createBoard,
+    deleteTask
   };
 };
 

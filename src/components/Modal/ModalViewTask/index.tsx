@@ -32,7 +32,7 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
         throw new Error("Task must be used within a ModalProvider");
       }
     
-      const { showEditTask, setShowEditTask } = modalContext;
+      const { showEditTask, setShowEditTask, setShowDeleteTask, showDeleteTask } = modalContext;
 
       const themeContext = useContext(ThemeContext);
 
@@ -42,11 +42,20 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
   
     const {isDarkTheme} = themeContext;
     
-      const handleShowEditTask = () => {
+    const handleShowEditTask = () => {
         setContainerAnimation('pop-out');
         setModalAnimation('modal-closed');
         setTimeout(() => {
         setShowEditTask(!showEditTask);
+        handleClose();
+        }, 250);
+    }
+
+    const handleShowDeleteTask = () => {
+        setContainerAnimation('pop-out');
+        setModalAnimation('modal-closed');
+        setTimeout(() => {
+        setShowDeleteTask(!showDeleteTask);
         handleClose();
         }, 250);
     }
@@ -103,7 +112,7 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
             <img ref={iconRef} src={IconVerticalEllipsis} className="vt__ellipsis" alt="" onClick= {() => setIsSettingsOpen(!isSettingsOpen)} />
             <div className={`vt__options ${isSettingsOpen ? '' : 'disable'}`} ref={settingsRef}>
                 <p className='vt__option' onClick={handleShowEditTask}>Edit Task</p>
-                <p className='vt__option vt__option--delete'>Delete Task</p>
+                <p className='vt__option vt__option--delete' onClick={handleShowDeleteTask}>Delete Task</p>
             </div>
         </div>
         <p className='vt__text'>{currentTask?.description}</p>
