@@ -38,10 +38,10 @@ const Header = () => {
     throw new Error("Task must be used within a ModalProvider");
   }
 
-  const { showAddTask, setShowAddTask, showViewBoard, setShowViewBoard, showEditBoard, setShowEditBoard } = modalContext;
+  const { showAddBoard, setShowAddBoard, showViewBoard, setShowViewBoard, showEditBoard, setShowEditBoard } = modalContext;
 
-  const handleShowAddTask = () => {
-    setShowAddTask(!showAddTask);
+  const handleShowAddBoard = () => {
+    setShowAddBoard(true)
   }
 
   const handleShowViewBoard = () => {
@@ -118,15 +118,15 @@ const Header = () => {
           <button 
               type='button'
               className={`header__add-task header__add-task--large ${currentBoardData.columns.length > 0 ? '' : 'header__add-task--disable'}`}
-              onClick={handleShowAddTask}
+              onClick={handleShowAddBoard}
           >
-            + Add New Task
+            + Create New Board
           </button>
           : 
           <button 
               type='button'
               className={`header__add-task header__add-task--large ${currentBoardData.columns.length > 0 ? '' : 'header__add-task--disable'}`}
-              onClick={handleShowAddTask}
+              onClick={handleShowAddBoard}
           >
             +
           </button>

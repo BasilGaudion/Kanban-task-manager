@@ -58,7 +58,7 @@ const AsideSettings = () => {
           <section className='aside__container'>
             <div className='aside__top-group'>
             <img className='aside__logo' src={isDarkTheme ? LogoLight : LogoDark} alt="" />
-                <h3 className='aside__title'>All Boards (3)</h3>
+                <h3 className='aside__title'>All Boards ({allBoardsName.length})</h3>
                 <ul className='aside__list'>
 
                 {allBoardsName.map((item, index) => {

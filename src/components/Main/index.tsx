@@ -19,7 +19,7 @@ import CreateColumn from '../CreateColumn';
 
 
 const Main = () => {
-  const [haveColums, setHaveColums] = useState(true);
+  const [haveColums, setHaveColums] = useState(false);
   const themeContext = useContext(ThemeContext);
   const asideContext = useContext(AsideContext);
   const boardContext = useContext(BoardContext);
@@ -34,6 +34,8 @@ const Main = () => {
       setLargeWindow(false);
     }
   }, [screenWidth]);
+
+  
 
   if (!themeContext) {
     throw new Error("Task must be used within a themeProvider");
@@ -53,6 +55,14 @@ const Main = () => {
     }
   
     const {currentBoardData, moveTaskToColumn } = boardContext;
+
+    useEffect(() => {
+      if (currentBoardData.columns.length < 1) {
+        setHaveColums(false);
+      } else {
+        setHaveColums(true);
+      }
+      }, [currentBoardData]);
 
     const onDragEnd = (result: any) => {
       const { destination, source, draggableId } = result;
