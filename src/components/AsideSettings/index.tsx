@@ -52,6 +52,7 @@ const AsideSettings = () => {
 
   const {allBoardsName, setCurrentBoard, currentBoard} = boardContext;
 
+
   return (
     <>
         <aside className={`aside ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'} ${asideOpen ? '' : 'hidden'}`}>
@@ -66,7 +67,10 @@ const AsideSettings = () => {
                         <li 
                         className={`aside__item ${item === currentBoard ? 'aside__item--current' : ''}`} 
                         key={index} 
-                        onClick={() => setCurrentBoard(item)}>
+                        onClick={() => {
+                          console.log("Board clicked:", item);
+                          setCurrentBoard(item);
+                        }}>
                             <img src={IconBoard} alt="" />
                             <p className={`aside__item-title ${item === currentBoard ? 'aside__item-title--current' : ''}`}>{item}</p>
                         </li>

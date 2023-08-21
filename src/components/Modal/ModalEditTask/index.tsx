@@ -22,7 +22,7 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({handleClose, isOpen }) => 
         throw new Error("Task must be used within a themeProvider");
     }
 
-    const {currentTask, setCurrentTask, currentBoardData} = boardContext;
+    const {currentTask, setCurrentTask, currentBoardData, updateTask} = boardContext;
     const [editingTask, setEditingTask] = useState<Task | null>(currentTask);
 
     const themeContext = useContext(ThemeContext);
@@ -40,15 +40,17 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({handleClose, isOpen }) => 
     const { showViewTask, setShowViewTask, showEditTask, setShowEditTask } = modalContext;
 
     const handleEditTask = () => {
-        setCurrentTask(editingTask);
-        setContainerAnimation('pop-out');
-        setModalAnimation('modal-closed');
-        setTimeout(() => {
-            handleClose();
-            setShowEditTask(!showEditTask);
-            setShowViewTask(!showViewTask);
-        }, 300); // durée de l'animation de fermeture
+    if (editingTask && currentTask) {
+        updateTask(currentTask.id, editingTask);
     }
+    setContainerAnimation('pop-out');
+    setModalAnimation('modal-closed');
+    setTimeout(() => {
+        handleClose();
+        setShowEditTask(!showEditTask);
+        setShowViewTask(!showViewTask);
+    }, 300);
+}
 
     useEffect(() => {
         if (isOpen) {

@@ -64,6 +64,7 @@ interface IBoardContext {
     currentSubtask: Subtask | null;
     setCurrentSubtask: React.Dispatch<React.SetStateAction<Subtask | null>>;
     updateSubtask: (subtaskTitle: string) => void;
+    updateTask: (taskId: string, updatedTask: Task)  => void;
     createTask: (newTask: Task) => void;
     createColumn: (newColumn: Column) => void;
     createBoard: (newBoard: Board) => void;
@@ -122,10 +123,17 @@ export const useBoardProvider = (): IBoardContext => {
 
 
   const [allBoards, setAllBoards] = useState<Board[]>(initializedData.allBoardsData);
-  const [currentBoardData, setCurrentBoardData] = useState<Board>(initializedData.allBoardsData[0]);
+  const [currentBoardData, setCurrentBoardData] = useState<Board>(
+    initializedData.allBoardsData && initializedData.allBoardsData.length > 0
+    ? initializedData.allBoardsData[0]
+    : {} as Board
+  );  
   const [allBoardsName, setAllBoardsName] = useState<string[]>(initializedData.allBoards);
-  const [currentBoard, setCurrentBoard] = useState<string>(initializedData.allBoardsData[0].name);
-  const [columnByBoard, setColumnByBoard] = useState<Column[]>(currentBoardData.columns);
+  const [currentBoard, setCurrentBoard] = useState<string>(
+    initializedData.allBoardsData && initializedData.allBoardsData.length > 0 
+    ? initializedData.allBoardsData[0].name 
+    : ""
+  );  const [columnByBoard, setColumnByBoard] = useState<Column[]>(currentBoardData.columns);
   const [tasksByColumn, setTasksByColumn] = useState<Task[]>([]);
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
   const [currentSubtask, setCurrentSubtask] = useState<Subtask | null>(null);
@@ -139,14 +147,18 @@ export const useBoardProvider = (): IBoardContext => {
   }, [allBoards, allBoardsName]);
 
   useEffect(() => {
+    console.log("Current board changed to:", currentBoard);
     const storedData = JSON.parse(localStorage.getItem(localStorageKey) || '{}');
-    const result = storedData.allBoardsData.find((board: Board) => board.name === currentBoard);
-    if (result) {
-      setCurrentBoardData(result);
-      setColumnByBoard(result.columns);
-      if (result.columns.length) {
-        setTasksByColumn(result.columns[0].tasks);
-      }
+    if (storedData.allBoardsData) {
+        const result = storedData.allBoardsData.find((board: Board) => board.name === currentBoard);
+        console.log("Found board in localStorage:", result);
+        if (result) {
+            setCurrentBoardData(result);
+            setColumnByBoard(result.columns);
+            if (result.columns.length) {
+                setTasksByColumn(result.columns[0].tasks);
+            }
+        }
     }
   }, [currentBoard]);
 
@@ -185,7 +197,11 @@ export const useBoardProvider = (): IBoardContext => {
     boardCopy.columns[columnIdx].tasks[taskIdx] = updatedTask;
     setCurrentBoardData(boardCopy);
 
-    localStorage.setItem('boardAppData', JSON.stringify({ boardData: boardCopy, allBoards: allBoardsName }));
+    const currentLocalStorageData = JSON.parse(localStorage.getItem('boardAppData') || '{}');
+    const updatedBoardsData = (currentLocalStorageData.allBoardsData || []).map((board: Board) => board.id === boardCopy.id ? boardCopy : board);
+    currentLocalStorageData.allBoardsData = updatedBoardsData;
+    localStorage.setItem('boardAppData', JSON.stringify(currentLocalStorageData));
+
   }
 
 
@@ -207,10 +223,32 @@ export const useBoardProvider = (): IBoardContext => {
 
     setCurrentBoardData(currentData);
 
-    localStorage.setItem('boardAppData', JSON.stringify({ boardData: boardCopy, allBoards: allBoardsName }));
+    const currentLocalStorageData = JSON.parse(localStorage.getItem('boardAppData') || '{}');
+    const updatedBoardsData = (currentLocalStorageData.allBoardsData || []).map((board: Board) => board.id === boardCopy.id ? boardCopy : board);
+    currentLocalStorageData.allBoardsData = updatedBoardsData;
+    localStorage.setItem('boardAppData', JSON.stringify(currentLocalStorageData));
+
   }
 
+  function updateTask(taskId: string, updatedTask: Task) {
+    const boardCopy = {...currentBoardData};
 
+    for (let column of boardCopy.columns) {
+        const taskIndex = column.tasks.findIndex(t => t.id === taskId);
+        if (taskIndex !== -1) {
+            column.tasks[taskIndex] = updatedTask;
+            break;
+        }
+    }
+
+    setCurrentBoardData(boardCopy);
+
+    // Mettre à jour le localStorage
+    const currentLocalStorageData = JSON.parse(localStorage.getItem('boardAppData') || '{}');
+    const updatedBoardsData = (currentLocalStorageData.allBoardsData || []).map((board: Board) => board.id === boardCopy.id ? boardCopy : board);
+    currentLocalStorageData.allBoardsData = updatedBoardsData;
+    localStorage.setItem('boardAppData', JSON.stringify(currentLocalStorageData));
+}
 
   const createColumn = (newColumn: Column) => {
     const currentData = {...currentBoardData};
@@ -227,7 +265,11 @@ export const useBoardProvider = (): IBoardContext => {
 
     setCurrentBoardData(currentData);
 
-    localStorage.setItem('boardAppData', JSON.stringify({ boardData: boardCopy, allBoards: allBoardsName }));
+    const currentLocalStorageData = JSON.parse(localStorage.getItem('boardAppData') || '{}');
+    const updatedBoardsData = (currentLocalStorageData.allBoardsData || []).map((board: Board) => board.id === boardCopy.id ? boardCopy : board);
+    currentLocalStorageData.allBoardsData = updatedBoardsData;
+    localStorage.setItem('boardAppData', JSON.stringify(currentLocalStorageData));
+
   }
 
 
@@ -251,7 +293,11 @@ export const useBoardProvider = (): IBoardContext => {
     if (currentBoardData.id === updatedBoard.id) {
         setCurrentBoardData(updatedBoard);
     }
-    localStorage.setItem(localStorageKey, JSON.stringify({ boardData: updatedBoard, allBoards: allBoardsName }));
+    const currentLocalStorageData = JSON.parse(localStorage.getItem('boardAppData') || '{}');
+    const updatedBoardsData = (currentLocalStorageData.allBoardsData || []).map((board: Board) => board.id === updatedBoard.id ? updatedBoard : board);
+    currentLocalStorageData.allBoardsData = updatedBoardsData;
+    localStorage.setItem('boardAppData', JSON.stringify(currentLocalStorageData));
+
   }
 
   const deleteBoard = (boardToDelete: Board) => {
@@ -282,7 +328,10 @@ export const useBoardProvider = (): IBoardContext => {
     setAllBoardsName(updatedBoardsName);
   
     // Mettre à jour le stockage local
+    const updatedBoardsData = (storedData.allBoardsData || []).filter((board: Board) => board.id !== boardToDelete.id);
+    storedData.allBoardsData = updatedBoardsData;
     localStorage.setItem(localStorageKey, JSON.stringify(storedData));
+
   }
   
 
@@ -305,7 +354,11 @@ export const useBoardProvider = (): IBoardContext => {
 
     setCurrentBoardData(boardCopy);
 
-    localStorage.setItem(localStorageKey, JSON.stringify({ boardData: boardCopy, allBoards: allBoardsName }));
+    const currentLocalStorageData = JSON.parse(localStorage.getItem('boardAppData') || '{}');
+    const updatedBoardsData = (currentLocalStorageData.allBoardsData || []).map((board: Board) => board.id === boardCopy.id ? boardCopy : board);
+    currentLocalStorageData.allBoardsData = updatedBoardsData;
+    localStorage.setItem('boardAppData', JSON.stringify(currentLocalStorageData));
+
 };
 
   // ==============DRAG AND DROP====================
@@ -315,20 +368,37 @@ export const useBoardProvider = (): IBoardContext => {
     newStatus: string,
     sourceIndex: number,
     targetIndex: number
-) => {
+  ) => {
     const boardCopy = { ...currentBoardData };
     const sourceColumn = boardCopy.columns.find(column => column.tasks.some(task => task.id === taskId));
     const destinationColumn = boardCopy.columns.find(column => column.name === newStatus);
-
-    if (sourceColumn && destinationColumn) {
-        const [movedTask] = sourceColumn.tasks.splice(sourceIndex, 1);
-        movedTask.status = newStatus;
-        destinationColumn.tasks.splice(targetIndex, 0, movedTask);
+  
+    if (sourceColumn && destinationColumn && sourceColumn.tasks && destinationColumn.tasks) {
+      const [movedTask] = sourceColumn.tasks.splice(sourceIndex, 1);
+      movedTask.status = newStatus;
+      destinationColumn.tasks.splice(targetIndex, 0, movedTask);
     }
-
+  
     setCurrentBoardData(boardCopy);
-    localStorage.setItem('boardAppData', JSON.stringify({ boardData: boardCopy, allBoards: allBoardsName }));
-};
+    
+    // Récupération des données actuelles dans le localStorage sous la clé boardAppData
+    const currentLocalStorageData = JSON.parse(localStorage.getItem('boardAppData') || '{}');
+    
+    // Mise à jour de allBoardsData dans l'objet récupéré
+    const updatedAllBoardsData = currentLocalStorageData.allBoardsData || [];
+    const boardIndex = updatedAllBoardsData.findIndex((board: Board) => board.id === boardCopy.id);
+    if (boardIndex !== -1) {
+      updatedAllBoardsData[boardIndex] = boardCopy;
+    } else {
+      updatedAllBoardsData.push(boardCopy);
+    }
+    currentLocalStorageData.allBoardsData = updatedAllBoardsData;
+    
+    // Sauvegarde des données modifiées dans le localStorage sous la clé boardAppData
+    localStorage.setItem('boardAppData', JSON.stringify(currentLocalStorageData));
+  };
+  
+  
 
   return {
     currentBoard,
@@ -355,6 +425,7 @@ export const useBoardProvider = (): IBoardContext => {
     deleteTask,
     updateBoard,
     deleteBoard,
+    updateTask
   };
 };
 
