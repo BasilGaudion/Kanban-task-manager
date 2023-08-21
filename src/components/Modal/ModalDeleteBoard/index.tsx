@@ -2,36 +2,28 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import './styles.scss';
 import { ThemeContext } from "../../../utils/providers/useThemeProvider";
 import { BoardContext } from "../../../utils/providers/useBoardProvider";
-import { ModalContext } from "../../../utils/providers/useModalProvider";
 
 import Task from '../../Task';
 
 
-interface ModalDeleteTaskProps {
+interface ModalDeleteBoardProps {
     handleClose: () => void;
     isOpen: boolean;
 }
 
-const ModalDeleteTask: React.FC<ModalDeleteTaskProps> = ({handleClose, isOpen }) => {
+const ModalDeleteBoard: React.FC<ModalDeleteBoardProps> = ({handleClose, isOpen }) => {
     const ref = useRef<HTMLDivElement>(null);
     const [containerAnimation, setContainerAnimation] = useState('pop-in');
     const [modalAnimation, setModalAnimation] = useState
     ('modal-open');
     const themeContext = useContext(ThemeContext);
     const boardContext = useContext(BoardContext);
-    const modalContext = useContext(ModalContext);
 
     if (!boardContext) {
       throw new Error("Task must be used within a themeProvider");
     }
   
-    const {currentTask, deleteTask,} = boardContext;
-
-    if (!modalContext) {
-        throw new Error("Task must be used within a ModalProvider");
-      }
-    
-      const { showViewTask, setShowViewTask } = modalContext;
+    const {currentBoardData, deleteBoard} = boardContext;
 
     if (!themeContext) {
       throw new Error("Task must be used within a themeProvider");
@@ -66,8 +58,8 @@ const ModalDeleteTask: React.FC<ModalDeleteTaskProps> = ({handleClose, isOpen })
     }, [handleClose]);
 
     const handleDeleteTask = () => {
-        if (currentTask) {
-            deleteTask(currentTask)
+        if (currentBoardData) {
+            deleteBoard(currentBoardData)
             setContainerAnimation('pop-out');
             setModalAnimation('modal-closed');
             setTimeout(handleClose, 300);
@@ -78,23 +70,22 @@ const ModalDeleteTask: React.FC<ModalDeleteTaskProps> = ({handleClose, isOpen })
         setContainerAnimation('pop-out');
         setModalAnimation('modal-closed');
         setTimeout(() => {
-        setShowViewTask(!showViewTask);
         handleClose();
         }, 250);
     }
 
   return (
-    <div className={`dt ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
-        <section className={`dt__container ${containerAnimation}`} ref={ref}>
-            <h2 className='dt__action'>Delete this task ?</h2>
-            <p className='dt__text'>Are you sure you want to delete the ‘{currentTask?.title}’ task and its subtasks? This action cannot be reversed.</p>
-            <div className='dt__button-group'>
-                <button type='button' className='dt__button dt__button--delete' onClick={handleDeleteTask}>Delete</button>
-                <button type='button' className='dt__button dt__button--cancel' onClick={handleCancel}>Cancel</button>
+    <div className={`db ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
+        <section className={`db__container ${containerAnimation}`} ref={ref}>
+            <h2 className='db__action'>Delete this task ?</h2>
+            <p className='db__text'>Are you sure you want to delete the ‘{currentBoardData.name}’ task and its subtasks? This action cannot be reversed.</p>
+            <div className='db__button-group'>
+                <button type='button' className='db__button db__button--delete' onClick={handleDeleteTask}>Delete</button>
+                <button type='button' className='db__button db__button--cancel' onClick={handleCancel}>Cancel</button>
             </div>
       </section>
     </div>
   );
 };
 
-export default ModalDeleteTask;
+export default ModalDeleteBoard;

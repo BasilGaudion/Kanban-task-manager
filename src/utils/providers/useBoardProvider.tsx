@@ -67,6 +67,8 @@ interface IBoardContext {
     createTask: (newTask: Task) => void;
     createColumn: (newColumn: Column) => void;
     createBoard: (newBoard: Board) => void;
+    updateBoard: (updatedBoard: Board) => void;
+    deleteBoard: (boardToDelete: Board) => void;
     deleteTask: (task: Task) => void;
     moveTaskToColumn: (taskId: string, newStatus: string, sourceIndex: number, targetIndex: number) => void; 
 }
@@ -144,6 +146,22 @@ export const useBoardProvider = (): IBoardContext => {
     }
   }, [currentBoard]);
 
+//   useEffect(() => {
+//     console.log('Current board name changed:', currentBoard);
+//     const storedData = getStoredData();
+//     console.log('Stored data:', storedData);
+//     const result = storedData.allBoards.find((board: Board) => board.name === currentBoard);
+//     console.log('Found board:', result);
+//     if (result) {
+//       setCurrentBoardData(result);
+//       setColumnByBoard(result.columns);
+//       if (result.columns.length) {
+//         setTasksByColumn(result.columns[0].tasks);
+//       }
+//     }
+// }, [currentBoard]);
+
+
   // --------------- Helper Functions ---------------
 
   const findColumnAndTaskIndices = (task: Task) => {
@@ -182,6 +200,8 @@ export const useBoardProvider = (): IBoardContext => {
     localStorage.setItem('boardAppData', JSON.stringify({ boardData: boardCopy, allBoards: allBoardsName }));
   }
 
+
+
   const createTask = (newTask: Task) => {
     const currentData = {...currentBoardData};
 
@@ -202,6 +222,8 @@ export const useBoardProvider = (): IBoardContext => {
     localStorage.setItem('boardAppData', JSON.stringify({ boardData: boardCopy, allBoards: allBoardsName }));
   }
 
+
+
   const createColumn = (newColumn: Column) => {
     const currentData = {...currentBoardData};
 
@@ -220,17 +242,59 @@ export const useBoardProvider = (): IBoardContext => {
     localStorage.setItem('boardAppData', JSON.stringify({ boardData: boardCopy, allBoards: allBoardsName }));
   }
 
+
+
   const createBoard = (newBoard: Board) => {
-      // Ajout du nouveau tableau à la liste actuelle des tableaux
       const updatedBoards = [...allBoardsName, newBoard.name];
       
       setCurrentBoardData(newBoard);
       setAllBoardsName(updatedBoards);
       setCurrentBoard(newBoard.name);
 
-      // Mettre à jour le stockage local
       localStorage.setItem('boardAppData', JSON.stringify({ boardData: newBoard, allBoards: updatedBoards }));
   }
+
+
+
+  const updateBoard = (updatedBoard: Board) => {
+    if (currentBoardData.id === updatedBoard.id) {
+        setCurrentBoardData(updatedBoard);
+    }
+    localStorage.setItem(localStorageKey, JSON.stringify({ boardData: updatedBoard, allBoards: allBoardsName }));
+  }
+
+  const deleteBoard = (boardToDelete: Board) => {
+    // Supprimer le tableau des données de stockage local, s'il est présent.
+    let storedData = JSON.parse(localStorage.getItem(localStorageKey) || '{}');
+    if (storedData.boardData?.id === boardToDelete.id) {
+      if (allBoardsName.length > 1) {
+        const newCurrentBoardName = allBoardsName.find(name => name !== boardToDelete.name) || '';
+        const newCurrentBoardData = generateIdForBoards(boardsData.boards).find(board => board.name === newCurrentBoardName) || null;
+        
+        // Mise à jour du tableau courant dans le stockage local
+        storedData.boardData = newCurrentBoardData;
+        setCurrentBoard(newCurrentBoardName);
+        setCurrentBoardData(newCurrentBoardData!);
+        setColumnByBoard(newCurrentBoardData?.columns || []);
+      } else {
+        // S'il n'y a pas d'autres tableaux, réinitialisez le tableau courant
+        storedData.boardData = null;
+        setCurrentBoard('');
+        setCurrentBoardData({} as Board);
+        setColumnByBoard([]);
+      }
+    }
+  
+    // Mettre à jour le tableau de noms des tableaux.
+    const updatedBoardsName = allBoardsName.filter(name => name !== boardToDelete.name);
+    storedData.allBoards = updatedBoardsName;
+    setAllBoardsName(updatedBoardsName);
+  
+    // Mettre à jour le stockage local
+    localStorage.setItem(localStorageKey, JSON.stringify(storedData));
+  }
+  
+
 
   const deleteTask = (task: Task) => {
     const boardCopy = { ...currentBoardData };
@@ -297,7 +361,9 @@ export const useBoardProvider = (): IBoardContext => {
     moveTaskToColumn,
     createColumn,
     createBoard,
-    deleteTask
+    deleteTask,
+    updateBoard,
+    deleteBoard,
   };
 };
 

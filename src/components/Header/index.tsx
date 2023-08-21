@@ -38,7 +38,7 @@ const Header = () => {
     throw new Error("Task must be used within a ModalProvider");
   }
 
-  const { showAddBoard, setShowAddBoard, showViewBoard, setShowViewBoard, showEditBoard, setShowEditBoard } = modalContext;
+  const { showAddBoard, setShowAddBoard, showViewBoard, setShowViewBoard, showEditBoard, setShowEditBoard, showDeleteBoard, setShowDeleteBoard } = modalContext;
 
   const handleShowAddBoard = () => {
     setShowAddBoard(true)
@@ -50,6 +50,10 @@ const Header = () => {
 
   const handleShowEditBoard = () => {
     setShowEditBoard(!showEditBoard);
+  }
+
+  const handleShowDeleteBoard = () => {
+    setShowDeleteBoard(!showDeleteBoard);
   }
 
   if (!themeContext) {
@@ -136,7 +140,7 @@ const Header = () => {
           </div>
           <div className={`header__options ${isSettingsOpen ? '' : 'disable'}`} ref={settingsRef}>
               <p className='header__option' onClick={handleShowEditBoard}>Edit Board</p>
-              <p className='header__option header__option--delete'>Delete Board</p>
+              <p className='header__option header__option--delete' onClick={handleShowDeleteBoard}>Delete Board</p>
           </div>
         </div>
       </div>
