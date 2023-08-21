@@ -147,11 +147,9 @@ export const useBoardProvider = (): IBoardContext => {
   }, [allBoards, allBoardsName]);
 
   useEffect(() => {
-    console.log("Current board changed to:", currentBoard);
     const storedData = JSON.parse(localStorage.getItem(localStorageKey) || '{}');
     if (storedData.allBoardsData) {
         const result = storedData.allBoardsData.find((board: Board) => board.name === currentBoard);
-        console.log("Found board in localStorage:", result);
         if (result) {
             setCurrentBoardData(result);
             setColumnByBoard(result.columns);

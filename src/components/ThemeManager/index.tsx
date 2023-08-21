@@ -17,10 +17,6 @@ const ThemeManager = () => {
     setIsDarkTheme(!isDarkTheme);
   };
 
-  useEffect(() => {
-    console.log(isDarkTheme);
-  }, [isDarkTheme]);
-
   return (
     <div className={`theme ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
         <img src={IconLightTheme} alt="" />

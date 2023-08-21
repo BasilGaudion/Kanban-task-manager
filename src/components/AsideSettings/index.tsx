@@ -68,7 +68,6 @@ const AsideSettings = () => {
                         className={`aside__item ${item === currentBoard ? 'aside__item--current' : ''}`} 
                         key={index} 
                         onClick={() => {
-                          console.log("Board clicked:", item);
                           setCurrentBoard(item);
                         }}>
                             <img src={IconBoard} alt="" />

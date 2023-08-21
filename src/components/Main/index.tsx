@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
-// import { Swiper, SwiperSlide } from 'swiper/react';
 import { ModalContext } from "../../utils/providers/useModalProvider";
 import { ThemeContext } from "../../utils/providers/useThemeProvider";
 import { AsideContext } from "../../utils/providers/useAsideProvider";
@@ -7,20 +6,16 @@ import { BoardContext } from "../../utils/providers/useBoardProvider";
 import useWindowSize from '../../hooks/useWindowSize';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-// Import Swiper styles
-// import 'swiper/scss';
-// import 'swiper/scss/pagination';
-
 import './styles.scss';
 import Column from '../Column';
 
-// import { Scrollbar } from 'swiper/modules';
 import CreateColumn from '../CreateColumn';
 
 
 const Main = () => {
   const [haveColums, setHaveColums] = useState(false);
   const themeContext = useContext(ThemeContext);
+  const modalContext = useContext(ModalContext);
   const asideContext = useContext(AsideContext);
   const boardContext = useContext(BoardContext);
   const [largeWindow, setLargeWindow] = useState(true);
@@ -35,7 +30,15 @@ const Main = () => {
     }
   }, [screenWidth]);
 
-  
+  if (!modalContext) {
+    throw new Error("Task must be used within a ModalProvider");
+  }
+
+  const { showAddColumn, setShowAddColumn } = modalContext;
+
+  const handleShowAddColumn = () => {
+    setShowAddColumn(!showAddColumn);
+  }
 
   if (!themeContext) {
     throw new Error("Task must be used within a themeProvider");
@@ -97,7 +100,7 @@ const Main = () => {
         ) : (
           <div className='main__container--empty container'>
             <h3 className='main__empty-board'>This board is empty. Create a new column to get started.</h3>
-            <button type='button' className='main__button-column'>+ Add New Column</button>
+            <button type='button' className='main__button-column' onClick={handleShowAddColumn}>+ Add New Column</button>
           </div>
         )}
     </main>
