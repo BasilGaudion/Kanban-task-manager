@@ -108,7 +108,7 @@ export const useBoardProvider = (): IBoardContext => {
     } else {
       const generatedBoards = generateIdForBoards(boardsData.boards);
       const defaultData = {
-        boardData: generatedBoards[0],
+        allBoardsData: generatedBoards,
         allBoards: generatedBoards.map((board: Board) => board.name)
       };
       localStorage.setItem(localStorageKey, JSON.stringify(defaultData));
@@ -120,23 +120,27 @@ export const useBoardProvider = (): IBoardContext => {
 
   // --------------- States ---------------
 
-  const [currentBoardData, setCurrentBoardData] = useState<Board>(initializedData.boardData);
+
+  const [allBoards, setAllBoards] = useState<Board[]>(initializedData.allBoardsData);
+  const [currentBoardData, setCurrentBoardData] = useState<Board>(initializedData.allBoardsData[0]);
   const [allBoardsName, setAllBoardsName] = useState<string[]>(initializedData.allBoards);
-  const [currentBoard, setCurrentBoard] = useState<string>(initializedData.boardData.name);
-  const [columnByBoard, setColumnByBoard] = useState<Column[]>(initializedData.boardData.columns);
+  const [currentBoard, setCurrentBoard] = useState<string>(initializedData.allBoardsData[0].name);
+  const [columnByBoard, setColumnByBoard] = useState<Column[]>(currentBoardData.columns);
   const [tasksByColumn, setTasksByColumn] = useState<Task[]>([]);
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
   const [currentSubtask, setCurrentSubtask] = useState<Subtask | null>(null);
   const [subTasksByTask, setSubTasksByTask] = useState<Subtask[]>([]);
 
+
   // --------------- Effects & LocalStorage Sync ---------------
 
   useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify({ boardData: currentBoardData, allBoards: allBoardsName }));
-  }, [currentBoardData, allBoardsName]);
+    localStorage.setItem(localStorageKey, JSON.stringify({ allBoardsData: allBoards, allBoards: allBoardsName }));
+  }, [allBoards, allBoardsName]);
 
   useEffect(() => {
-    const result = generateIdForBoards(boardsData.boards).find(board => board.name === currentBoard);
+    const storedData = JSON.parse(localStorage.getItem(localStorageKey) || '{}');
+    const result = storedData.allBoardsData.find((board: Board) => board.name === currentBoard);
     if (result) {
       setCurrentBoardData(result);
       setColumnByBoard(result.columns);
@@ -145,22 +149,6 @@ export const useBoardProvider = (): IBoardContext => {
       }
     }
   }, [currentBoard]);
-
-//   useEffect(() => {
-//     console.log('Current board name changed:', currentBoard);
-//     const storedData = getStoredData();
-//     console.log('Stored data:', storedData);
-//     const result = storedData.allBoards.find((board: Board) => board.name === currentBoard);
-//     console.log('Found board:', result);
-//     if (result) {
-//       setCurrentBoardData(result);
-//       setColumnByBoard(result.columns);
-//       if (result.columns.length) {
-//         setTasksByColumn(result.columns[0].tasks);
-//       }
-//     }
-// }, [currentBoard]);
-
 
   // --------------- Helper Functions ---------------
 
@@ -245,14 +233,17 @@ export const useBoardProvider = (): IBoardContext => {
 
 
   const createBoard = (newBoard: Board) => {
-      const updatedBoards = [...allBoardsName, newBoard.name];
-      
-      setCurrentBoardData(newBoard);
-      setAllBoardsName(updatedBoards);
-      setCurrentBoard(newBoard.name);
+    const updatedBoards = [...allBoards, newBoard];
+    setAllBoards(updatedBoards);
 
-      localStorage.setItem('boardAppData', JSON.stringify({ boardData: newBoard, allBoards: updatedBoards }));
-  }
+    const updatedBoardNames = updatedBoards.map(board => board.name);
+    setAllBoardsName(updatedBoardNames);
+
+    setCurrentBoardData(newBoard);
+    setCurrentBoard(newBoard.name);
+
+    localStorage.setItem(localStorageKey, JSON.stringify({ allBoardsData: updatedBoards, allBoards: updatedBoardNames }));
+  };
 
 
 
