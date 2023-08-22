@@ -136,7 +136,7 @@ const Header = () => {
           </button>
         }
           <div className='header__settings' onClick= {() => setIsSettingsOpen(!isSettingsOpen)} ref={iconRef}>
-          <img src={IconVerticalEllipsis} className='header__ellipsis'alt="" />
+            <img src={IconVerticalEllipsis} className='header__ellipsis'alt="" />
           </div>
           <div className={`header__options ${isSettingsOpen ? '' : 'disable'}`} ref={settingsRef}>
               <p className='header__option' onClick={handleShowEditBoard}>Edit Board</p>

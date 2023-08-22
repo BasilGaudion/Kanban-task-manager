@@ -289,30 +289,46 @@ export const useBoardProvider = (): IBoardContext => {
 
   const updateBoard = (updatedBoard: Board) => {
     if (currentBoardData.id === updatedBoard.id) {
-        setCurrentBoardData(updatedBoard);
+      setCurrentBoardData(updatedBoard);
+      setCurrentBoard(updatedBoard.name)
     }
+  
+    const boardIndex = allBoards.findIndex(board => board.id === updatedBoard.id);
+    
+    if (boardIndex !== -1) {
+      const updatedAllBoards = [...allBoards];
+      updatedAllBoards[boardIndex] = updatedBoard;
+      setAllBoards(updatedAllBoards);
+  
+      if (allBoardsName[boardIndex] !== updatedBoard.name) {
+        const updatedAllBoardsName = [...allBoardsName];
+        updatedAllBoardsName[boardIndex] = updatedBoard.name;
+        setAllBoardsName(updatedAllBoardsName);
+      }
+    } else {
+      console.error("Couldn't find the board to update");
+    }
+  
     const currentLocalStorageData = JSON.parse(localStorage.getItem('boardAppData') || '{}');
     const updatedBoardsData = (currentLocalStorageData.allBoardsData || []).map((board: Board) => board.id === updatedBoard.id ? updatedBoard : board);
     currentLocalStorageData.allBoardsData = updatedBoardsData;
     localStorage.setItem('boardAppData', JSON.stringify(currentLocalStorageData));
-
   }
+  
+
 
   const deleteBoard = (boardToDelete: Board) => {
-    // Supprimer le tableau des données de stockage local, s'il est présent.
     let storedData = JSON.parse(localStorage.getItem(localStorageKey) || '{}');
     if (storedData.boardData?.id === boardToDelete.id) {
       if (allBoardsName.length > 1) {
         const newCurrentBoardName = allBoardsName.find(name => name !== boardToDelete.name) || '';
         const newCurrentBoardData = generateIdForBoards(boardsData.boards).find(board => board.name === newCurrentBoardName) || null;
         
-        // Mise à jour du tableau courant dans le stockage local
         storedData.boardData = newCurrentBoardData;
         setCurrentBoard(newCurrentBoardName);
         setCurrentBoardData(newCurrentBoardData!);
         setColumnByBoard(newCurrentBoardData?.columns || []);
       } else {
-        // S'il n'y a pas d'autres tableaux, réinitialisez le tableau courant
         storedData.boardData = null;
         setCurrentBoard('');
         setCurrentBoardData({} as Board);
@@ -320,12 +336,10 @@ export const useBoardProvider = (): IBoardContext => {
       }
     }
   
-    // Mettre à jour le tableau de noms des tableaux.
     const updatedBoardsName = allBoardsName.filter(name => name !== boardToDelete.name);
     storedData.allBoards = updatedBoardsName;
     setAllBoardsName(updatedBoardsName);
-  
-    // Mettre à jour le stockage local
+
     const updatedBoardsData = (storedData.allBoardsData || []).filter((board: Board) => board.id !== boardToDelete.id);
     storedData.allBoardsData = updatedBoardsData;
     localStorage.setItem(localStorageKey, JSON.stringify(storedData));

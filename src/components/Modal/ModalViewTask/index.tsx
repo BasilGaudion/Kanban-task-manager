@@ -109,7 +109,9 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
         <section className={`vt__container ${containerAnimation}`} ref={ref}>
         <div className='vt__title-group'>
         <h2 className='vt__title'>{currentTask?.title}</h2>
-            <img ref={iconRef} src={IconVerticalEllipsis} className="vt__ellipsis" alt="" onClick= {() => setIsSettingsOpen(!isSettingsOpen)} />
+        <div className='vt__settings'  onClick= {() => setIsSettingsOpen(!isSettingsOpen)} >
+            <img ref={iconRef} src={IconVerticalEllipsis} className="vt__ellipsis" alt=""/>
+        </div>
             <div className={`vt__options ${isSettingsOpen ? '' : 'disable'}`} ref={settingsRef}>
                 <p className='vt__option' onClick={handleShowEditTask}>Edit Task</p>
                 <p className='vt__option vt__option--delete' onClick={handleShowDeleteTask}>Delete Task</p>

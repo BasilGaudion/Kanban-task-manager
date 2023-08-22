@@ -76,9 +76,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-left: 16px;
+        margin-left: 10px;
         border: none;
         background-color: var(--background-modal);
+        width: 20px;
     }
 
     &__add-task {

@@ -41,6 +41,14 @@
         }
     }
 
+    &__settings {
+        display: flex;
+        justify-content: center;
+        width: 20px;
+        margin-right: -20px;
+        cursor: pointer;
+    }
+
     &__ellipsis {
         cursor: pointer;
     }
