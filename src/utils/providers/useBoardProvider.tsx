@@ -174,53 +174,39 @@ export const useBoardProvider = (): IBoardContext => {
 
   const updateSubtask = (subtaskTitle: string) => {
     if(!currentTask) return;
-
     const subtaskIndex = currentTask.subtasks.findIndex(st => st.title === subtaskTitle);
-
     if (subtaskIndex === -1) return;
-
     const updatedSubtasks = [...currentTask.subtasks];
     updatedSubtasks[subtaskIndex].isCompleted = !updatedSubtasks[subtaskIndex].isCompleted;
-
     const updatedTask = { ...currentTask, subtasks: updatedSubtasks };
-    
     const { columnIdx, taskIdx } = findColumnAndTaskIndices(updatedTask);
-
     if (columnIdx === -1 || taskIdx === -1) {
         console.error("Couldn't locate the task or column");
         return;
     }
-
     const boardCopy = { ...currentBoardData };
     boardCopy.columns[columnIdx].tasks[taskIdx] = updatedTask;
     setCurrentBoardData(boardCopy);
-
     const currentLocalStorageData = JSON.parse(localStorage.getItem('boardAppData') || '{}');
     const updatedBoardsData = (currentLocalStorageData.allBoardsData || []).map((board: Board) => board.id === boardCopy.id ? boardCopy : board);
     currentLocalStorageData.allBoardsData = updatedBoardsData;
     localStorage.setItem('boardAppData', JSON.stringify(currentLocalStorageData));
-
   }
 
 
 
   const createTask = (newTask: Task) => {
     const currentData = {...currentBoardData};
-
     if (!currentData || !currentData.columns) {
       console.error("currentData ou currentData.columns est indéfini");
       return;
-  }
+    }
     const targetColumn = currentData.columns.filter(column => column).find(column => column.name === newTask.status);
-  
     if (!targetColumn) return; 
     targetColumn.tasks.push(newTask);
-
     const boardCopy = {...currentData}; 
     const allBoardsName = currentBoard;
-
     setCurrentBoardData(currentData);
-
     const currentLocalStorageData = JSON.parse(localStorage.getItem('boardAppData') || '{}');
     const updatedBoardsData = (currentLocalStorageData.allBoardsData || []).map((board: Board) => board.id === boardCopy.id ? boardCopy : board);
     currentLocalStorageData.allBoardsData = updatedBoardsData;
@@ -238,31 +224,23 @@ export const useBoardProvider = (): IBoardContext => {
             break;
         }
     }
-
     setCurrentBoardData(boardCopy);
-
-    // Mettre à jour le localStorage
     const currentLocalStorageData = JSON.parse(localStorage.getItem('boardAppData') || '{}');
     const updatedBoardsData = (currentLocalStorageData.allBoardsData || []).map((board: Board) => board.id === boardCopy.id ? boardCopy : board);
     currentLocalStorageData.allBoardsData = updatedBoardsData;
     localStorage.setItem('boardAppData', JSON.stringify(currentLocalStorageData));
-}
+  }
 
   const createColumn = (newColumn: Column) => {
     const currentData = {...currentBoardData};
-
     if (!currentData) {
       console.error("currentData ou currentData.columns est indéfini");
       return;
     }
-    
     currentData.columns.push(newColumn);
-
     const boardCopy = {...currentData}; 
     const allBoardsName = currentBoard;
-
     setCurrentBoardData(currentData);
-
     const currentLocalStorageData = JSON.parse(localStorage.getItem('boardAppData') || '{}');
     const updatedBoardsData = (currentLocalStorageData.allBoardsData || []).map((board: Board) => board.id === boardCopy.id ? boardCopy : board);
     currentLocalStorageData.allBoardsData = updatedBoardsData;
@@ -275,13 +253,10 @@ export const useBoardProvider = (): IBoardContext => {
   const createBoard = (newBoard: Board) => {
     const updatedBoards = [...allBoards, newBoard];
     setAllBoards(updatedBoards);
-
     const updatedBoardNames = updatedBoards.map(board => board.name);
     setAllBoardsName(updatedBoardNames);
-
     setCurrentBoardData(newBoard);
     setCurrentBoard(newBoard.name);
-
     localStorage.setItem(localStorageKey, JSON.stringify({ allBoardsData: updatedBoards, allBoards: updatedBoardNames }));
   };
 
@@ -292,14 +267,11 @@ export const useBoardProvider = (): IBoardContext => {
       setCurrentBoardData(updatedBoard);
       setCurrentBoard(updatedBoard.name)
     }
-  
     const boardIndex = allBoards.findIndex(board => board.id === updatedBoard.id);
-    
     if (boardIndex !== -1) {
       const updatedAllBoards = [...allBoards];
       updatedAllBoards[boardIndex] = updatedBoard;
       setAllBoards(updatedAllBoards);
-  
       if (allBoardsName[boardIndex] !== updatedBoard.name) {
         const updatedAllBoardsName = [...allBoardsName];
         updatedAllBoardsName[boardIndex] = updatedBoard.name;
@@ -308,46 +280,54 @@ export const useBoardProvider = (): IBoardContext => {
     } else {
       console.error("Couldn't find the board to update");
     }
-  
     const currentLocalStorageData = JSON.parse(localStorage.getItem('boardAppData') || '{}');
     const updatedBoardsData = (currentLocalStorageData.allBoardsData || []).map((board: Board) => board.id === updatedBoard.id ? updatedBoard : board);
     currentLocalStorageData.allBoardsData = updatedBoardsData;
     localStorage.setItem('boardAppData', JSON.stringify(currentLocalStorageData));
   }
+
+
   
-
-
   const deleteBoard = (boardToDelete: Board) => {
     let storedData = JSON.parse(localStorage.getItem(localStorageKey) || '{}');
-    if (storedData.boardData?.id === boardToDelete.id) {
-      if (allBoardsName.length > 1) {
-        const newCurrentBoardName = allBoardsName.find(name => name !== boardToDelete.name) || '';
-        const newCurrentBoardData = generateIdForBoards(boardsData.boards).find(board => board.name === newCurrentBoardName) || null;
+  
+    // Trouvez le board actuellement affiché.
+    const currentBoardData = storedData.allBoardsData?.find((board: Board) => board.name === currentBoard);
+  
+    // Si le board actuellement affiché est celui à supprimer, alors remplacez-le par un autre board ou videz-le si c'est le seul board.
+    if (currentBoardData?.id === boardToDelete.id) {
+      if (storedData.allBoards && storedData.allBoards.length > 1) {
+        const newCurrentBoardName: string = storedData.allBoards.find((name: string) => name !== boardToDelete.name) || '';
+        const newCurrentBoardData: Board | null = storedData.allBoardsData.find((board: Board) => board.name === newCurrentBoardName) || null;
         
-        storedData.boardData = newCurrentBoardData;
         setCurrentBoard(newCurrentBoardName);
         setCurrentBoardData(newCurrentBoardData!);
         setColumnByBoard(newCurrentBoardData?.columns || []);
       } else {
-        storedData.boardData = null;
         setCurrentBoard('');
         setCurrentBoardData({} as Board);
         setColumnByBoard([]);
       }
     }
   
-    const updatedBoardsName = allBoardsName.filter(name => name !== boardToDelete.name);
-    storedData.allBoards = updatedBoardsName;
+    // Mettre à jour les noms des boards dans le state et le localStorage
+    const updatedBoardsName: string[] = (storedData.allBoards || []).filter((name: string) => name !== boardToDelete.name);
+    
+    // Ici, mettez à jour `allBoardsName` dans votre état
     setAllBoardsName(updatedBoardsName);
-
-    const updatedBoardsData = (storedData.allBoardsData || []).filter((board: Board) => board.id !== boardToDelete.id);
+  
+    storedData.allBoards = updatedBoardsName;
+  
+    // Mettre à jour les données des boards dans le localStorage
+    const updatedBoardsData: Board[] = (storedData.allBoardsData || []).filter((board: Board) => board.id !== boardToDelete.id);
     storedData.allBoardsData = updatedBoardsData;
+  
+    // Enregistrez le state modifié dans le localStorage
     localStorage.setItem(localStorageKey, JSON.stringify(storedData));
-
   }
   
-
-
+  
+  
   const deleteTask = (task: Task) => {
     const boardCopy = { ...currentBoardData };
     const columnContainingTask = boardCopy.columns.find(column => column.tasks.some(t => t.id === task.id));
@@ -355,23 +335,18 @@ export const useBoardProvider = (): IBoardContext => {
         console.error("Couldn't find column containing the task");
         return;
     }
-
     const taskIndex = columnContainingTask.tasks.findIndex(t => t.id === task.id);
     if (taskIndex === -1) {
         console.error("Couldn't find the task");
         return;
     }
-
     columnContainingTask.tasks.splice(taskIndex, 1);
-
     setCurrentBoardData(boardCopy);
-
     const currentLocalStorageData = JSON.parse(localStorage.getItem('boardAppData') || '{}');
     const updatedBoardsData = (currentLocalStorageData.allBoardsData || []).map((board: Board) => board.id === boardCopy.id ? boardCopy : board);
     currentLocalStorageData.allBoardsData = updatedBoardsData;
     localStorage.setItem('boardAppData', JSON.stringify(currentLocalStorageData));
-
-};
+  };
 
   // ==============DRAG AND DROP====================
 
