@@ -1,0 +1,25 @@
+.home-description {
+    width: 50%;
+    margin: 0 5% 0 10%;
+    height: fit-content;
+
+    &__logo {
+        width: 300px
+    }
+
+    &__title  {
+        font-size: 2rem;
+        margin: 50px 0 30px;
+
+        span {
+            color: #635FC7;
+        }
+    }
+
+    &__intro {
+        font-size: 1.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+}

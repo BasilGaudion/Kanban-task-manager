@@ -1,0 +1,45 @@
+.home-page {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    color: #000112;
+    
+    > span {
+        width: 2px;
+        height: 50%;
+        background-color: #635FC7;
+        opacity: 0.3;
+        box-shadow: 0 0px 5px 5px rgba(99,95,199,.1);
+    }
+
+    &__content {
+        width: 50%;
+        margin: 0 10% 0 5%;
+        position: relative;
+    }
+
+    &__buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+    }
+
+    &__button {
+        appearance: none;
+        background-color: transparent;
+        border: none;
+        font-size: 1.2rem;
+        color: #635FC7;
+        font-weight: 500;
+        transition: all 0.5s ease-in-out;
+
+        &.show {
+            font-weight: 700;
+        }
+    }
+
+    label {
+        display: none;
+    }
+}
