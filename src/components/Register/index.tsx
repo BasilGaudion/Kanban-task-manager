@@ -1,7 +1,9 @@
 import React, { useContext, useState } from 'react';
 import './styles.scss';
+import { ToastContainer, toast } from 'react-toastify';
 import { LoginContext } from '../../utils/providers/useLoginProvider';
 import { UserContext } from '../../utils/providers/useUserProvider';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
   const [email, setEmail] = useState(''); // Initialize to null
@@ -41,7 +43,17 @@ const Register = () => {
       signIn({ email, password });
     }
     else {
-      throw new Error('Passwords do not match');
+      toast.error('Passwords do not match', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
+      // throw new Error('Passwords do not match');
     }
   };
 
@@ -87,6 +99,7 @@ const Register = () => {
         />
 
         <button className="register__submit" type="submit">Register</button>
+        <ToastContainer />
       </form>
     </div>
   );

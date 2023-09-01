@@ -1,6 +1,8 @@
 import React, { useState, useEffect, createContext } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Interface
 interface IUserContext {
@@ -8,7 +10,7 @@ interface IUserContext {
   setIsConnected: React.Dispatch<React.SetStateAction<boolean>>;
   token: string | null; // Explicitly allow null
   setToken: React.Dispatch<React.SetStateAction<string | null>>; // Explicitly allow null
-  login: (email: string, password: string) => void;
+  login: (userData: { emailLogin: string; passwordLogin: string }) => void;
   signIn: (userData: { email: string; password: string }) => void;
   logout: () => void;
 }
@@ -32,21 +34,31 @@ export const useUserProvider = (): IUserContext => {
     window.localStorage.setItem('isConnected', String(isConnected)); // Convert boolean to string
   }, [isConnected]);
 
-  const login = async (email: string, password: string) => {
+  const login = async (userData: { emailLogin: string; passwordLogin: string }) => {
     try {
       const response = await axios.post('http://localhost:3000/api/auth/login', {
-        username: email,
-        password: password,
+        email: userData.emailLogin,
+        password: userData.passwordLogin,
       });
       setToken(response.data.token);
       if (response.data.token) {
         localStorage.setItem('authToken', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+        localStorage.setItem('userId', JSON.stringify(response.data.userId));
         setIsConnected(true);
       }
     }
-    catch {
-      throw new Error('Adresse E-mail et/ou le mot de passe incorrects');
+    catch (error) {
+      // throw new Error('Adresse E-mail et/ou le mot de passe incorrects');
+      toast.error('Incorrect email address or password', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
     }
   };
 

@@ -1,34 +1,88 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import './styles.scss';
-import { LoginContext } from "../../utils/providers/useLoginProvider";
+import { ToastContainer } from 'react-toastify';
+import { LoginContext } from '../../utils/providers/useLoginProvider';
+import { UserContext } from '../../utils/providers/useUserProvider';
 
 const Login = () => {
-    const loginContext = useContext(LoginContext);
+  const [emailLogin, setEmailLogin] = useState(''); // Initialize to null
+  const [passwordLogin, setPasswordLogin] = useState(''); // Initialize to null
+  const loginContext = useContext(LoginContext);
 
-    if (!loginContext) {
-      throw new Error("Task must be used within a themeProvider");
-    }
-  
-    const {isLoginVisible, setIsLoginVisible} = loginContext;
+  if (!loginContext) {
+    throw new Error('Task must be used within a themeProvider');
+  }
 
-    return (
-        <div className={`login ${isLoginVisible ? "show" : ""}`} >
-            <form className="login__form" action="#" method="post">
-                <label htmlFor="email"><b>Email</b></label>
-                <input className='login__email' type="email" placeholder="Email" name="email" required />
+  const { isLoginVisible } = loginContext;
 
-                <label htmlFor="password"><b>Password</b></label>
-                <input className='login__password' type="password" placeholder="Password" name="password" required />
+  const userContext = useContext(UserContext);
 
-                <button className='login__submit' type="submit">Login</button>
-            </form>
-            <button type="button" className="login__forgot">
-                <span>
-                    <a href="#">Forgot password ?</a>
-                </span>
-            </button>
-        </div>
-    );
+  if (!userContext) {
+    throw new Error('Task must be used within a themeProvider');
+  }
+
+  const { login } = userContext;
+
+  const handleEmailChangeLogin = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmailLogin(e.target.value);
+  };
+
+  const handlePasswordChangeLogin = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswordLogin(e.target.value);
+  };
+
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    login({ emailLogin, passwordLogin });
+  };
+
+  return (
+    <div className={`login ${isLoginVisible ? 'show' : ''}`}>
+      <form
+        className="login__form"
+        action="#"
+        method="post"
+        onSubmit={handleLogin}
+      >
+        <label htmlFor="emailLogin"><b>Email</b></label>
+        <input
+          className="login__email"
+          type="email"
+          placeholder="Email"
+          name="emailLogin"
+          required
+          onChange={handleEmailChangeLogin}
+          value={emailLogin}
+        />
+
+        <label htmlFor="passwordLogin"><b>Password</b></label>
+        <input
+          className="login__password"
+          type="password"
+          placeholder="Password"
+          name="passwordLogin"
+          required
+          onChange={handlePasswordChangeLogin}
+          value={passwordLogin}
+        />
+
+        <button
+          className="login__submit"
+          type="submit"
+        >Login
+        </button>
+        <ToastContainer />
+      </form>
+      <button
+        type="button"
+        className="login__forgot"
+      >
+        <span>
+          <a href="#">Forgot password ?</a>
+        </span>
+      </button>
+    </div>
+  );
 };
 
 export default Login;
