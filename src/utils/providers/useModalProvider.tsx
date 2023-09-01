@@ -35,7 +35,6 @@ export const useModalProvider = (): IModalContext => {
   const [showDeleteTask, setShowDeleteTask] = useState(false);
   const [showDeleteBoard, setShowDeleteBoard] = useState(false);
 
-
   return {
     showViewTask,
     setShowViewTask,
@@ -54,6 +53,6 @@ export const useModalProvider = (): IModalContext => {
     showDeleteTask,
     setShowDeleteTask,
     showDeleteBoard,
-    setShowDeleteBoard
+    setShowDeleteBoard,
   };
 };

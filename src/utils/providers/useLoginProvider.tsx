@@ -8,7 +8,7 @@ interface ILoginContext {
 export const LoginContext = createContext<ILoginContext | undefined>(undefined);
 
 export const useLoginProvider = (): ILoginContext => {
-    const [isLoginVisible, setIsLoginVisible] = useState(true);
+  const [isLoginVisible, setIsLoginVisible] = useState(true);
 
   return {
     isLoginVisible,

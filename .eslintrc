@@ -1,8 +1,31 @@
 {
-  "extends": "airbnb",
-  "parser": "@babel/eslint-parser",
+  "extends": [
+    "airbnb",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
   "env": {
-    "browser": true
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"],
+        "map": [
+          ["src", "./src"],
+          ["app", "./src"]
+        ]
+      }
+    }
   },
   "rules": {
     "brace-style": ["error", "stroustrup"],
@@ -29,6 +52,7 @@
     "react/forbid-prop-types": "off",
     "react/no-access-state-in-setstate": "warn",
     "react/jsx-one-expression-per-line": "off",
+    "react/jsx-no-useless-fragment": "warn",
     "react/destructuring-assignment": "warn",
     "react/no-unescaped-entities": "off",
     "react/jsx-props-no-spreading": "off",
@@ -40,18 +64,17 @@
     "react/react-in-jsx-scope": "off",
     "max-len": "off",
     "react/function-component-definition": "off",
-    "arrow-body-style":"off",
-    "padded-blocks":"off"
+    "arrow-body-style": "off",
+    "padded-blocks": "off",
+    "import/extensions": "off",
+    "no-nested-ternary": "off"
   },
-  "settings": {
-    "import/resolver": {
-      "alias": {
-        "extensions": [".js"],
-        "map": [
-          ["src", "./src"],
-          ["app", "./src"]
-        ]
+  "overrides": [
+    {
+      "files": ["**/*.tsx"],
+      "rules": {
+        "react/prop-types": "off"
       }
     }
-  }
+  ]
 }

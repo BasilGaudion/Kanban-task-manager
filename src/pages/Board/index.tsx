@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './styles.scss';
-import Header from '../../components/Header'
+import Header from '../../components/Header';
 import Main from '../../components/Main';
 import AsideSettings from '../../components/AsideSettings';
 import useWindowSize from '../../hooks/useWindowSize';
-import { AsideContext } from "../../utils/providers/useAsideProvider";
+import { AsideContext } from '../../utils/providers/useAsideProvider';
 import AllModals from '../../components/AllModals';
 
 const Board = () => {
@@ -13,15 +13,16 @@ const Board = () => {
   const asideContext = useContext(AsideContext);
 
   if (!asideContext) {
-    throw new Error("Task must be used within a asideProvider");
+    throw new Error('Task must be used within a asideProvider');
   }
 
-  const { asideOpen, setAsideOpen } = asideContext;
+  const { asideOpen } = asideContext;
 
   useEffect(() => {
     if (screenWidth && screenWidth >= 768) {
       setLargeWindow(true);
-    } else {
+    }
+    else {
       setLargeWindow(false);
     }
   }, [screenWidth]);
@@ -30,16 +31,14 @@ const Board = () => {
     <div className="board">
       {
         largeWindow
-        ?
-        <AsideSettings/>
-        :
-        <></>
+          ? <AsideSettings />
+          : <></>
       }
       <div className={`board__container ${asideOpen ? 'settings' : ''}`}>
         <Header />
         <Main />
       </div>
-      <AllModals/>
+      <AllModals />
     </div>
   );
 };

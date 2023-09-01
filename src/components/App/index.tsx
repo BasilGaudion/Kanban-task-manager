@@ -2,10 +2,11 @@
 import React from 'react';
 import AppRoutes from '../../utils/AppRoutes';
 import { useModalProvider, ModalContext } from '../../utils/providers/useModalProvider';
-import { useThemeProvider, ThemeContext } from "../../utils/providers/useThemeProvider";
-import { useAsideProvider, AsideContext } from "../../utils/providers/useAsideProvider";
-import { useBoardProvider, BoardContext } from "../../utils/providers/useBoardProvider";
-import { useLoginProvider, LoginContext } from "../../utils/providers/useLoginProvider";
+import { useThemeProvider, ThemeContext } from '../../utils/providers/useThemeProvider';
+import { useAsideProvider, AsideContext } from '../../utils/providers/useAsideProvider';
+import { useBoardProvider, BoardContext } from '../../utils/providers/useBoardProvider';
+import { useLoginProvider, LoginContext } from '../../utils/providers/useLoginProvider';
+import { useUserProvider, UserContext } from '../../utils/providers/useUserProvider';
 
 import './styles.scss';
 
@@ -15,10 +16,12 @@ function App() {
   const dataAsideContext = useAsideProvider();
   const dataBoardContext = useBoardProvider();
   const dataLoginContext = useLoginProvider();
+  const dataUserContext = useUserProvider();
 
   return (
     <div className="app">
-        <ThemeContext.Provider value={dataThemeContext}>
+      <ThemeContext.Provider value={dataThemeContext}>
+        <UserContext.Provider value={dataUserContext}>
           <LoginContext.Provider value={dataLoginContext}>
             <BoardContext.Provider value={dataBoardContext}>
               <AsideContext.Provider value={dataAsideContext}>
@@ -28,7 +31,8 @@ function App() {
               </AsideContext.Provider>
             </BoardContext.Provider>
           </LoginContext.Provider>
-        </ThemeContext.Provider>
+        </UserContext.Provider>
+      </ThemeContext.Provider>
     </div>
   );
 }
