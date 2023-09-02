@@ -65,28 +65,29 @@ const Task: React.FC<TaskProps> = ({ task, index }) => {
       {(provided, snapshot) => {
         if (snapshot.isDragging && provided.draggableProps.style) {
           const style = provided.draggableProps.style as React.CSSProperties;
-          let adjustedLeft = Number(style.left?.toString().split('px')[0]);
-          console.log('Initial left:', style.left);
+          const initialLeft = Number(style.left?.toString().split('px')[0]);
+          console.log('Initial left:', initialLeft);
           console.log('ScrollX:', scrollX);
-          console.log('Aside width:', 264);
+          let adjustedLeft = initialLeft; // Initialize to initial left
 
-          // Appliquez le décalage seulement si `asideOpen` est à `true`
+          // To have the right value, InitialLeft - AdjustedLeft should be 264
           if (asideOpen) {
-            adjustedLeft -= (scrollX - 264); // 264 est la largeur de votre panneau latéral
+            adjustedLeft = initialLeft - 264;
           }
 
-          // Utilisez la nouvelle ref pour accéder à l'élément DOM
+          console.log('Adjusted left:', adjustedLeft);
+
+          // Use the new ref to access the DOM element
           if (taskRef.current) {
             taskRef.current.style.setProperty('left', `${adjustedLeft}px`, 'important');
           }
-          console.log('Adjusted left:', adjustedLeft);
         }
 
         return (
           <div
             ref={(ref) => {
               provided.innerRef(ref);
-              taskRef.current = ref; // Mettre à jour la nouvelle ref
+              taskRef.current = ref; // Update the new ref
             }}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
