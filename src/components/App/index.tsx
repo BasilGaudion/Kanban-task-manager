@@ -7,6 +7,7 @@ import { useAsideProvider, AsideContext } from '../../utils/providers/useAsidePr
 import { useBoardProvider, BoardContext } from '../../utils/providers/useBoardProvider';
 import { useLoginProvider, LoginContext } from '../../utils/providers/useLoginProvider';
 import { useUserProvider, UserContext } from '../../utils/providers/useUserProvider';
+import { useScrollProvider, ScrollContext } from '../../utils/providers/useScrollProvider';
 
 import './styles.scss';
 
@@ -17,19 +18,22 @@ function App() {
   const dataBoardContext = useBoardProvider();
   const dataLoginContext = useLoginProvider();
   const dataUserContext = useUserProvider();
+  const dataScrollContext = useScrollProvider();
 
   return (
     <div className="app">
       <ThemeContext.Provider value={dataThemeContext}>
         <UserContext.Provider value={dataUserContext}>
           <LoginContext.Provider value={dataLoginContext}>
-            <BoardContext.Provider value={dataBoardContext}>
-              <AsideContext.Provider value={dataAsideContext}>
-                <ModalContext.Provider value={dataModalContext}>
-                  <AppRoutes />
-                </ModalContext.Provider>
-              </AsideContext.Provider>
-            </BoardContext.Provider>
+            <ScrollContext.Provider value={dataScrollContext}>
+              <BoardContext.Provider value={dataBoardContext}>
+                <AsideContext.Provider value={dataAsideContext}>
+                  <ModalContext.Provider value={dataModalContext}>
+                    <AppRoutes />
+                  </ModalContext.Provider>
+                </AsideContext.Provider>
+              </BoardContext.Provider>
+            </ScrollContext.Provider>
           </LoginContext.Provider>
         </UserContext.Provider>
       </ThemeContext.Provider>

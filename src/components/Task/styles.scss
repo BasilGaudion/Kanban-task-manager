@@ -5,8 +5,14 @@
     box-shadow: 0px 4px 6px 0px rgba(54, 78, 126, 0.10);
     background: var(--background-modal);
     cursor: pointer;
-    // top: auto !important;
-    left: auto !important;// Beautiful-dnd doesn't work corectly if screen size is changing
+    // position: absolute;
+    // top: unset !important;
+    // left: auto !important;
+
+    &--aside {
+        left: auto !important;
+        // right: auto !important;
+    }
 
     &__container {
         padding: 23px 16px;
