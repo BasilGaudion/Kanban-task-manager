@@ -6,6 +6,7 @@ import { IconCross } from '../../../assets';
 import { ThemeContext } from '../../../utils/providers/useThemeProvider';
 import { createNewBoard } from '../../../utils/api/boardsAPI';
 import { Board, Column } from '../../../utils/Types/BoardTypes';
+import { BoardContext } from '../../../utils/providers/useBoardProvider';
 
 interface ModalAddBoardProps {
     handleClose: () => void;
@@ -16,6 +17,13 @@ const ModalAddBoard: React.FC<ModalAddBoardProps> = ({ handleClose, isOpen }) =>
   const ref = useRef<HTMLDivElement>(null);
   const [containerAnimation, setContainerAnimation] = useState('pop-in');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
+  const boardContext = useContext(BoardContext);
+
+  if (!boardContext) {
+    throw new Error('Task must be used within a asideProvider');
+  }
+
+  const { allBoardsData, setAllBoardsData } = boardContext;
 
   const initialBoard: Board = {
     name: '',
@@ -53,8 +61,11 @@ const ModalAddBoard: React.FC<ModalAddBoardProps> = ({ handleClose, isOpen }) =>
     }));
   };
 
-  const handleCreateBoard = () => {
-    createNewBoard(inCreationBoard);
+  const handleCreateBoard = async () => {
+    const newBoard = await createNewBoard(inCreationBoard);
+    if (newBoard) {
+      setAllBoardsData([...allBoardsData, newBoard]);
+    }
     handleClose();
   };
 

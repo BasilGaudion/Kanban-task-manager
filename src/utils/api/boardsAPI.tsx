@@ -1,5 +1,12 @@
 import axios from 'axios';
 import { Board } from '../Types/BoardTypes';
+// import { BoardContext } from '../providers/useBoardProvider';
+
+// if (!BoardContext) {
+//   throw new Error('Task must be used within a asideProvider');
+// }
+
+// const { setAllBoardsData, allBoardsData } = BoardContext;
 
 export const getAllBoards = async () => {
   const authToken = localStorage.getItem('authToken');
@@ -16,9 +23,7 @@ export const getAllBoards = async () => {
 };
 
 export const createNewBoard = async (newBoard: Board) => {
-  console.log('🚀 ~ file: BoardsAPI.tsx:19 ~ newBoard:', newBoard);
   const authToken = localStorage.getItem('authToken');
-  console.log('🚀 ~ file: BoardsAPI.tsx:21 ~ authToken:', authToken);
   const config = {
     headers: { Authorization: `Bearer ${authToken}` },
   };
