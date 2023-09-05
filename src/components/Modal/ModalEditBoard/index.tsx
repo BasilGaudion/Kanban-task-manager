@@ -2,10 +2,11 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import './styles.scss';
-// import { v4 as uuidv4 } from 'uuid';
 import { IconCross } from '../../../assets';
 import { ThemeContext } from '../../../utils/providers/useThemeProvider';
-// import { BoardContext, Board, Column } from '../../../utils/providers/useBoardProvider';
+import { BoardContext } from '../../../utils/providers/useBoardProvider';
+import { Board, Column } from '../../../utils/Types/BoardTypes';
+import { updateBoard } from '../../../utils/api/boardsAPI';
 
 interface ModalEditBoardProps {
     handleClose: () => void;
@@ -25,52 +26,62 @@ const ModalEditBoard: React.FC<ModalEditBoardProps> = ({ handleClose, isOpen }) 
 
   const { isDarkTheme } = themeContext;
 
-  //   const boardContext = useContext(BoardContext);
-  //   if (!boardContext) {
-  //     throw new Error('Task must be used within a themeProvider');
-  //   }
-  //   const { currentBoardData, updateBoard } = boardContext;
-  //   const [editingBoard, setEditingBoard] = useState<Board | null>(currentBoardData);
+  const boardContext = useContext(BoardContext);
+  if (!boardContext) {
+    throw new Error('Task must be used within a themeProvider');
+  }
+  const { currentBoardData, setCurrentBoardData, setAllBoardsData } = boardContext;
 
-  //   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     setEditingBoard((prev) => ({ ...prev!, name: e.target.value }));
-  //   };
+  const [editingBoard, setEditingBoard] = useState<Board | null>(currentBoardData);
 
-  //   const handleColumnChange = (index: number, value: string) => {
-  //     const newColumns = [...editingBoard!.columns];
-  //     newColumns[index].name = value;
-  //     setEditingBoard((prev) => ({ ...prev!, columns: newColumns }));
-  //   };
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditingBoard((prev) => ({ ...prev!, name: e.target.value }));
+  };
 
-  //   const handleAddColumn = () => {
-  //     const newColumn: Column = {
-  //       id: uuidv4(),
-  //       name: '',
-  //       tasks: [],
-  //     };
-  //     setEditingBoard((prev) => ({
-  //       ...prev!,
-  //       columns: [...prev!.columns, newColumn],
-  //     }));
-  //   };
+  const handleColumnChange = (index: number, value: string) => {
+    const newColumns = [...editingBoard!.columns];
+    newColumns[index].name = value;
+    setEditingBoard((prev) => ({ ...prev!, columns: newColumns }));
+  };
 
-  //   const handleDeleteColumn = (indexToDelete: number) => {
-  //     setEditingBoard((prev) => ({
-  //       ...prev!,
-  //       columns: prev!.columns.filter((_, index) => index !== indexToDelete),
-  //     }));
-  //   };
+  const handleAddColumn = () => {
+    const newColumn: Column = {
+      name: '',
+      color: '#FFFFFF',
+      tasks: [],
+    };
+    setEditingBoard((prev) => ({
+      ...prev!,
+      columns: [...prev!.columns, newColumn],
+    }));
+  };
 
-  //   const handleEditBoard = () => {
-  //     if (editingBoard) {
-  //       updateBoard(editingBoard);
-  //       setContainerAnimation('pop-out');
-  //       setModalAnimation('modal-closed');
-  //     }
-  //     setTimeout(() => {
-  //       handleClose();
-  //     }, 300);
-  //   };
+  const handleDeleteColumn = (indexToDelete: number) => {
+    setEditingBoard((prev) => ({
+      ...prev!,
+      columns: prev!.columns.filter((_, index) => index !== indexToDelete),
+    }));
+  };
+
+  const handleEditBoard = async () => {
+    if (editingBoard && editingBoard._id) {
+      const updatedBoard = await updateBoard(editingBoard._id, editingBoard);
+      if (updatedBoard) {
+        setCurrentBoardData(editingBoard);
+        setAllBoardsData((prev) => prev.map((board) => {
+          if (board._id === editingBoard._id) {
+            return editingBoard;
+          }
+          return board;
+        }));
+      }
+      setContainerAnimation('pop-out');
+      setModalAnimation('modal-closed');
+    }
+    setTimeout(() => {
+      handleClose();
+    }, 300);
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -112,14 +123,14 @@ const ModalEditBoard: React.FC<ModalEditBoardProps> = ({ handleClose, isOpen }) 
             id="eb__title"
             className="eb__input eb__input--title"
             placeholder="e.g. Web Design"
-            // value={editingBoard?.name}
-            // onChange={handleNameChange}
+            value={editingBoard?.name}
+            onChange={handleNameChange}
           />
         </div>
         <div className="eb__columns-group">
           <h3 className="eb__title">Board Columns</h3>
-          {/* <ul className="eb__columns"> */}
-          {/* {editingBoard?.columns.map((column, key) => (
+          <ul className="eb__columns">
+            {editingBoard?.columns.map((column, key) => (
               <li className="eb__column">
                 <label htmlFor="eb__column1" className="visuallyhidden">Enter the first subtask</label>
                 <input
@@ -133,12 +144,12 @@ const ModalEditBoard: React.FC<ModalEditBoardProps> = ({ handleClose, isOpen }) 
                 />
                 <img src={IconCross} alt="" className="eb__column-delete" onClick={() => handleDeleteColumn(key)} />
               </li>
-            ))} */}
-          {/* </ul> */}
+            ))}
+          </ul>
           <button
             type="button"
             className="eb__button eb__button--add"
-            // onClick={handleAddColumn}
+            onClick={handleAddColumn}
           >
             + Add New column
           </button>
@@ -146,7 +157,7 @@ const ModalEditBoard: React.FC<ModalEditBoardProps> = ({ handleClose, isOpen }) 
         <button
           type="button"
           className="eb__button eb__button--create"
-        //   onClick={handleEditBoard}
+          onClick={handleEditBoard}
         >
           Edit Board
         </button>
