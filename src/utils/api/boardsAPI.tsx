@@ -41,6 +41,22 @@ export const createNewBoard = async (newBoard: Board) => {
   }
 };
 
+export const deleteBoard = async (id: string) => {
+  const authToken = localStorage.getItem('authToken');
+  const config = {
+    headers: { Authorization: `Bearer ${authToken}` },
+  };
+  try {
+    const result = await axios.delete(`http://localhost:3000/api/boards/${id}`, config);
+    console.log('🚀 ~ file: BoardsAPI.tsx:52 ~ result:', result.data);
+    return result.data;
+  }
+  catch (error) {
+    console.log('🚀 ~ file: BoardsAPI.tsx:33 ~ error:', error);
+    return null;
+  }
+};
+
 export const getBoardById = async () => {
   console.log('test');
 

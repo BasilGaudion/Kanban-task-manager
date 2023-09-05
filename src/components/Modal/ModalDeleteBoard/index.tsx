@@ -3,9 +3,8 @@ import React, {
 } from 'react';
 import './styles.scss';
 import { ThemeContext } from '../../../utils/providers/useThemeProvider';
-// import { BoardContext } from '../../../utils/providers/useBoardProvider';
-
-// import Task from '../../Task';
+import { BoardContext } from '../../../utils/providers/useBoardProvider';
+import { deleteBoard } from '../../../utils/api/boardsAPI';
 
 interface ModalDeleteBoardProps {
     handleClose: () => void;
@@ -17,13 +16,18 @@ const ModalDeleteBoard: React.FC<ModalDeleteBoardProps> = ({ handleClose, isOpen
   const [containerAnimation, setContainerAnimation] = useState('pop-in');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
   const themeContext = useContext(ThemeContext);
-  //   const boardContext = useContext(BoardContext);
+  const boardContext = useContext(BoardContext);
 
-  //   if (!boardContext) {
-  //     throw new Error('Task must be used within a themeProvider');
-  //   }
+  if (!boardContext) {
+    throw new Error('Task must be used within a themeProvider');
+  }
 
-  //   const { currentBoardData, deleteBoard } = boardContext;
+  const {
+    currentBoardData,
+    setAllBoardsData,
+    allBoardsData,
+    setCurrentBoardData,
+  } = boardContext;
 
   if (!themeContext) {
     throw new Error('Task must be used within a themeProvider');
@@ -58,14 +62,18 @@ const ModalDeleteBoard: React.FC<ModalDeleteBoardProps> = ({ handleClose, isOpen
     };
   }, [handleClose]);
 
-  //   const handleDeleteTask = () => {
-  //     if (currentBoardData) {
-  //       deleteBoard(currentBoardData);
-  //       setContainerAnimation('pop-out');
-  //       setModalAnimation('modal-closed');
-  //       setTimeout(handleClose, 300);
-  //     }
-  //   };
+  const handleDeleteTask = async () => {
+    if (currentBoardData._id) {
+      const deletedBoard = await deleteBoard(currentBoardData._id);
+      if (deletedBoard) {
+        setAllBoardsData(allBoardsData.slice().filter((board) => board._id !== currentBoardData._id));
+        setCurrentBoardData(allBoardsData[0]);
+      }
+      setContainerAnimation('pop-out');
+      setModalAnimation('modal-closed');
+      setTimeout(handleClose, 300);
+    }
+  };
 
   const handleCancel = () => {
     setContainerAnimation('pop-out');
@@ -81,14 +89,14 @@ const ModalDeleteBoard: React.FC<ModalDeleteBoardProps> = ({ handleClose, isOpen
         <h2 className="db__action">Delete this task ?</h2>
         <p className="db__text">
           Are you sure you want to delete the
-          {/* ‘{currentBoardData.name}’  */}
+          ‘{currentBoardData.name}’
           task and its subtasks? This action cannot be reversed.
         </p>
         <div className="db__button-group">
           <button
             type="button"
             className="db__button db__button--delete"
-        //   onClick={handleDeleteTask}
+            onClick={handleDeleteTask}
           >
             Delete
           </button>
