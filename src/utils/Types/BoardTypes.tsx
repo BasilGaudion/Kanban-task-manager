@@ -1,11 +1,11 @@
 export interface Subtask {
-  id?: string;
+  _id?: string;
   title: string;
   isCompleted: boolean;
 }
 
 export interface Task {
-  id?: string;
+  _id?: string;
   title: string;
   description: string;
   status: string;
@@ -13,7 +13,7 @@ export interface Task {
 }
 
 export interface Column {
-  id?: string;
+  _id?: string;
   name: string;
   color: string;
   tasks: Task[];

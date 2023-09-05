@@ -21,7 +21,9 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
     <section className="column">
       <div className="column__title-group">
         <span className="column__color" />
-        <h3 className="column__title">{column.name} ({column.tasks.length})</h3>
+        <h3 className="column__title">{column.name}
+          {/* ({column.tasks.length}) */}
+        </h3>
       </div>
       <Droppable droppableId={column.name}>
         {(provided) => (
@@ -30,10 +32,10 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            {column.tasks.map((task: TaskType, index: number) => (
-              <Task key={task.id} task={task} index={index} />
+            {/* {column.tasks.map((task: TaskType, index: number) => (
+              <Task key={task._id} task={task} index={index} />
             ))}
-            {provided.placeholder}
+            {provided.placeholder} */}
           </div>
         )}
       </Droppable>

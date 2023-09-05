@@ -36,7 +36,6 @@ const Main = () => {
     if (containerRef.current) {
       const newScrollX = containerRef.current.scrollLeft;
       setScrollX(newScrollX);
-      // console.log(`Current scrollbar position: ${newScrollX}`);
     }
   };
 
@@ -76,16 +75,20 @@ const Main = () => {
     throw new Error('Task must be used within a asideProvider');
   }
 
-  // const { currentBoardData, moveTaskToColumn } = boardContext;
+  //! TODO - Remeber to add moveTaskToColumn here
+  const { currentBoardData } = boardContext;
 
-  // useEffect(() => {
-  //   if (currentBoardData.columns.length < 1) {
-  //     setHaveColums(false);
-  //   }
-  //   else {
-  //     setHaveColums(true);
-  //   }
-  // }, [currentBoardData]);
+  useEffect(() => {
+    if (currentBoardData.columns) {
+      if (currentBoardData.columns.length < 1) {
+        setHaveColums(false);
+      }
+      else {
+        setHaveColums(true);
+      }
+    }
+
+  }, [currentBoardData]);
 
   const onDragEnd = (result: any) => {
     const { destination, source, draggableId } = result;
@@ -109,14 +112,14 @@ const Main = () => {
       {haveColums ? (
         <div className="main__container container" ref={containerRef} onScroll={handleScroll}>
           <DragDropContext
-            // key={currentBoardData.id}
+            key={currentBoardData._id}
             onDragEnd={onDragEnd}
           >
-            {/* {currentBoardData.columns.map((column, index) => (
-              <div className="main__columns" key={index}>
-                <Column key={column.id} column={column} />
+            {currentBoardData.columns.map((column) => (
+              <div className="main__columns" key={column._id}>
+                <Column key={column._id} column={column} />
               </div>
-            ))} */}
+            ))}
             <div><CreateColumn /></div>
           </DragDropContext>
         </div>

@@ -59,7 +59,7 @@ const Task: React.FC<TaskProps> = ({ task, index }) => {
 
   return (
     <Draggable
-      draggableId={task.id || 'defaultId'}
+      draggableId={task._id || 'defaultId'}
       index={index}
     >
       {(provided, snapshot) => {

@@ -1801,7 +1801,7 @@
 
 "@types/react-color@^3.0.6":
   version "3.0.6"
-  resolved "https://registry.npmjs.org/@types/react-color/-/react-color-3.0.6.tgz"
+  resolved "https://registry.yarnpkg.com/@types/react-color/-/react-color-3.0.6.tgz#602fed023802b2424e7cd6ff3594ccd3d5055f9a"
   integrity sha512-OzPIO5AyRmLA7PlOyISlgabpYUa3En74LP8mTMa0veCA719SvYQov4WLMsHvCgXP+L+KI9yGhYnqZafVGG0P4w==
   dependencies:
     "@types/react" "*"

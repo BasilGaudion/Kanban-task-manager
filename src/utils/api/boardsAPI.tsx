@@ -72,8 +72,3 @@ export const updateBoard = async (id: string, updatedBoard: Board) => {
     return null;
   }
 };
-
-export const getBoardById = async () => {
-  console.log('test');
-
-};
