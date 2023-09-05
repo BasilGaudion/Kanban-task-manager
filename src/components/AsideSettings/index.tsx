@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import './styles.scss';
 import {
   IconBoard, IconBoardPurple, IconHidePurple, IconHideSidebar, IconShowSidebar, LogoDark, LogoLight,
@@ -21,7 +21,7 @@ const AsideSettings = () => {
   if (!modalContext) {
     throw new Error('Task must be used within a ModalProvider');
   }
-  const { setShowAddBoard, showAddBoard } = modalContext;
+  const { setShowAddBoard } = modalContext;
 
   const handleShowAddBoard = () => {
     setShowAddBoard(true);
@@ -52,7 +52,7 @@ const AsideSettings = () => {
     throw new Error('Task must be used within a asideProvider');
   }
 
-  const { allBoardsName, setCurrentBoard, currentBoard } = boardContext;
+  const { allBoardsData, currentBoardData, setCurrentBoardData } = boardContext;
 
   return (
     <>
@@ -60,23 +60,24 @@ const AsideSettings = () => {
         <section className="aside__container">
           <div className="aside__top-group">
             <img className="aside__logo" src={isDarkTheme ? LogoLight : LogoDark} alt="" />
-            <h3 className="aside__title">All Boards ({allBoardsName.length})</h3>
+            <h3 className="aside__title">All Boards ({allBoardsData.length})</h3>
             <ul className="aside__list">
-
-              {allBoardsName.map((item, index) => {
-                return (
-                  <li
-                    className={`aside__item ${item === currentBoard ? 'aside__item--current' : ''}`}
-                    key={index}
-                    onClick={() => {
-                      setCurrentBoard(item);
-                    }}
-                  >
-                    <img src={IconBoard} alt="" />
-                    <p className={`aside__item-title ${item === currentBoard ? 'aside__item-title--current' : ''}`}>{item}</p>
-                  </li>
-                );
-              })}
+              {
+                allBoardsData.map((item, index) => {
+                  return (
+                    <li
+                      className={`aside__item ${item._id === currentBoardData._id ? 'aside__item--current' : ''}`}
+                      key={index}
+                      onClick={() => {
+                        setCurrentBoardData(item);
+                      }}
+                    >
+                      <img src={IconBoard} alt="" />
+                      <p className={`aside__item-title ${item._id === currentBoardData._id ? 'aside__item-title--current' : ''}`}>{item.name}</p>
+                    </li>
+                  );
+                })
+              }
               <li className="aside__item aside__item--create" onClick={handleShowAddBoard}>
                 <img src={IconBoardPurple} alt="" />
                 <p className="aside__item-title aside__item-title--create">+ Create New Board</p>

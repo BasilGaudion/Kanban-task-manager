@@ -32,10 +32,6 @@ const Main = () => {
   const { setScrollX } = scrollContext;
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // useEffect(() => {
-  //   // console.log('Current container:', containerRef.current);
-  // }, []); // Exécuté une seule fois après le montage
-
   const handleScroll = () => {
     if (containerRef.current) {
       const newScrollX = containerRef.current.scrollLeft;
@@ -73,23 +69,23 @@ const Main = () => {
     throw new Error('Task must be used within a asideProvider');
   }
 
-  const { asideOpen, setAsideOpen } = asideContext;
+  const { asideOpen } = asideContext;
 
   // ====== Board Context ==========
   if (!boardContext) {
     throw new Error('Task must be used within a asideProvider');
   }
 
-  const { currentBoardData, moveTaskToColumn } = boardContext;
+  // const { currentBoardData, moveTaskToColumn } = boardContext;
 
-  useEffect(() => {
-    if (currentBoardData.columns.length < 1) {
-      setHaveColums(false);
-    }
-    else {
-      setHaveColums(true);
-    }
-  }, [currentBoardData]);
+  // useEffect(() => {
+  //   if (currentBoardData.columns.length < 1) {
+  //     setHaveColums(false);
+  //   }
+  //   else {
+  //     setHaveColums(true);
+  //   }
+  // }, [currentBoardData]);
 
   const onDragEnd = (result: any) => {
     const { destination, source, draggableId } = result;
@@ -102,22 +98,25 @@ const Main = () => {
       destination.droppableId === source.droppableId
           && destination.index === source.index
     ) {
-      return;
+      // return;
     }
 
-    moveTaskToColumn(draggableId, destination.droppableId, source.index, destination.index);
+    // moveTaskToColumn(draggableId, destination.droppableId, source.index, destination.index);
   };
 
   return (
     <main className={`main ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'} ${asideOpen && largeWindow ? 'main--reduct' : ''}`}>
       {haveColums ? (
         <div className="main__container container" ref={containerRef} onScroll={handleScroll}>
-          <DragDropContext key={currentBoardData.id} onDragEnd={onDragEnd}>
-            {currentBoardData.columns.map((column, index) => (
+          <DragDropContext
+            // key={currentBoardData.id}
+            onDragEnd={onDragEnd}
+          >
+            {/* {currentBoardData.columns.map((column, index) => (
               <div className="main__columns" key={index}>
                 <Column key={column.id} column={column} />
               </div>
-            ))}
+            ))} */}
             <div><CreateColumn /></div>
           </DragDropContext>
         </div>

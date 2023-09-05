@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import './styles.scss';
 import { Droppable } from 'react-beautiful-dnd';
 import Task from '../Task';
-import { Column as ColumnType, Task as TaskType, BoardContext } from '../../utils/providers/useBoardProvider';
+import { Column as ColumnType, Task as TaskType } from '../../utils/Types/BoardTypes';
 import AddTaskContainer from '../AddTaskContainer/AddTaskContainer';
 import { ItemTypes } from '../../utils/Types/DnDTypes';
 

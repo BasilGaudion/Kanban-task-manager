@@ -36,7 +36,7 @@ const Header = () => {
     throw new Error('Task must be used within a asideProvider');
   }
 
-  const { currentBoardData } = boardContext;
+  // const { currentBoardData } = boardContext;
 
   // ====== Modal Context ==========
   if (!modalContext) {
@@ -111,7 +111,7 @@ const Header = () => {
                 : <img src={LogoMobile} className="header__logo" alt="Logo Mobile" />
             )
         }
-          <h2 className="header__board-name">{currentBoardData.name}</h2>
+          {/* <h2 className="header__board-name">{currentBoardData.name}</h2> */}
           {
           largeWindow
             ? <></>
@@ -124,7 +124,7 @@ const Header = () => {
             ? (
               <button
                 type="button"
-                className={`header__add-task header__add-task--large ${currentBoardData.columns.length > 0 ? '' : 'header__add-task--disable'}`}
+                // className={`header__add-task header__add-task--large ${currentBoardData.columns.length > 0 ? '' : 'header__add-task--disable'}`}
                 onClick={handleShowAddBoard}
               >
                 + Create New Board
@@ -133,7 +133,7 @@ const Header = () => {
             : (
               <button
                 type="button"
-                className={`header__add-task header__add-task--large ${currentBoardData.columns.length > 0 ? '' : 'header__add-task--disable'}`}
+                // className={`header__add-task header__add-task--large ${currentBoardData.columns.length > 0 ? '' : 'header__add-task--disable'}`}
                 onClick={handleShowAddBoard}
               >
                 +
