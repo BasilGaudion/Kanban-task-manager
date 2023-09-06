@@ -14,6 +14,8 @@ import LogoLight from './images/logo-light.svg';
 import LogoMobile from './images/logo-mobile.svg';
 import IconBoardPurple from './images/icon-board-purple.svg';
 import IconHidePurple from './images/icon-hide-purple.svg';
+import IconEdit from './images/icon-edit.svg';
+import IconEditPurple from './images/icon-edit-purple.svg';
 
 export {
   IconAddTaskMobile,
@@ -31,5 +33,7 @@ export {
   LogoLight,
   LogoMobile,
   IconBoardPurple,
-  IconHidePurple
+  IconHidePurple,
+  IconEdit,
+  IconEditPurple,
 };

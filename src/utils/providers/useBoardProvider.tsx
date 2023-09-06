@@ -1,13 +1,15 @@
 import React, { createContext, useEffect, useState } from 'react';
 // eslint-disable-next-line import/no-unresolved
 import { getAllBoards } from '../api/boardsAPI';
-import { Board } from '../Types/BoardTypes';
+import { Board, Column } from '../Types/BoardTypes';
 
 interface IBoardContext {
   allBoardsData: Board[];
   setAllBoardsData: React.Dispatch<React.SetStateAction<Board[]>>;
   currentBoardData: Board;
   setCurrentBoardData: React.Dispatch<React.SetStateAction<Board>>;
+  currentColumnData: Column;
+  setCurrentColumnData: React.Dispatch<React.SetStateAction<Column>>;
 }
 
 export const BoardContext = createContext<IBoardContext | undefined>(undefined);
@@ -18,6 +20,7 @@ export const useBoardProvider = (): IBoardContext => {
   // ============== STATES =================
   const [allBoardsData, setAllBoardsData] = useState<Board[]>([]);
   const [currentBoardData, setCurrentBoardData] = useState<Board>({} as Board);
+  const [currentColumnData, setCurrentColumnData] = useState<Column>({} as Column);
 
   // ============ USE EFFECTS ==============
 
@@ -84,5 +87,7 @@ export const useBoardProvider = (): IBoardContext => {
     setAllBoardsData,
     currentBoardData,
     setCurrentBoardData,
+    currentColumnData,
+    setCurrentColumnData,
   };
 };

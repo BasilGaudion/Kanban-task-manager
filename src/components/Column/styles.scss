@@ -4,10 +4,33 @@
     flex-direction: column;
     max-height: 84vh;
 
+    &:hover {
+        .column__edit-icon-container {
+            opacity: 1;
+        }
+    }
+
+    &__title-color-text {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
     &__title-group {
         display: flex;
+        align-items: center;
         gap: 16px;
         margin-bottom: 24px;
+    }
+
+    &__edit-icon-container {
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    &__edit-icon {
+        width: 20px;
+        cursor: pointer;
     }
 
     &__color {

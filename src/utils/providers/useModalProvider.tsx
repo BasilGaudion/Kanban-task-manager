@@ -20,6 +20,10 @@ interface IModalContext {
   setShowDeleteTask: React.Dispatch<React.SetStateAction<boolean>>;
   showDeleteBoard: boolean;
   setShowDeleteBoard: React.Dispatch<React.SetStateAction<boolean>>;
+  showEditColumn: boolean;
+  setShowEditColumn: React.Dispatch<React.SetStateAction<boolean>>;
+  showDeleteColumn: boolean;
+  setShowDeleteColumn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const ModalContext = createContext<IModalContext | undefined>(undefined);
@@ -34,6 +38,8 @@ export const useModalProvider = (): IModalContext => {
   const [showAddColumn, setShowAddColumn] = useState(false);
   const [showDeleteTask, setShowDeleteTask] = useState(false);
   const [showDeleteBoard, setShowDeleteBoard] = useState(false);
+  const [showEditColumn, setShowEditColumn] = useState(false);
+  const [showDeleteColumn, setShowDeleteColumn] = useState(false);
 
   return {
     showViewTask,
@@ -54,5 +60,9 @@ export const useModalProvider = (): IModalContext => {
     setShowDeleteTask,
     showDeleteBoard,
     setShowDeleteBoard,
+    showEditColumn,
+    setShowEditColumn,
+    showDeleteColumn,
+    setShowDeleteColumn,
   };
 };

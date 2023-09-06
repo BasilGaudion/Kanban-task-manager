@@ -1,0 +1,61 @@
+@import '../animations';
+@import '../../../styles/placeholders';
+
+.dc {
+    @extend %modalBgDefaultStyle;
+
+    &__container {
+        @extend %modalContainer
+    }
+
+    &__action {
+        color: #EA5555;
+        font-family: Plus Jakarta Sans;
+        font-size: 1.125rem;
+        font-weight: 700;
+        line-height: normal;
+    }
+
+    &__text {
+        color: var(--medium-grey, #828FA3);
+        font-family: Plus Jakarta Sans;
+        font-size: .8125rem;
+        font-weight: 500;
+        line-height: 23px;
+    }
+
+    &__button-group {
+        display: flex;
+        gap: 16px;
+    }
+
+    &__button {
+        width: 200px;
+        height: 40px;
+        text-align: center;
+        font-family: Plus Jakarta Sans;
+        font-size: .8125rem;
+        font-weight: 700;
+        border-radius: 20px;
+        border: none;
+
+        &--delete {
+            background: var(--red, #EA5555);
+            color: var(--white, #FFF);
+        }
+
+        &--cancel {
+            background-color: var(--add-button-background);
+            color: #635FC7;
+        }
+    }
+
+}
+
+@media screen and (min-width: 768px) {
+    .db {
+        &__container {
+            width: 480px;
+        }
+    }
+}
