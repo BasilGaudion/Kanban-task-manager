@@ -56,7 +56,7 @@ const Task: React.FC<TaskProps> = ({ task, index }) => {
   }
   const { asideOpen } = asideContext;
 
-  const completedSubtasks = task.subtasks.filter((subtask) => subtask.isCompleted).length;
+  const completedSubtasks = task?.subtasks?.filter((subtask) => subtask.isCompleted).length;
 
   return (
     <Draggable
@@ -91,7 +91,7 @@ const Task: React.FC<TaskProps> = ({ task, index }) => {
           >
             <div className="task__container">
               <h2 className="task__title">{task.title}</h2>
-              <h4 className="task__subtitle">{completedSubtasks} of {task.subtasks.length} subtasks</h4>
+              <h4 className="task__subtitle">{completedSubtasks} of {task?.subtasks?.length} subtasks</h4>
             </div>
           </div>
         );

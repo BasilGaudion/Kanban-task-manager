@@ -2,11 +2,12 @@ import React, {
   useEffect, useRef, useState, useContext,
 } from 'react';
 import './styles.scss';
-// import { v4 as uuidv4 } from 'uuid';
 import { IconCross } from '../../../assets';
 import { ModalContext } from '../../../utils/providers/useModalProvider';
 import { ThemeContext } from '../../../utils/providers/useThemeProvider';
-// import { BoardContext, Subtask, Task } from '../../../utils/providers/useBoardProvider';
+import { BoardContext } from '../../../utils/providers/useBoardProvider';
+import { Column, Subtask, Task } from '../../../utils/Types/BoardTypes';
+import { createNewTask, deleteTask, editTask } from '../../../utils/api/tasksAPI';
 
 interface ModalEditTaskProps {
     handleClose: () => void;
@@ -18,16 +19,16 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
   const [containerAnimation, setContainerAnimation] = useState('pop-in');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
   const modalContext = useContext(ModalContext);
-  //   const boardContext = useContext(BoardContext);
+  const boardContext = useContext(BoardContext);
 
-  //   if (!boardContext) {
-  //     throw new Error('Task must be used within a themeProvider');
-  //   }
+  if (!boardContext) {
+    throw new Error('Task must be used within a themeProvider');
+  }
 
-  //   const {
-  //     currentTask, setCurrentTask, currentBoardData, updateTask,
-  //   } = boardContext;
-  //   const [editingTask, setEditingTask] = useState<Task | null>(currentTask);
+  const {
+    currentTaskData, currentColumnData, currentBoardData, setCurrentBoardData, setCurrentColumnData, setAllBoardsData, setCurrentTaskData,
+  } = boardContext;
+  const [editingTask, setEditingTask] = useState<Task>(currentTaskData);
 
   const themeContext = useContext(ThemeContext);
 
@@ -45,10 +46,37 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
     showViewTask, setShowViewTask, showEditTask, setShowEditTask,
   } = modalContext;
 
-  const handleEditTask = () => {
-    // if (editingTask && currentTask) {
-    //   updateTask(currentTask.id, editingTask);
-    // }
+  const handleEditTask = async () => {
+    if (!editingTask.title) {
+      alert('Veuillez donner un nom');
+      return;
+    }
+    if (!editingTask.description) {
+      alert('Veuillez donner une description');
+      return;
+    }
+    if (!editingTask.status) {
+      alert('Veuillez choisir un status');
+      return;
+    }
+    if (editingTask._id && editingTask && currentBoardData._id && currentColumnData._id) {
+      const updatedBoard = await editTask(currentBoardData._id, currentColumnData._id, editingTask);
+      if (!updatedBoard) return;
+      console.log(updatedBoard);
+
+      setAllBoardsData((prev) => {
+        const newBoards = [...prev];
+        const boardIndex = newBoards.findIndex((board) => board._id === currentBoardData._id);
+        const columnIndex = newBoards[boardIndex].columns.findIndex((column) => column._id === currentColumnData._id);
+        const taskIndex = newBoards[boardIndex].columns[columnIndex].tasks.findIndex((task) => task._id === currentTaskData._id);
+
+        const updatedTaskFromBoard = updatedBoard.columns[columnIndex].tasks[taskIndex];
+        newBoards[boardIndex].columns[columnIndex].tasks[taskIndex] = updatedTaskFromBoard;
+
+        return newBoards;
+      });
+      setCurrentTaskData(updatedBoard.columns.find((column: Column) => column.tasks.some((taskInColumn) => taskInColumn._id === currentTaskData._id))!.tasks.find((task: Task) => task._id === currentTaskData._id)!);
+    }
     setContainerAnimation('pop-out');
     setModalAnimation('modal-closed');
     setTimeout(() => {
@@ -85,47 +113,70 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
     };
   }, [handleClose]);
 
-  //   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     setEditingTask((prev) => ({ ...prev!, title: e.target.value }));
-  //   };
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditingTask((prev) => ({ ...prev!, title: e.target.value }));
+  };
 
-  //   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-  //     setEditingTask((prev) => ({ ...prev!, description: e.target.value }));
-  //   };
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setEditingTask((prev) => ({ ...prev!, description: e.target.value }));
+  };
 
-  //   const handleSubtaskChange = (index: number, value: string) => {
-  //     const newSubtasks = [...editingTask!.subtasks];
-  //     newSubtasks[index].title = value;
-  //     setEditingTask((prev) => ({ ...prev!, subtasks: newSubtasks }));
-  //   };
+  const handleSubtaskChange = (index: number, value: string) => {
+    const newSubtasks = [...editingTask!.subtasks];
+    newSubtasks[index].title = value;
+    setEditingTask((prev) => ({ ...prev!, subtasks: newSubtasks }));
+  };
 
-  //   const handleAddSubtask = () => {
-  //     const newSubtask: Subtask = {
-  //       id: uuidv4(),
-  //       title: '',
-  //       isCompleted: false,
-  //     };
-  //     setEditingTask((prev) => ({
-  //       ...prev!,
-  //       subtasks: [...prev!.subtasks, newSubtask],
-  //     }));
-  //   };
+  const handleAddSubtask = () => {
+    const newSubtask: Subtask = {
+      title: '',
+      isCompleted: false,
+    };
+    setEditingTask((prev) => ({
+      ...prev!,
+      subtasks: [...prev!.subtasks, newSubtask],
+    }));
+  };
 
-  //   const handleDeleteSubtask = (indexToDelete: number) => {
-  //     setEditingTask((prev) => ({
-  //       ...prev!,
-  //       subtasks: prev!.subtasks.filter((_, index) => index !== indexToDelete),
-  //     }));
-  //   };
+  const handleDeleteSubtask = (indexToDelete: number) => {
+    setEditingTask((prev) => ({
+      ...prev!,
+      subtasks: prev!.subtasks.filter((_, index) => index !== indexToDelete),
+    }));
+  };
 
-  //   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //     const selectedStatus = e.target.value;
+  const handleStatusChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newColumnId = e.target.value;
+    const newColumn = currentBoardData.columns.find((column) => column._id === newColumnId);
 
-  //     setEditingTask((prev) => ({
-  //       ...prev!,
-  //       status: selectedStatus,
-  //     }));
-  //   };
+    if (currentBoardData._id && currentColumnData._id && editingTask?._id) {
+      await deleteTask(currentBoardData._id, currentColumnData._id, editingTask._id);
+    }
+
+    if (currentBoardData._id && editingTask) {
+      await createNewTask(currentBoardData._id, newColumnId, editingTask);
+    }
+
+    setCurrentColumnData(newColumn!);
+    setCurrentBoardData((prev) => {
+      const sourceColumn = prev.columns.find((column) => column._id === currentColumnData._id);
+      if (sourceColumn) {
+        sourceColumn.tasks = sourceColumn.tasks.filter((task) => task._id !== editingTask?._id);
+      }
+
+      const targetColumn = prev.columns.find((column) => column._id === newColumnId);
+      if (targetColumn && editingTask) {
+        targetColumn.tasks.push(editingTask);
+      }
+
+      return { ...prev };
+    });
+
+    setEditingTask((prev) => ({
+      ...prev,
+      status: newColumn?.name || '',
+    }));
+  };
 
   return (
     <div className={`et ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
@@ -140,8 +191,8 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
             id="et__title"
             className="et__input et__input--title"
             placeholder="e.g. Take coffee break"
-            // value={editingTask?.title}
-            // onChange={handleTitleChange}
+            value={editingTask?.title}
+            onChange={handleTitleChange}
           />
         </div>
         <div className="et__description-group">
@@ -152,14 +203,14 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
             id="et__description"
             className="et__input et__input--description"
             placeholder="e.g. It’s always good to take a break. This 15 minute break will  recharge the batteries a little."
-            // value={editingTask?.description}
-            // onChange={handleDescriptionChange}
+            value={editingTask?.description}
+            onChange={handleDescriptionChange}
           />
         </div>
         <div className="et__subtasks-group">
           <h3 className="et__title">Subtasks</h3>
           <ul className="et__subtasks">
-            {/* {editingTask?.subtasks.map((subtask, key) => (
+            {editingTask?.subtasks.map((subtask, key) => (
               <li className="et__subtask">
                 <label htmlFor="et__subtask1" className="visuallyhidden">Enter the first subtask</label>
                 <input
@@ -178,12 +229,12 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
                   onClick={() => handleDeleteSubtask(key)}
                 />
               </li>
-            ))} */}
+            ))}
           </ul>
           <button
             type="button"
             className="et__button et__button--add"
-            // onClick={handleAddSubtask}
+            onClick={handleAddSubtask}
           >
             + Add New Subtask
           </button>
@@ -194,11 +245,20 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
           <select
             className="et__select"
             id="subtasks"
-            // onChange={handleStatusChange}
+            onChange={handleStatusChange}
+            value={editingTask?.status}
           >
-            {/* {currentBoardData.columns.map((column, key) => (
-              <option value={column.name}>{column.name}</option>
-            ))} */}
+            <option
+              value={currentColumnData._id}
+              selected
+            >
+              {currentColumnData.name}
+            </option>
+            {currentBoardData.columns
+              .filter((column) => column._id !== currentColumnData._id)
+              .map((column, key) => (
+                <option key={key} value={column._id}>{column.name}</option>
+              ))}
           </select>
         </div>
         <button type="button" className="et__button et__button--create" onClick={handleEditTask}>Edit Task</button>
