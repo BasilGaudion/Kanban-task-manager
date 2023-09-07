@@ -63,7 +63,7 @@ const AsideSettings = () => {
             <h3 className="aside__title">All Boards ({allBoardsData?.length})</h3>
             <ul className="aside__list">
               {
-                allBoardsData.map((item, index) => {
+                allBoardsData?.map((item, index) => {
                   return (
                     <li
                       className={`aside__item ${item._id === currentBoardData._id ? 'aside__item--current' : ''}`}

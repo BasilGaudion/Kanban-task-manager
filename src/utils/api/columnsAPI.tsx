@@ -45,10 +45,7 @@ export const editColumn = async (boardId: string, editedColumn: Column) => {
 };
 
 export const deleteColumn = async (boardId: string, columnId: string) => {
-  console.log('🚀 ~ file: columnsAPI.tsx:48 ~ boardId:', boardId);
-  console.log('🚀 ~ file: columnsAPI.tsx:48 ~ columnId:', columnId);
   const authToken = localStorage.getItem('authToken');
-  console.log('🚀 ~ file: columnsAPI.tsx:51 ~ authToken:', authToken);
   const config = {
     headers: { Authorization: `Bearer ${authToken}` },
   };
@@ -63,8 +60,4 @@ export const deleteColumn = async (boardId: string, columnId: string) => {
     console.log('🚀 ~ file: BoardsAPI.tsx:33 ~ error:', error);
     return null;
   }
-};
-
-export const deleteBoard = async () => {
-  console.log('coucou');
 };

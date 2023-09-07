@@ -29,7 +29,7 @@ const Task: React.FC<TaskProps> = ({ task, index }) => {
     throw new Error('Task must be used within a themeProvider');
   }
 
-  // const { setCurrentTask } = boardContext;
+  const { setCurrentTaskData, setCurrentColumnData, currentBoardData } = boardContext;
 
   if (!themeContext) {
     throw new Error('Task must be used within a themeProvider');
@@ -46,7 +46,8 @@ const Task: React.FC<TaskProps> = ({ task, index }) => {
   const { showViewTask, setShowViewTask } = modalContext;
 
   const handleShowTask = () => {
-    // setCurrentTask(task);
+    setCurrentColumnData(currentBoardData.columns.find((column) => column.tasks.some((taskInColumn) => taskInColumn._id === task._id))!);
+    setCurrentTaskData(task);
     setShowViewTask(!showViewTask);
   };
 

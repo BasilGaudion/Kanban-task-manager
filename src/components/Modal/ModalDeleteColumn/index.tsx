@@ -35,8 +35,6 @@ const ModalDeleteColumn: React.FC<ModalDeleteColumnProps> = ({ handleClose, isOp
   const {
     currentBoardData,
     setAllBoardsData,
-    allBoardsData,
-    setCurrentBoardData,
     currentColumnData,
   } = boardContext;
 

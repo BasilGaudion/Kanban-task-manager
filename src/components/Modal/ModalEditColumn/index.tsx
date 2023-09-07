@@ -154,17 +154,17 @@ const ModalEditColumn: React.FC<ModalEditColumnProps> = ({ handleClose, isOpen }
         <div className="ec__buttons-group">
           <button
             type="button"
-            className="ec__button ec__button--create"
-            onClick={handleEditColumn}
-          >
-            Edit Column
-          </button>
-          <button
-            type="button"
             className="ec__button ec__button--delete"
             onClick={handleShowDeleteColumn}
           >
             Delete Column
+          </button>
+          <button
+            type="button"
+            className="ec__button ec__button--create"
+            onClick={handleEditColumn}
+          >
+            Edit Column
           </button>
         </div>
       </section>

@@ -1,4 +1,4 @@
-.addTask {
+.add-task {
     width: 280px;
     min-height: 88px;
     border-radius: 8px;
@@ -9,12 +9,12 @@
     cursor: pointer;
 
     &--empty {
-        margin-top: -20px;
+        margin-top: -25px;
     }
 
     &:hover {
 
-        .addTask__title {
+        .add-task__title {
             color: #635FC7;
         }
     }

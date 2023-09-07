@@ -47,7 +47,7 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
         <div className="column__title-color-text">
           <span className="column__color" />
           <h3 className="column__title">{column.name}
-            {/* ({column.tasks.length}) */}
+            ({column.tasks.length})
           </h3>
         </div>
         <div className="column__edit-icon-container"> 
@@ -61,10 +61,10 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            {/* {column.tasks.map((task: TaskType, index: number) => (
+            {column.tasks.map((task: TaskType, index: number) => (
               <Task key={task._id} task={task} index={index} />
             ))}
-            {provided.placeholder} */}
+            {provided.placeholder}
           </div>
         )}
       </Droppable>

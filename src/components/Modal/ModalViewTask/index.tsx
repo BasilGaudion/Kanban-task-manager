@@ -5,7 +5,8 @@ import './styles.scss';
 import { IconVerticalEllipsis } from '../../../assets';
 import { ModalContext } from '../../../utils/providers/useModalProvider';
 import { ThemeContext } from '../../../utils/providers/useThemeProvider';
-// import { BoardContext } from '../../../utils/providers/useBoardProvider';
+import { BoardContext } from '../../../utils/providers/useBoardProvider';
+import { editTask } from '../../../utils/api/tasksAPI';
 
 interface ModalViewTaskProps {
     handleClose: () => void;
@@ -20,17 +21,17 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
   const [modalAnimation, setModalAnimation] = useState('modal-open');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const modalContext = useContext(ModalContext);
-  // const boardContext = useContext(BoardContext);
+  const boardContext = useContext(BoardContext);
 
-  // if (!boardContext) {
-  //   throw new Error('Task must be used within a themeProvider');
-  // }
+  if (!boardContext) {
+    throw new Error('Task must be used within a themeProvider');
+  }
 
-  // const {
-  //   currentTask, setCurrentTask, updateSubtask, currentBoardData,
-  // } = boardContext;
+  const {
+    currentTaskData, setCurrentTaskData, currentColumnData, currentBoardData, setCurrentBoardData,
+  } = boardContext;
 
-  // if (!currentTask) return null;
+  if (!currentTaskData) return null;
 
   if (!modalContext) {
     throw new Error('Task must be used within a ModalProvider');
@@ -64,6 +65,24 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
       setShowDeleteTask(!showDeleteTask);
       handleClose();
     }, 250);
+  };
+
+  const handleToggleSubtaskStatus = async (subtaskId: string) => {
+    setCurrentTaskData((prev) => ({
+      ...prev!,
+      subtasks: prev!.subtasks.map((subtask) => {
+        if (subtask._id === subtaskId) {
+          return {
+            ...subtask,
+            isCompleted: !subtask.isCompleted,
+          };
+        }
+        return subtask;
+      }),
+    }));
+    console.log('currentTaskData', currentTaskData);
+    
+    editTask(currentBoardData._id!, currentColumnData._id!, currentTaskData);
   };
 
   useEffect(() => {
@@ -108,14 +127,14 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
     };
   }, [isSettingsOpen]);
 
-  // const completedSubtasks = currentTask.subtasks.filter((subtask) => subtask.isCompleted).length;
+  const completedSubtasks = currentTaskData.subtasks.filter((subtask) => subtask.isCompleted).length;
 
   return (
 
     <div className={`vt ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
       <section className={`vt__container ${containerAnimation}`} ref={ref}>
         <div className="vt__title-group">
-          {/* <h2 className="vt__title">{currentTask?.title}</h2> */}
+          <h2 className="vt__title">{currentTaskData?.title}</h2>
           <div className="vt__settings" onClick={() => setIsSettingsOpen(!isSettingsOpen)}>
             <img ref={iconRef} src={IconVerticalEllipsis} className="vt__ellipsis" alt="" />
           </div>
@@ -124,10 +143,10 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
             <p className="vt__option vt__option--delete" onClick={handleShowDeleteTask}>Delete Task</p>
           </div>
         </div>
-        {/* <p className="vt__text">{currentTask?.description}</p>
-        <h4 className="vt__subtitle">Subtasks ({completedSubtasks} of {currentTask?.subtasks.length})</h4> */}
+        <p className="vt__text">{currentTaskData?.description}</p>
+        <h4 className="vt__subtitle">Subtasks ({completedSubtasks} of {currentTaskData?.subtasks.length})</h4>
         <ul className="vt__checkgroup">
-          {/* {currentTask?.subtasks.map((subtask, key) => (
+          {currentTaskData?.subtasks.map((subtask, key) => (
             <li className="vt__check-item" key={key}>
               <input
                 type="checkbox"
@@ -135,11 +154,11 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
                 id={subtask.title}
                 className="vt__checkbox"
                 checked={subtask.isCompleted}
-                onChange={() => updateSubtask(subtask.title)}
+                onChange={() => handleToggleSubtaskStatus(subtask._id ? subtask._id : '')}
               />
               <label htmlFor={subtask.title}>{subtask.title}</label>
             </li>
-          ))} */}
+          ))}
         </ul>
         <h4 className="vt__subtitle">Current status</h4>
         <div className="vt__select-block">

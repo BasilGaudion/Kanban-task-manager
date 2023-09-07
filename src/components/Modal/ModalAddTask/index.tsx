@@ -2,10 +2,11 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import './styles.scss';
-import { v4 as uuidv4 } from 'uuid';
 import { IconCross } from '../../../assets';
 import { ThemeContext } from '../../../utils/providers/useThemeProvider';
-// import { BoardContext, Subtask, Task } from '../../../utils/providers/useBoardProvider';
+import { Task, Subtask } from '../../../utils/Types/BoardTypes';
+import { BoardContext } from '../../../utils/providers/useBoardProvider';
+import { createNewTask } from '../../../utils/api/tasksAPI';
 
 interface ModalAddTaskProps {
     handleClose: () => void;
@@ -16,68 +17,69 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [containerAnimation, setContainerAnimation] = useState('pop-in');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
-  //   const boardContext = useContext(BoardContext);
+  const boardContext = useContext(BoardContext);
 
-  //   if (!boardContext) {
-  //     throw new Error('Task must be used within a themeProvider');
-  //   }
+  if (!boardContext) {
+    throw new Error('Task must be used within a themeProvider');
+  }
 
-  //   const {
-  //     currentBoardData,
-  //     createTask,
-  //   } = boardContext;
+  const {
+    currentBoardData, currentColumnData, setCurrentColumnData, setAllBoardsData,
+  } = boardContext;
 
-  //   const initialTask: Task = {
-  //     id: uuidv4(),
-  //     title: '',
-  //     description: '',
-  //     status: '',
-  //     subtasks: [],
-  //   };
+  const initialTask: Task = {
+    title: '',
+    description: '',
+    status: currentColumnData.name || '',
+    subtasks: [],
+  };
 
-  //   const [inCreationtask, setInCreationTask] = useState<Task>(initialTask);
+  const [inCreationtask, setInCreationTask] = useState<Task>(initialTask);
 
-  //   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     setInCreationTask((prev) => ({ ...prev!, title: e.target.value }));
-  //   };
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInCreationTask((prev) => ({ ...prev!, title: e.target.value }));
+  };
 
-  //   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-  //     setInCreationTask((prev) => ({ ...prev!, description: e.target.value }));
-  //   };
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInCreationTask((prev) => ({ ...prev!, description: e.target.value }));
+  };
 
-  //   const handleSubtaskChange = (index: number, value: string) => {
-  //     const newSubtasks = [...inCreationtask!.subtasks];
-  //     newSubtasks[index].title = value;
-  //     setInCreationTask((prev) => ({ ...prev!, subtasks: newSubtasks }));
-  //   };
+  const handleSubtaskChange = (index: number, value: string) => {
+    const newSubtasks = [...inCreationtask!.subtasks];
+    newSubtasks[index].title = value;
+    setInCreationTask((prev) => ({ ...prev!, subtasks: newSubtasks }));
+  };
 
-  //   const handleAddSubtask = () => {
-  //     const newSubtask: Subtask = {
-  //       id: uuidv4(),
-  //       title: '',
-  //       isCompleted: false,
-  //     };
-  //     setInCreationTask((prev) => ({
-  //       ...prev!,
-  //       subtasks: [...prev!.subtasks, newSubtask],
-  //     }));
-  //   };
+  const handleAddSubtask = () => {
+    const newSubtask: Subtask = {
+      title: '',
+      isCompleted: false,
+    };
+    setInCreationTask((prev) => ({
+      ...prev!,
+      subtasks: [...prev!.subtasks, newSubtask],
+    }));
+  };
 
-  //   const handleDeleteSubtask = (indexToDelete: number) => {
-  //     setInCreationTask((prev) => ({
-  //       ...prev!,
-  //       subtasks: prev!.subtasks.filter((_, index) => index !== indexToDelete),
-  //     }));
-  //   };
+  const handleDeleteSubtask = (indexToDelete: number) => {
+    setInCreationTask((prev) => ({
+      ...prev!,
+      subtasks: prev!.subtasks.filter((_, index) => index !== indexToDelete),
+    }));
+  };
 
-  //   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //     const selectedStatus = e.target.value;
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedStatusId = e.target.value;
+    const selectedStatus = currentBoardData.columns.find((column) => column._id === selectedStatusId)?.name;
 
-  //     setInCreationTask((prev) => ({
-  //       ...prev!,
-  //       status: selectedStatus,
-  //     }));
-  //   };
+    setCurrentColumnData(currentBoardData.columns.find((column) => column._id === selectedStatusId)!);
+
+    setInCreationTask((prev) => ({
+      ...prev!,
+      status: selectedStatus?.toString() || '',
+    }));
+  };
+
   const themeContext = useContext(ThemeContext);
 
   if (!themeContext) {
@@ -113,15 +115,24 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
     };
   }, [handleClose]);
 
-  //   const handleCreateTask = () => {
-  //     if (!inCreationtask.status) {
-  //       alert('Veuillez sélectionner un statut pour la tâche.');
-  //       return;
-  //     }
+  const handleCreateTask = async () => {
+    if (currentBoardData._id && currentColumnData._id) {
+      const newTask = await createNewTask(currentBoardData._id, currentColumnData._id, inCreationtask);
 
-  //     createTask(inCreationtask);
-  //     handleClose();
-  //   };
+      if (newTask) {
+        setAllBoardsData((prev) => {
+          const newBoards = [...prev];
+          const boardIndex = newBoards.findIndex((board) => board._id === currentBoardData._id);
+          const columnIndex = newBoards[boardIndex].columns.findIndex((column) => column._id === currentColumnData._id);
+          newBoards[boardIndex].columns[columnIndex].tasks.push(inCreationtask);
+          return newBoards;
+        });
+      }
+      setContainerAnimation('pop-out');
+      setModalAnimation('modal-closed');
+      setTimeout(handleClose, 300);
+    }
+  };
 
   return (
     <div className={`at ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
@@ -136,8 +147,8 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
             id="at__title"
             className="at__input at__input--title"
             placeholder="e.g. Take coffee break"
-            // value={inCreationtask?.title}
-            // onChange={handleTitleChange}
+            value={inCreationtask?.title}
+            onChange={handleTitleChange}
           />
         </div>
         <div className="at__description-group">
@@ -148,14 +159,14 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
             id="at__description"
             className="at__input at__input--description"
             placeholder="e.g. It’s always good to take a break. This 15 minute break will  recharge the batteries a little."
-            // value={inCreationtask?.description}
-            // onChange={handleDescriptionChange}
+            value={inCreationtask?.description}
+            onChange={handleDescriptionChange}
           />
         </div>
         <div className="at__subtasks-group">
           <h3 className="at__title">Subtasks</h3>
           <ul className="at__subtasks">
-            {/* {inCreationtask?.subtasks.map((subtask, key) => (
+            {inCreationtask?.subtasks.map((subtask, key) => (
               <li className="et__subtask">
                 <label htmlFor="et__subtask1" className="visuallyhidden">Enter the first subtask</label>
                 <input
@@ -174,12 +185,12 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
                   onClick={() => handleDeleteSubtask(key)}
                 />
               </li>
-            ))} */}
+            ))}
           </ul>
           <button
             type="button"
             className="et__button et__button--add"
-            // onClick={handleAddSubtask}
+            onClick={handleAddSubtask}
           >
             + Add New Subtask
           </button>
@@ -190,19 +201,26 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
           <select
             className="et__select"
             id="subtasks"
-            // onChange={handleStatusChange}
-            // value={inCreationtask.status}
+            onChange={handleStatusChange}
+            value={inCreationtask.status}
           >
-            <option value="">Sélectionnez un statut</option>
-            {/* {currentBoardData.columns.map((column, key) => (
-              <option key={key} value={column.name}>{column.name}</option>
-            ))} */}
+            <option
+              value={currentColumnData._id}
+              selected
+            >
+              {currentColumnData.name}
+            </option>
+            {currentBoardData.columns
+              .filter((column) => column._id !== currentColumnData._id)
+              .map((column, key) => (
+                <option key={key} value={column._id}>{column.name}</option>
+              ))}
           </select>
         </div>
         <button
           type="button"
           className="at__button at__button--create"
-        //   onClick={handleCreateTask}
+          onClick={handleCreateTask}
         >
           Create Task
         </button>

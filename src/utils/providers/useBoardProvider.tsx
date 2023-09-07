@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 // eslint-disable-next-line import/no-unresolved
 import { getAllBoards } from '../api/boardsAPI';
-import { Board, Column } from '../Types/BoardTypes';
+import { Board, Column, Task } from '../Types/BoardTypes';
 
 interface IBoardContext {
   allBoardsData: Board[];
@@ -10,6 +10,8 @@ interface IBoardContext {
   setCurrentBoardData: React.Dispatch<React.SetStateAction<Board>>;
   currentColumnData: Column;
   setCurrentColumnData: React.Dispatch<React.SetStateAction<Column>>;
+  currentTaskData: Task;
+  setCurrentTaskData: React.Dispatch<React.SetStateAction<Task>>;
 }
 
 export const BoardContext = createContext<IBoardContext | undefined>(undefined);
@@ -21,6 +23,7 @@ export const useBoardProvider = (): IBoardContext => {
   const [allBoardsData, setAllBoardsData] = useState<Board[]>([]);
   const [currentBoardData, setCurrentBoardData] = useState<Board>({} as Board);
   const [currentColumnData, setCurrentColumnData] = useState<Column>({} as Column);
+  const [currentTaskData, setCurrentTaskData] = useState<Task>({} as Task);
 
   // ============ USE EFFECTS ==============
 
@@ -89,5 +92,7 @@ export const useBoardProvider = (): IBoardContext => {
     setCurrentBoardData,
     currentColumnData,
     setCurrentColumnData,
+    currentTaskData,
+    setCurrentTaskData,
   };
 };
