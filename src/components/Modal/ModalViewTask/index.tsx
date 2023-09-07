@@ -6,7 +6,8 @@ import { IconVerticalEllipsis } from '../../../assets';
 import { ModalContext } from '../../../utils/providers/useModalProvider';
 import { ThemeContext } from '../../../utils/providers/useThemeProvider';
 import { BoardContext } from '../../../utils/providers/useBoardProvider';
-import { editTask } from '../../../utils/api/tasksAPI';
+import { createNewTask, deleteTask, editTask } from '../../../utils/api/tasksAPI';
+import { Task } from '../../../utils/Types/BoardTypes';
 
 interface ModalViewTaskProps {
     handleClose: () => void;
@@ -28,7 +29,7 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
   }
 
   const {
-    currentTaskData, setCurrentTaskData, currentColumnData, currentBoardData, setCurrentBoardData,
+    currentTaskData, setCurrentTaskData, currentColumnData, currentBoardData, setCurrentBoardData, setCurrentColumnData,
   } = boardContext;
 
   if (!currentTaskData) return null;
@@ -49,6 +50,40 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
 
   const { isDarkTheme } = themeContext;
 
+  const [editingTask, setEditingTask] = useState<Task>(currentTaskData);
+
+  const handleStatusChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newColumnId = e.target.value;
+    const newColumn = currentBoardData.columns.find((column) => column._id === newColumnId);
+
+    if (currentBoardData._id && currentColumnData._id && editingTask._id) {
+      await deleteTask(currentBoardData._id, currentColumnData._id, editingTask._id);
+    }
+
+    if (!currentBoardData._id) return;
+    await createNewTask(currentBoardData._id, newColumnId, editingTask);
+
+    setCurrentColumnData(newColumn!);
+    setCurrentBoardData((prev) => {
+      const sourceColumn = prev.columns.find((column) => column._id === currentColumnData._id);
+      if (sourceColumn) {
+        sourceColumn.tasks = sourceColumn.tasks.filter((task) => task._id !== editingTask._id);
+      }
+
+      const targetColumn = prev.columns.find((column) => column._id === newColumnId);
+      if (targetColumn) {
+        targetColumn.tasks.push(editingTask);
+      }
+
+      return { ...prev };
+    });
+
+    setEditingTask((prev) => ({
+      ...prev,
+      status: newColumn?.name || '',
+    }));
+  };
+
   const handleShowEditTask = () => {
     setContainerAnimation('pop-out');
     setModalAnimation('modal-closed');
@@ -68,21 +103,13 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
   };
 
   const handleToggleSubtaskStatus = async (subtaskId: string) => {
-    setCurrentTaskData((prev) => ({
-      ...prev!,
-      subtasks: prev!.subtasks.map((subtask) => {
-        if (subtask._id === subtaskId) {
-          return {
-            ...subtask,
-            isCompleted: !subtask.isCompleted,
-          };
-        }
-        return subtask;
-      }),
-    }));
-    console.log('currentTaskData', currentTaskData);
-    
-    editTask(currentBoardData._id!, currentColumnData._id!, currentTaskData);
+    const editedTask = { ...currentTaskData };
+    const subtaskIndex = editedTask.subtasks.findIndex((subtask) => subtask._id === subtaskId);
+    editedTask.subtasks[subtaskIndex].isCompleted = !editedTask.subtasks[subtaskIndex].isCompleted;
+    const result = await editTask(currentBoardData._id ? currentBoardData._id : '', currentColumnData._id ? currentColumnData._id : '', editedTask);
+    if (result) {
+      setCurrentTaskData(editedTask);
+    }
   };
 
   useEffect(() => {
@@ -163,10 +190,23 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
         <h4 className="vt__subtitle">Current status</h4>
         <div className="vt__select-block">
           <label htmlFor="subtasks" className="visuallyhidden">Select status</label>
-          <select className="vt__select" id="subtasks">
-            {/* {currentBoardData.columns.map((column, key) => (
-              <option value={key}>{column.name}</option>
-            ))} */}
+          <select
+            className="et__select"
+            id="subtasks"
+            onChange={handleStatusChange}
+            value={editingTask.status}
+          >
+            <option
+              value={currentColumnData._id}
+              selected
+            >
+              {currentColumnData.name}
+            </option>
+            {currentBoardData.columns
+              .filter((column) => column._id !== currentColumnData._id)
+              .map((column, key) => (
+                <option key={key} value={column._id}>{column.name}</option>
+              ))}
           </select>
         </div>
       </section>
