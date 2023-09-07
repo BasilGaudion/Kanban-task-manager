@@ -21,6 +21,7 @@ interface ColumnProps {
 
 const Column: React.FC<ColumnProps> = ({ column }) => {
   const modalContext = useContext(ModalContext);
+  const background = column.color;
 
   if (!modalContext) {
     throw new Error('Task must be used within a ModalProvider');
@@ -45,7 +46,7 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
     <section className="column">
       <div className="column__title-group">
         <div className="column__title-color-text">
-          <span className="column__color" />
+          <span className="column__color" style={{ backgroundColor: background }} />
           <h3 className="column__title">{column.name}
             ({column.tasks.length})
           </h3>

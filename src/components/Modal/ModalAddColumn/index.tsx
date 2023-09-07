@@ -27,7 +27,7 @@ const ModalAddColumn: React.FC<ModalAddColumnProps> = ({ handleClose, isOpen }) 
     throw new Error('Task must be used within a themeProvider');
   }
 
-  const { setAllBoardsData, currentBoardData } = boardContext;
+  const { setAllBoardsData, currentBoardData, setCurrentBoardData } = boardContext;
 
   const initialColumn: Column = {
     name: '',
@@ -58,12 +58,18 @@ const ModalAddColumn: React.FC<ModalAddColumnProps> = ({ handleClose, isOpen }) 
     if (currentBoardData._id) {
       const newColumn = await createNewColumn(currentBoardData._id, inCreationColumn);
       if (newColumn) {
-        setAllBoardsData((prev) => {
-          const newBoards = [...prev];
-          const boardIndex = newBoards.findIndex((board) => board._id === currentBoardData._id);
-          newBoards[boardIndex].columns.push(inCreationColumn);
-          return newBoards;
+        // setAllBoardsData((prev) => {
+        //   const newBoards = [...prev];
+        //   const boardIndex = newBoards.findIndex((board) => board._id === currentBoardData._id);
+        //   newBoards[boardIndex].columns.push(inCreationColumn);
+        //   return newBoards;
+        // });
+        setCurrentBoardData((prev) => {
+          const newBoard = { ...prev };
+          newBoard.columns.push(newColumn);
+          return newBoard;
         });
+
       }
       setContainerAnimation('pop-out');
       setModalAnimation('modal-closed');

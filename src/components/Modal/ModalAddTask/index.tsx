@@ -120,17 +120,26 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
       const newTask = await createNewTask(currentBoardData._id, currentColumnData._id, inCreationtask);
 
       if (newTask) {
-        setAllBoardsData((prev) => {
-          const newBoards = [...prev];
-          const boardIndex = newBoards.findIndex((board) => board._id === currentBoardData._id);
-          const columnIndex = newBoards[boardIndex].columns.findIndex((column) => column._id === currentColumnData._id);
-          newBoards[boardIndex].columns[columnIndex].tasks.push(inCreationtask);
-          return newBoards;
+        // setAllBoardsData((prev) => {
+        //   const newBoards = [...prev];
+        //   const boardIndex = newBoards.findIndex((board) => board._id === currentBoardData._id);
+        //   const columnIndex = newBoards[boardIndex].columns.findIndex((column) => column._id === currentColumnData._id);
+        //   newBoards[boardIndex].columns[columnIndex].tasks.push(inCreationtask);
+        //   return newBoards;
+        // });
+        setCurrentColumnData((prev) => {
+          const newColumn = { ...prev };
+          newColumn.tasks.push(inCreationtask);
+          return newColumn;
         });
       }
       setContainerAnimation('pop-out');
       setModalAnimation('modal-closed');
       setTimeout(handleClose, 300);
+    }
+    else {
+      console.log('erreur');
+
     }
   };
 
