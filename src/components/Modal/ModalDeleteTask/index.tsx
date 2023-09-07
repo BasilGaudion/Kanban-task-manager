@@ -3,8 +3,9 @@ import React, {
 } from 'react';
 import './styles.scss';
 import { ThemeContext } from '../../../utils/providers/useThemeProvider';
-// import { BoardContext } from '../../../utils/providers/useBoardProvider';
+import { BoardContext } from '../../../utils/providers/useBoardProvider';
 import { ModalContext } from '../../../utils/providers/useModalProvider';
+import { deleteTask } from '../../../utils/api/tasksAPI';
 
 // import Task from '../../Task';
 
@@ -18,14 +19,16 @@ const ModalDeleteTask: React.FC<ModalDeleteTaskProps> = ({ handleClose, isOpen }
   const [containerAnimation, setContainerAnimation] = useState('pop-in');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
   const themeContext = useContext(ThemeContext);
-  //   const boardContext = useContext(BoardContext);
+  const boardContext = useContext(BoardContext);
   const modalContext = useContext(ModalContext);
 
-  //   if (!boardContext) {
-  //     throw new Error('Task must be used within a themeProvider');
-  //   }
+  if (!boardContext) {
+    throw new Error('Task must be used within a themeProvider');
+  }
 
-  //   const { currentTask, deleteTask } = boardContext;
+  const {
+    currentTaskData, currentColumnData, currentBoardData, setAllBoardsData,
+  } = boardContext;
 
   if (!modalContext) {
     throw new Error('Task must be used within a ModalProvider');
@@ -66,14 +69,29 @@ const ModalDeleteTask: React.FC<ModalDeleteTaskProps> = ({ handleClose, isOpen }
     };
   }, [handleClose]);
 
-  //   const handleDeleteTask = () => {
-  //     if (currentTask) {
-  //       deleteTask(currentTask);
-  //       setContainerAnimation('pop-out');
-  //       setModalAnimation('modal-closed');
-  //       setTimeout(handleClose, 300);
-  //     }
-  //   };
+  const handleDeleteTask = async () => {
+    if (currentTaskData._id && currentColumnData._id && currentBoardData._id) {
+      const deletedTask = await deleteTask(currentBoardData._id, currentColumnData._id, currentTaskData._id);
+
+      if (deletedTask) {
+        setAllBoardsData((prev) => {
+          const newBoards = [...prev];
+
+          const boardIndex = newBoards.findIndex((board) => board._id === currentBoardData._id);
+
+          const columnIndex = newBoards[boardIndex].columns.findIndex((column) => column._id === currentColumnData._id);
+
+          newBoards[boardIndex].columns[columnIndex].tasks = newBoards[boardIndex].columns[columnIndex].tasks.filter((task) => task._id !== currentTaskData._id);
+
+          return newBoards;
+        });
+
+        setContainerAnimation('pop-out');
+        setModalAnimation('modal-closed');
+        setTimeout(handleClose, 300);
+      }
+    }
+  };
 
   const handleCancel = () => {
     setContainerAnimation('pop-out');
@@ -90,14 +108,14 @@ const ModalDeleteTask: React.FC<ModalDeleteTaskProps> = ({ handleClose, isOpen }
         <h2 className="dt__action">Delete this task ?</h2>
         <p className="dt__text">
           Are you sure you want to delete the
-          {/* ‘{currentTask?.title}’  */}
+          ‘{currentTaskData?.title}’
           task and its subtasks? This action cannot be reversed.
         </p>
         <div className="dt__button-group">
           <button
             type="button"
             className="dt__button dt__button--delete"
-            // onClick={handleDeleteTask}
+            onClick={handleDeleteTask}
           >Delete
           </button>
           <button type="button" className="dt__button dt__button--cancel" onClick={handleCancel}>Cancel</button>
