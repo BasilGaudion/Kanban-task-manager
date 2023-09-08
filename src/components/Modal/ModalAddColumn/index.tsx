@@ -21,7 +21,13 @@ const ModalAddColumn: React.FC<ModalAddColumnProps> = ({ handleClose, isOpen }) 
   const boardContext = useContext(BoardContext);
   const [selectedColor, setSelectedColor] = useState<string>('#f44336');
 
-  const colors: string[] = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#607d8b', '#e4dfda', '#476c9b', '#468C98'];
+  const colors: string[] = [
+    '#70E4B0', '#B3E57C', '#85E083', '#6CD474', '#58C666', // Verts pastel vifs
+    '#72C5F0', '#82D4E8', '#6CC5F7', '#59BCE5', '#47B0D3', // Bleus pastel vifs
+    '#FF6B85', '#FF887A', '#FF7373', '#FF8DA1', '#FF9B7B', // Rouges pastel vifs
+    '#FFEA61', '#FFED85', '#FFE66D', '#FFDF56', '#FFD43F', // Jaunes pastel vifs
+    '#FFC285', // Orange pastel vif
+  ];
 
   if (!boardContext) {
     throw new Error('Task must be used within a themeProvider');
