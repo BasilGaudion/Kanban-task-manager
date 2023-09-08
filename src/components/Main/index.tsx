@@ -76,7 +76,7 @@ const Main = () => {
   }
 
   //! TODO - Remeber to add moveTaskToColumn here
-  const { currentBoardData } = boardContext;
+  const { currentBoardData, moveTaskToColumn } = boardContext;
 
   useEffect(() => {
     if (currentBoardData.columns) {
@@ -101,10 +101,10 @@ const Main = () => {
       destination.droppableId === source.droppableId
           && destination.index === source.index
     ) {
-      // return;
+      return;
     }
 
-    // moveTaskToColumn(draggableId, destination.droppableId, source.index, destination.index);
+    moveTaskToColumn(draggableId, destination.droppableId, source.index, destination.index);
   };
 
   return (

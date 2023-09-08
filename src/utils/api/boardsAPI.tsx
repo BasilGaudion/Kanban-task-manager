@@ -44,7 +44,6 @@ export const deleteBoard = async (id: string) => {
       `http://localhost:3000/api/boards/${id}`,
       config,
     );
-    console.log('🚀 ~ file: BoardsAPI.tsx:52 ~ result:', result.data);
     return result.data;
   }
   catch (error) {
@@ -64,7 +63,6 @@ export const updateBoard = async (id: string, updatedBoard: Board) => {
       updatedBoard,
       config,
     );
-    console.log('🚀 ~ file: BoardsAPI.tsx:52 ~ result:', result.data);
     return result.data;
   }
   catch (error) {

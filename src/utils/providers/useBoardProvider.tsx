@@ -1,6 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-// eslint-disable-next-line import/no-unresolved
-import { getAllBoards } from '../api/boardsAPI';
+import { getAllBoards, updateBoard } from '../api/boardsAPI';
 import { Board, Column, Task } from '../Types/BoardTypes';
 
 interface IBoardContext {
@@ -12,6 +11,12 @@ interface IBoardContext {
   setCurrentColumnData: React.Dispatch<React.SetStateAction<Column>>;
   currentTaskData: Task;
   setCurrentTaskData: React.Dispatch<React.SetStateAction<Task>>;
+  moveTaskToColumn: (
+    taskId: string,
+    newStatus: string,
+    sourceIndex: number,
+    targetIndex: number,
+  ) => void;
 }
 
 export const BoardContext = createContext<IBoardContext | undefined>(undefined);
@@ -49,41 +54,29 @@ export const useBoardProvider = (): IBoardContext => {
 
   // ==============DRAG AND DROP====================
 
-  // const moveTaskToColumn = (
-  //   taskId: string,
-  //   newStatus: string,
-  //   sourceIndex: number,
-  //   targetIndex: number,
-  // ) => {
-  //   const boardCopy = { ...currentBoardData };
-  //   const sourceColumn = boardCopy.columns.find((column) => column.tasks.some((task) => task.id === taskId));
-  //   const destinationColumn = boardCopy.columns.find((column) => column.name === newStatus);
+  const moveTaskToColumn = async (
+    taskId: string,
+    newStatus: string,
+    sourceIndex: number,
+    targetIndex: number,
+  ) => {
+    const boardCopy = { ...currentBoardData };
+    const sourceColumn = boardCopy.columns.find((column) => column.tasks.some((task) => task._id === taskId));
+    const destinationColumn = boardCopy.columns.find((column) => column._id === newStatus);
 
-  //   if (sourceColumn && destinationColumn && sourceColumn.tasks && destinationColumn.tasks) {
-  //     const [movedTask] = sourceColumn.tasks.splice(sourceIndex, 1);
-  //     movedTask.status = newStatus;
-  //     destinationColumn.tasks.splice(targetIndex, 0, movedTask);
-  //   }
+    if (sourceColumn && destinationColumn && sourceColumn.tasks && destinationColumn.tasks) {
+      const [movedTask] = sourceColumn.tasks.splice(sourceIndex, 1);
+      movedTask.status = newStatus;
+      destinationColumn.tasks.splice(targetIndex, 0, movedTask);
+    }
 
-  //   setCurrentBoardData(boardCopy);
-
-  //   // Récupération des données actuelles dans le localStorage sous la clé boardAppData
-  //   const currentLocalStorageData = JSON.parse(localStorage.getItem('boardAppData') || '{}');
-
-  //   // Mise à jour de allBoardsData dans l'objet récupéré
-  //   const updatedAllBoardsData = currentLocalStorageData.allBoardsData || [];
-  //   const boardIndex = updatedAllBoardsData.findIndex((board: Board) => board.id === boardCopy.id);
-  //   if (boardIndex !== -1) {
-  //     updatedAllBoardsData[boardIndex] = boardCopy;
-  //   }
-  //   else {
-  //     updatedAllBoardsData.push(boardCopy);
-  //   }
-  //   currentLocalStorageData.allBoardsData = updatedAllBoardsData;
-
-  //   // Sauvegarde des données modifiées dans le localStorage sous la clé boardAppData
-  //   localStorage.setItem('boardAppData', JSON.stringify(currentLocalStorageData));
-  // };
+    if (boardCopy._id) {
+      const updatedBoard = await updateBoard(boardCopy._id, boardCopy);
+      if (updatedBoard) {
+        setCurrentBoardData(boardCopy);
+      }
+    }
+  };
 
   return {
     allBoardsData,
@@ -94,5 +87,6 @@ export const useBoardProvider = (): IBoardContext => {
     setCurrentColumnData,
     currentTaskData,
     setCurrentTaskData,
+    moveTaskToColumn,
   };
 };

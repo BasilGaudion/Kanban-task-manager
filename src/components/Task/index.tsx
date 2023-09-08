@@ -82,7 +82,7 @@ const Task: React.FC<TaskProps> = ({ task, index }) => {
           <div
             ref={(ref) => {
               provided.innerRef(ref);
-              taskRef.current = ref; // Update the new ref
+              taskRef.current = ref;
             }}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
