@@ -9,6 +9,37 @@
         @extend %modalContainer
     }
 
+    &__action-group {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+    }
+
+    &__color-picker {
+        position: absolute;
+        top: 50px;
+        max-width: 140px;
+        border-radius: 8px;
+        z-index: 15;
+        right: -100px;
+        display: none;
+        background-color: var(--background-modal);
+        padding: 10px;
+
+        &--visible {
+            display: block;
+        }
+    }
+
+    &__color {
+        min-width: 22px;
+        height: 22px;
+        border-radius: 100%;
+        cursor: pointer;
+    }
+
     &__action {
         color: var(--title);
         font-family: Plus Jakarta Sans;

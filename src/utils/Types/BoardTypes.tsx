@@ -8,6 +8,7 @@ export interface Task {
   _id?: string;
   title: string;
   description: string;
+  color: string;
   status: string;
   subtasks: Subtask[];
 }

@@ -89,7 +89,7 @@ const Task: React.FC<TaskProps> = ({ task, index }) => {
             className={`task ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'} ${asideOpen ? 'task--aside' : ''}`}
             onClick={handleShowTask}
           >
-            <div className="task__container">
+            <div className="task__container" style={{ borderLeft: `8px solid ${task.color}` }}>
               <h2 className="task__title">{task.title}</h2>
               <h4 className="task__subtitle">{completedSubtasks} of {task?.subtasks?.length} subtasks</h4>
             </div>

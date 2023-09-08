@@ -2,6 +2,7 @@ import React, {
   useEffect, useRef, useState, useContext,
 } from 'react';
 import './styles.scss';
+import { CirclePicker, ColorResult } from 'react-color';
 import { IconCross } from '../../../assets';
 import { ModalContext } from '../../../utils/providers/useModalProvider';
 import { ThemeContext } from '../../../utils/providers/useThemeProvider';
@@ -16,6 +17,8 @@ interface ModalEditTaskProps {
 
 const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const colors: string[] = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#607d8b', '#476c9b', '#468C98'];
+  const [isPickerVisible, setPickerVisibility] = useState(false);
   const [containerAnimation, setContainerAnimation] = useState('pop-in');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
   const modalContext = useContext(ModalContext);
@@ -29,6 +32,7 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
     currentTaskData, currentColumnData, currentBoardData, setCurrentBoardData, setCurrentColumnData, setAllBoardsData, setCurrentTaskData,
   } = boardContext;
   const [editingTask, setEditingTask] = useState<Task>(currentTaskData);
+  const [selectedColor, setSelectedColor] = useState<string>(editingTask?.color || '');
 
   const themeContext = useContext(ThemeContext);
 
@@ -117,6 +121,11 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
     setEditingTask((prev) => ({ ...prev!, title: e.target.value }));
   };
 
+  const handleColorSet = (color: ColorResult) => {
+    setSelectedColor(color.hex);
+    setEditingTask((prev) => ({ ...prev!, color: color.hex }));
+  };
+
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEditingTask((prev) => ({ ...prev!, description: e.target.value }));
   };
@@ -181,7 +190,26 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
   return (
     <div className={`et ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
       <section className={`et__container ${containerAnimation}`} ref={ref}>
-        <h2 className="et__action">Edit Task</h2>
+        <div className="et__action-group">
+          <h2 className="et__action">Edit Task</h2>
+          <span
+            className="et__color"
+            onClick={() => setPickerVisibility(!isPickerVisible)}
+            style={{
+              background: editingTask?.color,
+              border: editingTask.color ? 'none' : '3px solid #635FC7',
+            }}
+          />
+          <div className={`et__color-picker ${isPickerVisible ? 'et__color-picker--visible' : ''}`}>
+            <CirclePicker
+              color={editingTask.color ? editingTask.color : selectedColor}
+              width="295"
+              circleSize={30}
+              colors={colors}
+              onChangeComplete={handleColorSet}
+            />
+          </div>
+        </div>
         <div className="et__title-group">
           <h3 className="et__title">Title</h3>
           <label htmlFor="et__title" className="visuallyhidden">Enter the title of the task</label>

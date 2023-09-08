@@ -2,6 +2,7 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import './styles.scss';
+import { CirclePicker, ColorResult } from 'react-color';
 import { IconCross } from '../../../assets';
 import { ThemeContext } from '../../../utils/providers/useThemeProvider';
 import { Task, Subtask } from '../../../utils/Types/BoardTypes';
@@ -15,8 +16,11 @@ interface ModalAddTaskProps {
 
 const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const colors: string[] = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4caf50', '#8bc34a', '#cddc39', '#ffeb3b', '#ffc107', '#ff9800', '#ff5722', '#795548', '#607d8b', '#476c9b', '#468C98'];
+  const [isPickerVisible, setPickerVisibility] = useState(false);
   const [containerAnimation, setContainerAnimation] = useState('pop-in');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
+  const [selectedColor, setSelectedColor] = useState<string>('');
   const boardContext = useContext(BoardContext);
 
   if (!boardContext) {
@@ -24,12 +28,13 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
   }
 
   const {
-    currentBoardData, currentColumnData, setCurrentColumnData, setAllBoardsData,
+    currentBoardData, currentColumnData, setCurrentColumnData,
   } = boardContext;
 
   const initialTask: Task = {
     title: '',
     description: '',
+    color: '',
     status: currentColumnData.name || '',
     subtasks: [],
   };
@@ -38,6 +43,11 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInCreationTask((prev) => ({ ...prev!, title: e.target.value }));
+  };
+
+  const handleColorSet = (color: ColorResult) => {
+    setSelectedColor(color.hex);
+    setInCreationTask((prev) => ({ ...prev!, color: color.hex }));
   };
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -139,7 +149,27 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
   return (
     <div className={`at ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
       <section className={`at__container ${containerAnimation}`} ref={ref}>
-        <h2 className="at__action">Add New Task</h2>
+        <div className="at__action-group">
+          <h2 className="at__action">Add New Task</h2>
+          <span
+            className="at__color"
+            onClick={() => setPickerVisibility(!isPickerVisible)}
+            style={{
+              background: inCreationtask?.color,
+              border: inCreationtask.color ? 'none' : '3px solid #635FC7',
+            }}
+          />
+
+          <div className={`at__color-picker ${isPickerVisible ? 'at__color-picker--visible' : ''}`}>
+            <CirclePicker
+              color={inCreationtask.color ? inCreationtask.color : selectedColor}
+              width="295"
+              circleSize={30}
+              colors={colors}
+              onChangeComplete={handleColorSet}
+            />
+          </div>
+        </div>
         <div className="at__title-group">
           <h3 className="at__title">Title</h3>
           <label htmlFor="at__title" className="visuallyhidden">Enter the title of the task</label>
