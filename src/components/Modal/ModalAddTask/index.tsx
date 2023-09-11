@@ -15,6 +15,7 @@ interface ModalAddTaskProps {
 }
 
 const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
+  const ulRef = useRef<HTMLUListElement>(null);
   const ref = useRef<HTMLDivElement>(null);
   const colors: string[] = [
     '#70E4B0', '#B3E57C', '#85E083', '#6CD474', '#58C666', // Verts pastel vifs
@@ -84,6 +85,12 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
       subtasks: prev!.subtasks.filter((_, index) => index !== indexToDelete),
     }));
   };
+
+  useEffect(() => {
+    if (ulRef.current) {
+      ulRef.current.scrollTop = ulRef.current.scrollHeight;
+    }
+  }, [inCreationtask?.subtasks]);
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedStatusId = e.target.value;
@@ -204,7 +211,7 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
         </div>
         <div className="at__subtasks-group">
           <h3 className="at__title">Subtasks</h3>
-          <ul className="at__subtasks">
+          <ul className="at__subtasks" ref={ulRef}>
             {inCreationtask?.subtasks.map((subtask, key) => (
               <li className="et__subtask">
                 <label htmlFor="et__subtask1" className="visuallyhidden">Enter the first subtask</label>
@@ -220,7 +227,7 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
                 <img
                   src={IconCross}
                   alt="Delete Subtask"
-                  className="et__subtask-delete"
+                  className="at__subtask-delete"
                   onClick={() => handleDeleteSubtask(key)}
                 />
               </li>

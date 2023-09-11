@@ -63,6 +63,13 @@ const Header = () => {
     setShowDeleteBoard(!showDeleteBoard);
   };
 
+  const handleDisconnect = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('isConnected');
+    window.location.reload();
+  };
+
   if (!themeContext) {
     throw new Error('Task must be used within a themeProvider');
   }
@@ -146,6 +153,7 @@ const Header = () => {
           <div className={`header__options ${isSettingsOpen ? '' : 'disable'}`} ref={settingsRef}>
             <p className="header__option" onClick={handleShowEditBoard}>Edit Board</p>
             <p className="header__option header__option--delete" onClick={handleShowDeleteBoard}>Delete Board</p>
+            <p className="header__option" onClick={handleDisconnect}>Disconnect</p>
           </div>
         </div>
       </div>
