@@ -9,6 +9,7 @@ import { ThemeContext } from '../../utils/providers/useThemeProvider';
 import { AsideContext } from '../../utils/providers/useAsideProvider';
 import { BoardContext } from '../../utils/providers/useBoardProvider';
 import useWindowSize from '../../hooks/useWindowSize';
+import { Board } from '../../utils/Types/BoardTypes';
 
 const AsideSettings = () => {
   const asideContext = useContext(AsideContext);
@@ -62,26 +63,29 @@ const AsideSettings = () => {
             <img className="aside__logo" src={isDarkTheme ? LogoLight : LogoDark} alt="" />
             <h3 className="aside__title">All Boards ({allBoardsData?.length})</h3>
             <ul className="aside__list">
-              {
-                allBoardsData?.map((item, index) => {
-                  return (
-                    <li
-                      className={`aside__item ${item._id === currentBoardData._id ? 'aside__item--current' : ''}`}
-                      key={index}
-                      onClick={() => {
-                        setCurrentBoardData(item);
-                      }}
-                    >
-                      <img src={IconBoard} alt="" />
-                      <p className={`aside__item-title ${item._id === currentBoardData._id ? 'aside__item-title--current' : ''}`}>{item.name}</p>
-                    </li>
-                  );
-                })
-              }
               <li className="aside__item aside__item--create" onClick={handleShowAddBoard}>
                 <img src={IconBoardPurple} alt="" />
                 <p className="aside__item-title aside__item-title--create">+ Create New Board</p>
               </li>
+              {
+                allBoardsData
+                  ?.sort((a: Board, b: Board) => new Date(b.updatedAt ?? '1970-01-01T00:00:00Z').getTime()
+                    - new Date(a.updatedAt ?? '1970-01-01T00:00:00Z').getTime())
+                  .map((item: Board, index: number) => {
+                    return (
+                      <li
+                        className={`aside__item ${item._id === currentBoardData._id ? 'aside__item--current' : ''}`}
+                        key={index}
+                        onClick={() => {
+                          setCurrentBoardData(item);
+                        }}
+                      >
+                        <img src={IconBoard} alt="" />
+                        <p className={`aside__item-title ${item._id === currentBoardData._id ? 'aside__item-title--current' : ''}`}>{item.name}</p>
+                      </li>
+                    );
+                  })
+              }
             </ul>
           </div>
           <div className="aside__bottom-group">

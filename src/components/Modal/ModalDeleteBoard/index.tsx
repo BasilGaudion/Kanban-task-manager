@@ -62,12 +62,12 @@ const ModalDeleteBoard: React.FC<ModalDeleteBoardProps> = ({ handleClose, isOpen
     };
   }, [handleClose]);
 
-  const handleDeleteTask = async () => {
+  const handleDeleteBoard = async () => {
     if (currentBoardData._id) {
       const deletedBoard = await deleteBoard(currentBoardData._id);
       if (deletedBoard) {
-        setAllBoardsData(allBoardsData.slice().filter((board) => board._id !== currentBoardData._id));
         setCurrentBoardData(allBoardsData[0]);
+        setAllBoardsData(allBoardsData.slice().filter((board) => board._id !== currentBoardData._id));
       }
       setContainerAnimation('pop-out');
       setModalAnimation('modal-closed');
@@ -86,17 +86,17 @@ const ModalDeleteBoard: React.FC<ModalDeleteBoardProps> = ({ handleClose, isOpen
   return (
     <div className={`db ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
       <section className={`db__container ${containerAnimation}`} ref={ref}>
-        <h2 className="db__action">Delete this task ?</h2>
+        <h2 className="db__action">Delete this board ?</h2>
         <p className="db__text">
           Are you sure you want to delete the
           ‘{currentBoardData.name}’
-          task and its subtasks? This action cannot be reversed.
+          baord and its data ? This action cannot be reversed.
         </p>
         <div className="db__button-group">
           <button
             type="button"
             className="db__button db__button--delete"
-            onClick={handleDeleteTask}
+            onClick={handleDeleteBoard}
           >
             Delete
           </button>

@@ -33,7 +33,7 @@ const ModalAddColumn: React.FC<ModalAddColumnProps> = ({ handleClose, isOpen }) 
     throw new Error('Task must be used within a themeProvider');
   }
 
-  const { setAllBoardsData, currentBoardData, setCurrentBoardData } = boardContext;
+  const { currentBoardData, setCurrentBoardData } = boardContext;
 
   const initialColumn: Column = {
     name: '',
