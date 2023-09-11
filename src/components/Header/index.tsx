@@ -111,7 +111,7 @@ const Header = () => {
                 : <img src={LogoMobile} className="header__logo" alt="Logo Mobile" />
             )
         }
-          <h2 className="header__board-name" onClick={handleShowEditBoard}>{currentBoardData.name}</h2>
+          <h2 className="header__board-name" onClick={largeWindow ? handleShowEditBoard : handleShowViewBoard}>{currentBoardData.name}</h2>
           {
           largeWindow
             ? <></>
@@ -133,7 +133,7 @@ const Header = () => {
             : (
               <button
                 type="button"
-                className="header__add-task header__add-task--large"
+                className="header__add-task"
                 onClick={handleShowAddBoard}
               >
                 +

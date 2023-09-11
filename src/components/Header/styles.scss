@@ -33,6 +33,7 @@
         margin-right: 8px;
         color: var(--title);
         font-size: 1.125rem;
+        max-width: 175px;
         font-weight: 700;
         cursor: pointer;
     }
@@ -127,6 +128,7 @@
 
         &__board-name {
             font-size: 1.25rem;
+            max-width: 300px;
         }
 
         &__logo-container {

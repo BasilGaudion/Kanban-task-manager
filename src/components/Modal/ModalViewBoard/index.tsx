@@ -7,6 +7,8 @@ import ThemeManager from '../../ThemeManager';
 import { ModalContext } from '../../../utils/providers/useModalProvider';
 import { ThemeContext } from '../../../utils/providers/useThemeProvider';
 import useWindowSize from '../../../hooks/useWindowSize';
+import { BoardContext } from '../../../utils/providers/useBoardProvider';
+import { Board } from '../../../utils/Types/BoardTypes';
 
 interface ModalViewBoardProps {
     handleClose: () => void;
@@ -19,6 +21,7 @@ const ModalViewBoard: React.FC<ModalViewBoardProps> = ({ handleClose, isOpen }) 
   const screenWidth = useWindowSize().width;
   const [containerAnimation, setContainerAnimation] = useState('go-down');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
+  const boardContext = useContext(BoardContext);
   const modalContext = useContext(ModalContext);
 
   if (!modalContext) {
@@ -34,6 +37,12 @@ const ModalViewBoard: React.FC<ModalViewBoardProps> = ({ handleClose, isOpen }) 
   }
 
   const { isDarkTheme } = themeContext;
+
+  if (!boardContext) {
+    throw new Error('Task must be used within a asideProvider');
+  }
+
+  const { allBoardsData, currentBoardData, setCurrentBoardData } = boardContext;
 
   useEffect(() => {
     if (screenWidth && screenWidth >= 768) {
@@ -81,7 +90,7 @@ const ModalViewBoard: React.FC<ModalViewBoardProps> = ({ handleClose, isOpen }) 
   };
 
   return (
-    <>
+    <div>
       {
         largeWindow
           ? <></>
@@ -90,22 +99,29 @@ const ModalViewBoard: React.FC<ModalViewBoardProps> = ({ handleClose, isOpen }) 
               <section className={`vb__container ${containerAnimation}`} ref={ref}>
                 <h3 className="vb__title">All Boards (3)</h3>
                 <ul className="vb__list">
-                  <li className="vb__item vb__item--current">
-                    <img src={IconBoard} alt="" />
-                    <p className="vb__item-title vb__item-title--current">Platform Launch</p>
-                  </li>
-                  <li className="vb__item">
-                    <img src={IconBoard} alt="" />
-                    <p className="vb__item-title">Marketing Plan</p>
-                  </li>
-                  <li className="vb__item">
-                    <img src={IconBoard} alt="" />
-                    <p className="vb__item-title">Roadmap</p>
-                  </li>
                   <li className="vb__item vb__item--create" onClick={handleShowAddBoard}>
                     <img src={IconBoardPurple} alt="" />
                     <p className="vb__item-title vb__item-title--create">+ Create New Board</p>
                   </li>
+                  {
+                allBoardsData
+                  ?.sort((a: Board, b: Board) => new Date(b.updatedAt ?? '1970-01-01T00:00:00Z').getTime()
+                    - new Date(a.updatedAt ?? '1970-01-01T00:00:00Z').getTime())
+                  .map((item: Board, index: number) => {
+                    return (
+                      <li
+                        className={`vb__item ${item._id === currentBoardData._id ? 'vb__item--current' : ''}`}
+                        key={index}
+                        onClick={() => {
+                          setCurrentBoardData(item);
+                        }}
+                      >
+                        <img src={IconBoard} alt="" />
+                        <p className={`vb__item-title ${item._id === currentBoardData._id ? 'vb__item-title--current' : ''}`}>{item.name}</p>
+                      </li>
+                    );
+                  })
+              }
                 </ul>
                 <ThemeManager />
               </section>
@@ -113,7 +129,7 @@ const ModalViewBoard: React.FC<ModalViewBoardProps> = ({ handleClose, isOpen }) 
           )
       }
 
-    </>
+    </div>
   );
 };
 

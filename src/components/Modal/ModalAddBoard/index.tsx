@@ -23,7 +23,7 @@ const ModalAddBoard: React.FC<ModalAddBoardProps> = ({ handleClose, isOpen }) =>
     throw new Error('Task must be used within a asideProvider');
   }
 
-  const { allBoardsData, setAllBoardsData } = boardContext;
+  const { allBoardsData, setAllBoardsData, setCurrentBoardData } = boardContext;
 
   const initialBoard: Board = {
     name: '',
@@ -64,6 +64,7 @@ const ModalAddBoard: React.FC<ModalAddBoardProps> = ({ handleClose, isOpen }) =>
   const handleCreateBoard = async () => {
     const newBoard = await createNewBoard(inCreationBoard);
     if (newBoard) {
+      setCurrentBoardData(newBoard);
       setAllBoardsData([...allBoardsData, newBoard]);
     }
     handleClose();

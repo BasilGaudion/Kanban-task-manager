@@ -137,7 +137,7 @@ const ModalEditBoard: React.FC<ModalEditBoardProps> = ({ handleClose, isOpen }) 
                   type="text"
                   name={column.name}
                   id={column.name}
-                  className="eb__input et__input--column"
+                  className="eb__input eb__input--column"
                   placeholder="e.g. Make coffee"
                   value={column.name}
                   onChange={(e) => handleColumnChange(key, e.target.value)}
