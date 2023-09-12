@@ -4,7 +4,6 @@ import { Droppable } from 'react-beautiful-dnd';
 import Task from '../Task';
 import { Column as ColumnType, Task as TaskType } from '../../utils/Types/BoardTypes';
 import AddTaskContainer from '../AddTaskContainer/AddTaskContainer';
-// import { ItemTypes } from '../../utils/Types/DnDTypes';
 import { IconEditPurple } from '../../assets';
 import { ModalContext } from '../../utils/providers/useModalProvider';
 import { BoardContext } from '../../utils/providers/useBoardProvider';
@@ -12,12 +11,6 @@ import { BoardContext } from '../../utils/providers/useBoardProvider';
 interface ColumnProps {
   column: ColumnType;
 }
-
-// interface DraggedTaskItem {
-//   id: string;
-//   status: string;
-//   index: number;
-// }
 
 const Column: React.FC<ColumnProps> = ({ column }) => {
   const modalContext = useContext(ModalContext);

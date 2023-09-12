@@ -2,6 +2,7 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import './styles.scss';
+import { toast } from 'react-toastify';
 import { IconCross } from '../../../assets';
 import { ThemeContext } from '../../../utils/providers/useThemeProvider';
 import { createNewBoard } from '../../../utils/api/boardsAPI';
@@ -62,6 +63,19 @@ const ModalAddBoard: React.FC<ModalAddBoardProps> = ({ handleClose, isOpen }) =>
   };
 
   const handleCreateBoard = async () => {
+    if (!inCreationBoard.name) {
+      toast.error('You must define a name', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
+      return;
+    }
     const newBoard = await createNewBoard(inCreationBoard);
     if (newBoard) {
       setCurrentBoardData(newBoard);

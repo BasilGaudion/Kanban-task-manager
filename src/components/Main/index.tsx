@@ -75,7 +75,6 @@ const Main = () => {
     throw new Error('Task must be used within a asideProvider');
   }
 
-  //! TODO - Remeber to add moveTaskToColumn here
   const { currentBoardData, moveTaskToColumn } = boardContext;
 
   useEffect(() => {

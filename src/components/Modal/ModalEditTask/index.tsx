@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import './styles.scss';
 import { CirclePicker, ColorResult } from 'react-color';
+import { toast } from 'react-toastify';
 import { IconCross } from '../../../assets';
 import { ModalContext } from '../../../utils/providers/useModalProvider';
 import { ThemeContext } from '../../../utils/providers/useThemeProvider';
@@ -58,21 +59,47 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
 
   const handleEditTask = async () => {
     if (!editingTask.title) {
-      alert('Veuillez donner un nom');
+      toast.error('You need to define a color', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
       return;
     }
     if (!editingTask.description) {
-      alert('Veuillez donner une description');
+      toast.error('You need to define a description', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
       return;
     }
     if (!editingTask.status) {
-      alert('Veuillez choisir un status');
+      toast.error('You need to define a status', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
       return;
     }
     if (editingTask._id && editingTask && currentBoardData._id && currentColumnData._id) {
       const updatedBoard = await editTask(currentBoardData._id, currentColumnData._id, editingTask);
       if (!updatedBoard) return;
-      console.log(updatedBoard);
 
       setAllBoardsData((prev) => {
         const newBoards = [...prev];

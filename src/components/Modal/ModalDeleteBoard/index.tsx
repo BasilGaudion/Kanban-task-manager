@@ -15,6 +15,7 @@ const ModalDeleteBoard: React.FC<ModalDeleteBoardProps> = ({ handleClose, isOpen
   const ref = useRef<HTMLDivElement>(null);
   const [containerAnimation, setContainerAnimation] = useState('pop-in');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
+  const [isDeleted, setIsDeleted] = useState(false);
   const themeContext = useContext(ThemeContext);
   const boardContext = useContext(BoardContext);
 
@@ -66,14 +67,20 @@ const ModalDeleteBoard: React.FC<ModalDeleteBoardProps> = ({ handleClose, isOpen
     if (currentBoardData._id) {
       const deletedBoard = await deleteBoard(currentBoardData._id);
       if (deletedBoard) {
-        setCurrentBoardData(allBoardsData[0]);
-        setAllBoardsData(allBoardsData.slice().filter((board) => board._id !== currentBoardData._id));
+        setIsDeleted(true);
       }
       setContainerAnimation('pop-out');
       setModalAnimation('modal-closed');
       setTimeout(handleClose, 300);
     }
   };
+
+  useEffect(() => {
+    if (isDeleted) {
+      setCurrentBoardData(allBoardsData[0]);
+      setAllBoardsData(allBoardsData.slice().filter((board) => board._id !== currentBoardData._id));
+    }
+  }, [isDeleted]);
 
   const handleCancel = () => {
     setContainerAnimation('pop-out');

@@ -8,14 +8,13 @@ export const createNewTask = async (boardId: string, columnId: string, newTask: 
   };
   try {
     const result = await axios.post(
-      `http://localhost:3000/api/boards/${boardId}/columns/${columnId}/tasks`,
+      `https://kanban-task-manager-backend.vercel.app/api/boards/${boardId}/columns/${columnId}/tasks`,
       newTask,
       config,
     );
     return result.data;
   }
   catch (error) {
-    console.log('🚀 ~ file: BoardsAPI.tsx:33 ~ error:', error);
     return null;
   }
 };
@@ -28,14 +27,13 @@ export const editTask = async (boardId: string, columnId: string, editedTask: Ta
   };
   try {
     const result = await axios.put(
-      `http://localhost:3000/api/boards/${boardId}/columns/${columnId}/tasks/${taskId}`,
+      `https://kanban-task-manager-backend.vercel.app/api/boards/${boardId}/columns/${columnId}/tasks/${taskId}`,
       editedTask,
       config,
     );
     return result.data;
   }
   catch (error) {
-    console.log('🚀 ~ file: BoardsAPI.tsx:33 ~ error:', error);
     return null;
   }
 };
@@ -47,13 +45,12 @@ export const deleteTask = async (boardId: string, columnId: string, taskId: stri
   };
   try {
     const result = await axios.delete(
-      `http://localhost:3000/api/boards/${boardId}/columns/${columnId}/tasks/${taskId}`,
+      `https://kanban-task-manager-backend.vercel.app/api/boards/${boardId}/columns/${columnId}/tasks/${taskId}`,
       config,
     );
     return result.data;
   }
   catch (error) {
-    console.log('🚀 ~ file: BoardsAPI.tsx:33 ~ error:', error);
     return null;
   }
 };

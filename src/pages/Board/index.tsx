@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './styles.scss';
+import { ToastContainer } from 'react-toastify';
 import Header from '../../components/Header';
 import Main from '../../components/Main';
 import AsideSettings from '../../components/AsideSettings';
@@ -39,6 +40,7 @@ const Board = () => {
         <Main />
       </div>
       <AllModals />
+      <ToastContainer />
     </div>
   );
 };

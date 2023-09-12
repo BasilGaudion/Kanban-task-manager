@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import './styles.scss';
 import { CirclePicker, ColorResult } from 'react-color';
+import { toast } from 'react-toastify';
 import { IconCross } from '../../../assets';
 import { ThemeContext } from '../../../utils/providers/useThemeProvider';
 import { Task, Subtask } from '../../../utils/Types/BoardTypes';
@@ -18,11 +19,11 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
   const ulRef = useRef<HTMLUListElement>(null);
   const ref = useRef<HTMLDivElement>(null);
   const colors: string[] = [
-    '#70E4B0', '#B3E57C', '#85E083', '#6CD474', '#58C666', // Verts pastel vifs
-    '#72C5F0', '#82D4E8', '#6CC5F7', '#59BCE5', '#47B0D3', // Bleus pastel vifs
-    '#FF6B85', '#FF887A', '#FF7373', '#FF8DA1', '#FF9B7B', // Rouges pastel vifs
-    '#FFEA61', '#FFED85', '#FFE66D', '#FFDF56', '#FFD43F', // Jaunes pastel vifs
-    '#FFC285', // Orange pastel vif
+    '#70E4B0', '#B3E57C', '#85E083', '#6CD474', '#58C666',
+    '#72C5F0', '#82D4E8', '#6CC5F7', '#59BCE5', '#47B0D3',
+    '#FF6B85', '#FF887A', '#FF7373', '#FF8DA1', '#FF9B7B',
+    '#FFEA61', '#FFED85', '#FFE66D', '#FFDF56', '#FFD43F',
+    '#FFC285',
   ];
 
   const [isPickerVisible, setPickerVisibility] = useState(false);
@@ -140,8 +141,20 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
   }, [handleClose]);
 
   const handleCreateTask = async () => {
+    if (!inCreationtask.title) {
+      toast.error('You must add a title', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
+      return;
+    }
     if (currentBoardData._id && currentColumnData._id) {
-      console.log(inCreationtask);
       const newTask = await createNewTask(currentBoardData._id, currentColumnData._id, inCreationtask);
 
       if (newTask) {
@@ -156,8 +169,7 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
       setTimeout(handleClose, 300);
     }
     else {
-      console.log('erreur');
-
+      return null;
     }
   };
 

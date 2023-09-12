@@ -2,6 +2,7 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import { CirclePicker, ColorResult } from 'react-color';
+import { toast } from 'react-toastify';
 import { ThemeContext } from '../../../utils/providers/useThemeProvider';
 import { BoardContext } from '../../../utils/providers/useBoardProvider';
 import './styles.scss';
@@ -22,11 +23,11 @@ const ModalAddColumn: React.FC<ModalAddColumnProps> = ({ handleClose, isOpen }) 
   const [selectedColor, setSelectedColor] = useState<string>('#f44336');
 
   const colors: string[] = [
-    '#70E4B0', '#B3E57C', '#85E083', '#6CD474', '#58C666', // Verts pastel vifs
-    '#72C5F0', '#82D4E8', '#6CC5F7', '#59BCE5', '#47B0D3', // Bleus pastel vifs
-    '#FF6B85', '#FF887A', '#FF7373', '#FF8DA1', '#FF9B7B', // Rouges pastel vifs
-    '#FFEA61', '#FFED85', '#FFE66D', '#FFDF56', '#FFD43F', // Jaunes pastel vifs
-    '#FFC285', // Orange pastel vif
+    '#70E4B0', '#B3E57C', '#85E083', '#6CD474', '#58C666',
+    '#72C5F0', '#82D4E8', '#6CC5F7', '#59BCE5', '#47B0D3',
+    '#FF6B85', '#FF887A', '#FF7373', '#FF8DA1', '#FF9B7B',
+    '#FFEA61', '#FFED85', '#FFE66D', '#FFDF56', '#FFD43F',
+    '#FFC285',
   ];
 
   if (!boardContext) {
@@ -54,22 +55,34 @@ const ModalAddColumn: React.FC<ModalAddColumnProps> = ({ handleClose, isOpen }) 
 
   const handleCreateColumn = async () => {
     if (!inCreationColumn.name) {
-      alert('Veuillez donner un nom');
+      toast.error('You must define a name', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
       return;
     }
     if (!inCreationColumn.color) {
-      alert('Veuillez choisir une couleur');
+      toast.error('You need to define a color', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
       return;
     }
     if (currentBoardData._id) {
       const newColumn = await createNewColumn(currentBoardData._id, inCreationColumn);
       if (newColumn) {
-        // setAllBoardsData((prev) => {
-        //   const newBoards = [...prev];
-        //   const boardIndex = newBoards.findIndex((board) => board._id === currentBoardData._id);
-        //   newBoards[boardIndex].columns.push(inCreationColumn);
-        //   return newBoards;
-        // });
         setCurrentBoardData((prev) => {
           const newBoard = { ...prev };
           newBoard.columns.push(newColumn);

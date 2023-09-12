@@ -35,7 +35,7 @@ export const useUserProvider = (): IUserContext => {
 
   const login = async (userData: { emailLogin: string; passwordLogin: string }) => {
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/login', {
+      const response = await axios.post('https://kanban-task-manager-backend.vercel.app/api/auth/login', {
         email: userData.emailLogin,
         password: userData.passwordLogin,
       });
@@ -62,14 +62,14 @@ export const useUserProvider = (): IUserContext => {
 
   const signIn = async (userData: { email: string; password: string }) => {
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/signup', {
+      const response = await axios.post('https://kanban-task-manager-backend.vercel.app/api/auth/signup', {
         email: userData.email,
         password: userData.password,
       });
-      console.log(response);
+      return response.data;
     }
     catch (error) {
-      console.log(error);
+      return null;
     }
   };
 

@@ -2,6 +2,7 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import { CirclePicker, ColorResult } from 'react-color';
+import { toast } from 'react-toastify';
 import { ThemeContext } from '../../../utils/providers/useThemeProvider';
 import { BoardContext } from '../../../utils/providers/useBoardProvider';
 import './styles.scss';
@@ -54,11 +55,29 @@ const ModalEditColumn: React.FC<ModalEditColumnProps> = ({ handleClose, isOpen }
 
   const handleEditColumn = async () => {
     if (!editingColumn.name) {
-      alert('Veuillez donner un nom');
+      toast.error('You must define a name', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
       return;
     }
     if (!editingColumn.color) {
-      alert('Veuillez choisir une couleur');
+      toast.error('You need to define a color', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
       return;
     }
     if (editingColumn._id && editingColumn && currentBoardData._id) {
@@ -69,7 +88,6 @@ const ModalEditColumn: React.FC<ModalEditColumnProps> = ({ handleClose, isOpen }
           const boardIndex = newBoards.findIndex((board) => board._id === currentBoardData._id);
           const columnIndex = newBoards[boardIndex].columns.findIndex((column) => column._id === currentColumnData._id);
           newBoards[boardIndex].columns[columnIndex] = editingColumn;
-          console.log('🚀 ~ file: index.tsx:60 ~ newBoards:', newBoards);
           return newBoards;
         });
       }
