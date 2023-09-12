@@ -4,11 +4,22 @@ import { LogoDark } from '../../assets';
 
 const HomeDescription = () => {
   return (
-    <div className='home-description'>
-      <img src={LogoDark} className="home-description__logo" alt="Logo Mobile" />
-      <h1 className='home-description__title'><span>Kaban</span>, une solution innovante pour une gestion de groupe efficace</h1>
-      <p className='home-description__intro'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse sed nulla quis urna ultrices sollicitudin. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris id metus nec nisl pharetra ultricies. Mauris rutrum lorem sed bibendum ultrices. Sed tincidunt placerat lacinia. In mattis, tellus at malesuada lacinia, turpis risus lacinia nulla, eu feugiat nisi orci et neque. Quisque euismod nulla molestie pulvinar luctus..</p>
+    <div className="home-description">
+      <img src={LogoDark} className="home-description__logo" alt="Mobile Logo" />
+      <h1 className="home-description__title">
+        <span>Kanban</span>, an Innovative Solution for Effective Project Management
+      </h1>
+      <p className="home-description__intro">
+        Create customized <span className="home-description__highlight">Kanban boards</span> for each project. Organize your tasks into columns, from planning to execution, through validation and delivery.
+      </p>
+      <p className="home-description__intro">
+        Move your tasks from one column to another with a simple <span className="home-description__highlight">drag-and-drop</span>. This makes managing the progress of your projects a breeze.
+      </p>
+      <p className="home-description__intro">
+        Add details to tasks, including <span className="home-description__highlight">descriptions</span>, <span className="home-description__highlight">sub-tasks</span>, <span className="home-description__highlight">color codes</span>, and more. Ensure that nothing is overlooked.
+      </p>
     </div>
+
   );
 };
 

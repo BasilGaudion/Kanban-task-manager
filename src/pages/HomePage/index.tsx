@@ -26,17 +26,19 @@ const HomePage = () => {
     <div className="home-page container">
       <HomeDescription />
       <span />
-      <div className="home-page__content">
-        <div className="home-page__buttons">
-          <button className={`home-page__button ${isLoginVisible ? 'show' : ''}`} type="button" onClick={showLogin}>Login</button>
-          <button className={`home-page__button ${!isLoginVisible ? 'show' : ''}`} type="button" onClick={hiddenLogin}> Register</button>
-        </div>
-        <div className="home-page__forms">
+      <div className="home-page__login">
+        <div className="home-page__content">
+          <div className="home-page__buttons">
+            <button className={`home-page__button ${isLoginVisible ? 'show' : ''}`} type="button" onClick={showLogin}>Login</button>
+            <button className={`home-page__button ${!isLoginVisible ? 'show' : ''}`} type="button" onClick={hiddenLogin}> Register</button>
+          </div>
+          <div className="home-page__forms">
 
-          <Login />
+            <Login />
 
-          <Register />
+            <Register />
 
+          </div>
         </div>
       </div>
     </div>

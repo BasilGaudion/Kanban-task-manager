@@ -29,7 +29,6 @@ export const useUserProvider = (): IUserContext => {
   const [token, setToken] = useState<string | null>(null); // Initialize to null
   const navigate = useNavigate();
 
-  // Update local storage whenever `isConnected` changes
   useEffect(() => {
     window.localStorage.setItem('isConnected', String(isConnected)); // Convert boolean to string
   }, [isConnected]);
@@ -48,7 +47,6 @@ export const useUserProvider = (): IUserContext => {
       }
     }
     catch (error) {
-      // throw new Error('Adresse E-mail et/ou le mot de passe incorrects');
       toast.error('Incorrect email address or password', {
         position: 'top-right',
         autoClose: 2000,

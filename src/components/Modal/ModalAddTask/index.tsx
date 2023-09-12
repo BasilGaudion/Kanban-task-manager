@@ -141,6 +141,7 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
 
   const handleCreateTask = async () => {
     if (currentBoardData._id && currentColumnData._id) {
+      console.log(inCreationtask);
       const newTask = await createNewTask(currentBoardData._id, currentColumnData._id, inCreationtask);
 
       if (newTask) {
@@ -169,7 +170,7 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
             className="at__color"
             onClick={() => setPickerVisibility(!isPickerVisible)}
             style={{
-              background: inCreationtask?.color,
+              background: inCreationtask.color ? inCreationtask.color : selectedColor,
               border: inCreationtask.color ? 'none' : '3px solid #635FC7',
             }}
           />
