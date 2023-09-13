@@ -33,7 +33,7 @@ const Header = () => {
 
   // ====== Board Context ==========
   if (!boardContext) {
-    throw new Error('Task must be used within a asideProvider');
+    throw new Error('Task must be used within a boardProvider');
   }
 
   const { currentBoardData } = boardContext;
@@ -121,7 +121,10 @@ const Header = () => {
           <h2 className="header__board-name" onClick={largeWindow ? handleShowEditBoard : handleShowViewBoard}>{currentBoardData.name}</h2>
           {
           largeWindow
-            ? <></>
+            ? (
+              <>
+              </>
+            )
             : <img src={IconChevronDown} alt="" />
         }
         </div>
@@ -151,9 +154,15 @@ const Header = () => {
             <img src={IconVerticalEllipsis} className="header__ellipsis" alt="" />
           </div>
           <div className={`header__options ${isSettingsOpen ? '' : 'disable'}`} ref={settingsRef}>
-            <p className="header__option" onClick={handleShowEditBoard}>Edit Board</p>
-            <p className="header__option header__option--delete" onClick={handleShowDeleteBoard}>Delete Board</p>
-            <p className="header__option" onClick={handleDisconnect}>Disconnect</p>
+            {currentBoardData._id ? (
+              <>
+                <p className="header__option" onClick={handleShowEditBoard}>Edit Board</p>
+                <p className="header__option header__option--delete" onClick={handleShowDeleteBoard}>Delete Board</p>
+                <p className="header__option" onClick={handleDisconnect}>Disconnect</p>
+              </>
+            ) : (
+              <p className="header__option" onClick={handleDisconnect}>Disconnect</p>
+            )}
           </div>
         </div>
       </div>

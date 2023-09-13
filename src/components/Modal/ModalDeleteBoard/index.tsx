@@ -78,16 +78,12 @@ const ModalDeleteBoard: React.FC<ModalDeleteBoardProps> = ({ handleClose, isOpen
 
   useEffect(() => {
     if (isDeleted) {
-      // Supprimez le tableau actuel de allBoardsData
       const newBoardsData = allBoardsData.filter((board) => board._id !== currentBoardData._id);
 
-      // Si le tableau supprimé est le premier tableau de allBoardsData
       if (currentBoardData === allBoardsData[0]) {
-        // Utilisez le premier tableau de newBoardsData comme tableau actuel ou un tableau vide si newBoardsData est vide.
         setCurrentBoardData(newBoardsData[0] || {} as Board);
       }
       else {
-        // Si le tableau supprimé n'est pas le premier tableau, utilisez le premier tableau de allBoardsData comme tableau actuel.
         setCurrentBoardData(allBoardsData[0]);
       }
 
@@ -95,10 +91,6 @@ const ModalDeleteBoard: React.FC<ModalDeleteBoardProps> = ({ handleClose, isOpen
       setIsDeleted(false);
     }
   }, [isDeleted]);
-
-  useEffect(() => {
-    console.log(currentBoardData);
-  }, [currentBoardData]);
 
   const handleCancel = () => {
     setContainerAnimation('pop-out');
@@ -115,7 +107,7 @@ const ModalDeleteBoard: React.FC<ModalDeleteBoardProps> = ({ handleClose, isOpen
         <p className="db__text">
           Are you sure you want to delete the
           ‘{currentBoardData.name}’
-          baord and its data ? This action cannot be reversed.
+          board and its data ? This action cannot be reversed.
         </p>
         <div className="db__button-group">
           <button
