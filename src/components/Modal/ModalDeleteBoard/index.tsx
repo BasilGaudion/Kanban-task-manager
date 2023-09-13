@@ -5,6 +5,7 @@ import './styles.scss';
 import { ThemeContext } from '../../../utils/providers/useThemeProvider';
 import { BoardContext } from '../../../utils/providers/useBoardProvider';
 import { deleteBoard } from '../../../utils/api/boardsAPI';
+import { Board } from '../../../utils/Types/BoardTypes';
 
 interface ModalDeleteBoardProps {
     handleClose: () => void;
@@ -77,10 +78,27 @@ const ModalDeleteBoard: React.FC<ModalDeleteBoardProps> = ({ handleClose, isOpen
 
   useEffect(() => {
     if (isDeleted) {
-      setCurrentBoardData(allBoardsData[0]);
-      setAllBoardsData(allBoardsData.slice().filter((board) => board._id !== currentBoardData._id));
+      // Supprimez le tableau actuel de allBoardsData
+      const newBoardsData = allBoardsData.filter((board) => board._id !== currentBoardData._id);
+
+      // Si le tableau supprimé est le premier tableau de allBoardsData
+      if (currentBoardData === allBoardsData[0]) {
+        // Utilisez le premier tableau de newBoardsData comme tableau actuel ou un tableau vide si newBoardsData est vide.
+        setCurrentBoardData(newBoardsData[0] || {} as Board);
+      }
+      else {
+        // Si le tableau supprimé n'est pas le premier tableau, utilisez le premier tableau de allBoardsData comme tableau actuel.
+        setCurrentBoardData(allBoardsData[0]);
+      }
+
+      setAllBoardsData(newBoardsData);
+      setIsDeleted(false);
     }
   }, [isDeleted]);
+
+  useEffect(() => {
+    console.log(currentBoardData);
+  }, [currentBoardData]);
 
   const handleCancel = () => {
     setContainerAnimation('pop-out');

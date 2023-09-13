@@ -16,6 +16,7 @@ import CreateColumn from '../CreateColumn';
 
 const Main = () => {
   const [haveColums, setHaveColums] = useState(false);
+  const [haveBoard, setHaveBoard] = useState(false);
   const themeContext = useContext(ThemeContext);
   const modalContext = useContext(ModalContext);
   const asideContext = useContext(AsideContext);
@@ -52,10 +53,16 @@ const Main = () => {
     throw new Error('Task must be used within a ModalProvider');
   }
 
-  const { showAddColumn, setShowAddColumn } = modalContext;
+  const {
+    showAddColumn, setShowAddColumn, showAddBoard, setShowAddBoard,
+  } = modalContext;
 
   const handleShowAddColumn = () => {
     setShowAddColumn(!showAddColumn);
+  };
+
+  const handleShowAddBoard = () => {
+    setShowAddBoard(!showAddBoard);
   };
 
   if (!themeContext) {
@@ -78,15 +85,23 @@ const Main = () => {
   const { currentBoardData, moveTaskToColumn } = boardContext;
 
   useEffect(() => {
-    if (currentBoardData.columns) {
-      if (currentBoardData.columns.length < 1) {
-        setHaveColums(false);
-      }
-      else {
+    // Vérifiez si currentBoardData a une propriété spécifique, par exemple _id
+    if (currentBoardData && currentBoardData._id) {
+      setHaveBoard(true);
+
+      // Vérifiez si currentBoardData.columns existe et a au moins un élément
+      if (currentBoardData.columns && currentBoardData.columns.length > 0) {
         setHaveColums(true);
       }
-    }
+      else {
+        setHaveColums(false);
+      }
 
+    }
+    else {
+      setHaveBoard(false);
+      setHaveColums(false); // assurez-vous que haveColums est également mis à false si vous n'avez pas de board
+    }
   }, [currentBoardData]);
 
   const onDragEnd = (result: any) => {
@@ -108,29 +123,35 @@ const Main = () => {
 
   return (
     <main className={`main ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'} ${asideOpen && largeWindow ? 'main--reduct' : ''}`}>
-      {haveColums ? (
-        <div className="main__container container" ref={containerRef} onScroll={handleScroll}>
-          <DragDropContext
-            key={currentBoardData._id}
-            onDragEnd={onDragEnd}
-          >
-            {currentBoardData.columns.map((column) => (
-              <div className="main__columns" key={column._id}>
-                <Column key={column._id} column={column} />
-              </div>
-            ))}
-            <div><CreateColumn /></div>
-          </DragDropContext>
-        </div>
+      {haveBoard ? (
+        haveColums ? (
+          <div className="main__container container" ref={containerRef} onScroll={handleScroll}>
+            <DragDropContext
+              key={currentBoardData._id}
+              onDragEnd={onDragEnd}
+            >
+              {currentBoardData.columns.map((column) => (
+                <div className="main__columns" key={column._id}>
+                  <Column key={column._id} column={column} containerRef={containerRef} />
+                </div>
+              ))}
+              <div><CreateColumn /></div>
+            </DragDropContext>
+          </div>
+        ) : (
+          <div className="main__container--empty container">
+            <h3 className="main__empty-board">This board is empty. Create a new column to get started.</h3>
+            <button type="button" className="main__button-column" onClick={handleShowAddColumn}>+ Add New Column</button>
+          </div>
+        )
       ) : (
         <div className="main__container--empty container">
-          <h3 className="main__empty-board">This board is empty. Create a new column to get started.</h3>
-          <button type="button" className="main__button-column" onClick={handleShowAddColumn}>+ Add New Column</button>
+          <h3 className="main__empty-board">You don't have an existing board. Create a new board to get started.</h3>
+          <button type="button" className="main__button-column" onClick={handleShowAddBoard}>+ Add New Board</button>
         </div>
       )}
     </main>
   );
-
 };
 
 export default Main;

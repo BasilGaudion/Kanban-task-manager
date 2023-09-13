@@ -55,12 +55,41 @@
         flex-direction: column;
         gap: 12px;
         margin-bottom: 12px;
+        max-height: 200px;
+        overflow-y: scroll;
+        padding-right: 10px;
+    
+        &::-webkit-scrollbar {
+            width: 8px;
+            background: transparent;
+        }
+        
+        &:not(:hover) {
+            &::-webkit-scrollbar-thumb {
+                background: transparent;
+            }
+        }
+    
+        &:hover {
+            &::-webkit-scrollbar-thumb {
+                background: #828FA3;
+                border-radius: 4px;
+            }
+    
+            &::-webkit-scrollbar-thumb:hover {
+                background: #606a79;
+            }
+        }
     }
 
     &__column {
         display: flex;
         gap: 16px;
         align-items: center;
+    }
+
+    &__column-delete {
+        cursor: pointer;
     }
 
     &__button {

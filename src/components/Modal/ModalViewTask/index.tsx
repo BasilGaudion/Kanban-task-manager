@@ -174,7 +174,11 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
         <h4 className="vt__subtitle">Subtasks ({completedSubtasks} of {currentTaskData?.subtasks.length})</h4>
         <ul className="vt__checkgroup">
           {currentTaskData?.subtasks.map((subtask, key) => (
-            <li className="vt__check-item" key={key}>
+            <li
+              className="vt__check-item"
+              key={key}
+              onClick={() => handleToggleSubtaskStatus(subtask._id ? subtask._id : '')}
+            >
               <input
                 type="checkbox"
                 name={subtask.title}

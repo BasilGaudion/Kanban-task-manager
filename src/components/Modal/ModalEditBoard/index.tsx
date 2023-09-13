@@ -113,7 +113,19 @@ const ModalEditBoard: React.FC<ModalEditBoardProps> = ({ handleClose, isOpen }) 
   return (
     <div className={`eb ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
       <section className={`eb__container ${containerAnimation}`} ref={ref}>
-        <h2 className="eb__action">Edit Board</h2>
+        <div className="eb__action-group">
+          <h2 className="eb__action">Edit Board</h2>
+          <img
+            src={IconCross}
+            alt="Delete Subtask"
+            className="et__subtask-delete"
+            onClick={() => {
+              setContainerAnimation('pop-out');
+              setModalAnimation('modal-closed');
+              setTimeout(handleClose, 300);
+            }}
+          />
+        </div>
         <div className="eb__title-group">
           <h3 className="eb__title">Board Name</h3>
           <label htmlFor="eb__title" className="visuallyhidden">Enter the title of the Board</label>

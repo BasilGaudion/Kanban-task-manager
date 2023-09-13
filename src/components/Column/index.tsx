@@ -10,9 +10,10 @@ import { BoardContext } from '../../utils/providers/useBoardProvider';
 
 interface ColumnProps {
   column: ColumnType;
+  containerRef: React.RefObject<HTMLDivElement>;
 }
 
-const Column: React.FC<ColumnProps> = ({ column }) => {
+const Column: React.FC<ColumnProps> = ({ column, containerRef }) => {
   const modalContext = useContext(ModalContext);
   const background = column.color;
 
@@ -56,7 +57,7 @@ const Column: React.FC<ColumnProps> = ({ column }) => {
             {...provided.droppableProps}
           >
             {column.tasks.map((task: TaskType, index: number) => (
-              <Task key={task._id} task={task} index={index} />
+              <Task key={task._id} task={task} index={index} containerRef={containerRef} />
             ))}
             {provided.placeholder}
           </div>

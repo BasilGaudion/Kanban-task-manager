@@ -1,4 +1,6 @@
-import React, { useContext, useRef } from 'react';
+import React, {
+  useContext, useRef,
+} from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { ModalContext } from '../../utils/providers/useModalProvider';
 import { ThemeContext } from '../../utils/providers/useThemeProvider';
@@ -12,9 +14,10 @@ import './styles.scss';
 interface TaskProps {
   task: TaskType;
   index: number;
+  containerRef: React.RefObject<HTMLDivElement>;
 }
 
-const Task: React.FC<TaskProps> = ({ task, index }) => {
+const Task: React.FC<TaskProps> = ({ task, index, containerRef }) => {
   const themeContext = useContext(ThemeContext);
   const boardContext = useContext(BoardContext);
   const asideContext = useContext(AsideContext);
@@ -64,6 +67,7 @@ const Task: React.FC<TaskProps> = ({ task, index }) => {
       index={index}
     >
       {(provided, snapshot) => {
+        // handleDrag(snapshot);
         if (snapshot.isDragging && provided.draggableProps.style) {
           const style = provided.draggableProps.style as React.CSSProperties;
           const initialLeft = Number(style.left?.toString().split('px')[0]);
