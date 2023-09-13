@@ -1,15 +1,46 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './styles.scss';
 import { LogoDark, HomeBG, HomeGradient } from '../../assets';
+import { ModalContext } from '../../utils/providers/useModalProvider';
 
 const HomeDescription = () => {
+  const modalContext = useContext(ModalContext);
+
+  if (!modalContext) {
+    throw new Error('Task must be used within a ModalProvider');
+  }
+
+  const {
+    showLogin, setShowLogin, showRegister, setShowRegister,
+  } = modalContext;
+
+  const handleShowLogin = () => {
+    setShowLogin(!showLogin);
+  };
+
+  const handleShowRegister = () => {
+    setShowRegister(!showRegister);
+  };
+
   return (
     <div className="home-description">
       <header className="home-description__header">
         <img src={LogoDark} className="home-description__logo" alt="Mobile Logo" />
         <div className="home-description__authentification">
-          <button type="button" className="home-description__button">Login</button>
-          <button type="button" className="home-description__button">Register</button>
+          <button
+            type="button"
+            className="home-description__button"
+            onClick={handleShowLogin}
+          >
+            Login
+          </button>
+          <button
+            type="button"
+            className="home-description__button"
+            onClick={handleShowRegister}
+          >
+            Register
+          </button>
         </div>
       </header>
       <div className="home-description__image">
@@ -24,7 +55,11 @@ const HomeDescription = () => {
         <img src={HomeBG} alt="" />
       </div>
       <img className="home-description__gradient" src={HomeGradient} alt="" />
-      <button type="button" className="home-description__register">
+      <button
+        type="button"
+        className="home-description__register"
+        onClick={handleShowRegister}
+      >
         Register Now
       </button>
     </div>

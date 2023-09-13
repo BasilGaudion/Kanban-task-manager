@@ -16,6 +16,11 @@
     font-family: 'Plus Jakarta Sans';
     font-weight: 500;
     font-size: 1.1rem;
+    transition: color 0.25s ease;
+
+    &:hover {
+      color: #635FC7;
+    }
   }
 
   &__image {
@@ -89,6 +94,11 @@
     border-radius: 20px;
     font-family: 'Plus Jakarta Sans';
     font-size: 1.1rem;
+    transition: background-color 0.25s ease;
+
+    &:hover {
+      background-color: #474586;
+    }
   }
 
 }

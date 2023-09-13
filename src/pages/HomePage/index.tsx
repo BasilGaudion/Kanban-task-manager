@@ -4,6 +4,7 @@ import { LoginContext } from '../../utils/providers/useLoginProvider';
 import HomeDescription from '../../components/HomeDescription';
 import Login from '../../components/Login';
 import Register from '../../components/Register';
+import { ModalContext } from '../../utils/providers/useModalProvider';
 
 const HomePage = () => {
   const loginContext = useContext(LoginContext);
@@ -12,18 +13,22 @@ const HomePage = () => {
     throw new Error('Task must be used within a themeProvider');
   }
 
-  const { isLoginVisible, setIsLoginVisible } = loginContext;
+  const modalContext = useContext(ModalContext);
 
-  const hiddenLogin = () => {
-    setIsLoginVisible(false);
-  };
+  if (!modalContext) {
+    throw new Error('Task must be used within a ModalProvider');
+  }
 
-  const showLogin = () => {
-    setIsLoginVisible(true);
-  };
+  const {
+    showLogin, setShowLogin, showRegister, setShowRegister,
+  } = modalContext;
 
   return (
-    <HomeDescription />
+    <>
+      <HomeDescription />
+      {showLogin && <Login handleClose={() => setShowLogin(false)} isOpen />}
+      {showRegister && <Register handleClose={() => setShowRegister(false)} isOpen />}
+    </>
   );
 };
 

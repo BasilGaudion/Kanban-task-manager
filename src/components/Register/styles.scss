@@ -1,27 +1,94 @@
+@import '../Modal/animations';
+@import '../../styles/placeholders';
+
 .register {
-    input {
-        height: 50px;
-        border-radius: 8px;
-        border: none;
-        box-shadow: 0 0px 10px 0 rgba(31, 39, 54, 0.2);
-        padding: 10px;
-        width: 100%;
+    @extend %modalBgDefaultStyle;
+    z-index: 50;
+
+    &__container {
+        @extend %modalContainer;
+        background-color: #FFF;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    &__input {
+        margin-bottom: 25px;
+        border-radius: 4px;
+        border: 1px solid rgba(130, 143, 163, 0.25);
+        resize: none;
+        font-size: .8125rem;
+        line-height: 23px;
+        font-family: Plus Jakarta Sans;
+        padding: 8px 16px;
+        background-color: var(--background-modal);
+        color: var(--title);
 
         &::placeholder {
-            color: #000112;
+            opacity: 0.5;
+            font-size: .8125rem;
+            line-height: 23px;
+            font-family: Plus Jakarta Sans;
         }
     }
 
     &__submit {
+        @extend %modalButton;
         background-color: #635FC7;
-        border: none;
-        border-radius: 8px;
-        height: 50px;
-        color: white;
+        color: #FFF;
+        font-size: .8125rem;
     }
 
-    &.show {
-        opacity: 1;
-        pointer-events: all;
+    &__login {
+        border: none;
+        background-color: transparent;
+        color: #635FC7;
+        font-size: .8125rem;
+        font-weight: 700;
+        font-family: "Plus Jakarta Sans";
+        transition: text-decoration 0.2s ease;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
+
+}
+
+// =============================
+// Responsive
+// =============================
+
+@media screen and (min-width: 768px) {
+    .vt {
+
+        &__container {
+            width: 480px;
+            padding: 32px;
+        }
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    
+}
+
+
+.visuallyhidden { 
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+}
+
+.disable {
+    display: none;
 }

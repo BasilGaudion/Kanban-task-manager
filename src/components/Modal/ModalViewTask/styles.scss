@@ -5,7 +5,7 @@
     @extend %modalBgDefaultStyle;
 
     &__container {
-        @extend %modalContainer
+        @extend %modalContainer;
     }
 
     &__title-group {
