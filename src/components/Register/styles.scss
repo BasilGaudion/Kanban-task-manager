@@ -1,18 +1,4 @@
 .register {
-    position: absolute;
-    top: 0;
-    opacity: 0;
-    transition: all 0.5s ease-in-out;
-    pointer-events: none;
-
-    &__form  {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        margin-top: 35px;
-        height: 330px;
-    }
-
     input {
         height: 50px;
         border-radius: 8px;

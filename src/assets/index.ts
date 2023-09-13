@@ -16,6 +16,8 @@ import IconBoardPurple from './images/icon-board-purple.svg';
 import IconHidePurple from './images/icon-hide-purple.svg';
 import IconEdit from './images/icon-edit.svg';
 import IconEditPurple from './images/icon-edit-purple.svg';
+import HomeBG from './images/homeBG.svg';
+import HomeGradient from './images/gradient.svg';
 
 export {
   IconAddTaskMobile,
@@ -36,4 +38,6 @@ export {
   IconHidePurple,
   IconEdit,
   IconEditPurple,
+  HomeBG,
+  HomeGradient,
 };
