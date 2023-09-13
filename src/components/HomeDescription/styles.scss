@@ -107,9 +107,20 @@
     &__header {
       padding: 25px 10px 25px 15px;
     }
+
+    &__authentification {
+      display: flex;
+      gap: 20px;
+    }
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      gap: 35px;
+    }
     
     &__button {
-      font-size: 1.4rem;
+      font-size: 1.5rem;
     }
 
     &__image {
@@ -118,6 +129,7 @@
 
     &__title {
       font-size: 2.5rem;
+      line-height: 50px;
 
       span {
         font-size: 2.7rem;
@@ -138,5 +150,42 @@
 }
 
 @media screen and (min-width: 1440px) {
+  .home-description {
+    &__image {
+      height: 800px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      img {
+        max-width: 50%;
+        z-index: 15;
+      }
+    }
+
+    &__title {
+      font-size: 3.5rem;
+
+      span {
+        font-size: 3.7rem;
+      }
+    }
+
+    &__intro {
+      font-size: 1.8rem;
+      line-height: 40px;
+    }
+  
+    &__register {
+      bottom: 50px;
+      left: 430px;
+      width: 416px;
+      height: 50px;
+    }
+
+    &__gradient {
+      bottom: 20px;
+    }
+  }
   
 }

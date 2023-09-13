@@ -13,12 +13,14 @@ const HomeDescription = () => {
         </div>
       </header>
       <div className="home-description__image">
-        <h1 className="home-description__title">
-          <span>Kanban</span>, an Innovative Solution for Effective Project Management
-        </h1>
-        <p className="home-description__intro">
-          Create custom Kanban boards for projects. Organize tasks from planning to delivery. Drag-and-drop tasks to track progress. Add details so you don't miss anything.
-        </p>
+        <div className="home-description__content">
+          <h1 className="home-description__title">
+            <span>Kanban</span>, an Innovative Solution for Effective Project Management
+          </h1>
+          <p className="home-description__intro">
+            Create custom Kanban boards for projects. Organize tasks from planning to delivery. Drag-and-drop tasks to track progress. Add details so you don't miss anything.
+          </p>
+        </div>
         <img src={HomeBG} alt="" />
       </div>
       <img className="home-description__gradient" src={HomeGradient} alt="" />
