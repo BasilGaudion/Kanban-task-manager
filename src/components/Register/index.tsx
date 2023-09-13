@@ -2,7 +2,7 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import './styles.scss';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { UserContext } from '../../utils/providers/useUserProvider';
 import { ModalContext } from '../../utils/providers/useModalProvider';
 import 'react-toastify/dist/ReactToastify.css';
@@ -74,12 +74,33 @@ const Register: React.FC<RegisterProps> = ({ handleClose, isOpen }) => {
     setPasswordConfirm(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleShowLogin = () => {
+    setContainerAnimation('pop-out');
+    setModalAnimation('modal-closed');
+    setTimeout(() => {
+      setShowLogin(!showLogin);
+      handleClose();
+    }, 250);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (password === passwordConfirm) {
-      signIn({ email, password });
+
+    if (password.length < 8) {
+      toast.error('Password must be at least 8 characters long.', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
+      return;
     }
-    else {
+
+    if (password !== passwordConfirm) {
       toast.error('Passwords do not match', {
         position: 'top-right',
         autoClose: 2000,
@@ -90,17 +111,23 @@ const Register: React.FC<RegisterProps> = ({ handleClose, isOpen }) => {
         progress: undefined,
         theme: 'colored',
       });
-      // throw new Error('Passwords do not match');
+      return;
     }
-  };
 
-  const handleShowLogin = () => {
-    setContainerAnimation('pop-out');
-    setModalAnimation('modal-closed');
-    setTimeout(() => {
-      setShowLogin(!showLogin);
-      handleClose();
-    }, 250);
+    const success = await signIn({ email, password });
+    if (success !== null) {
+      toast.success('You are registered !', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
+      handleShowLogin();
+    }
   };
 
   return (
@@ -146,7 +173,6 @@ const Register: React.FC<RegisterProps> = ({ handleClose, isOpen }) => {
           />
 
           <button className="register__submit" type="submit">Register</button>
-          <ToastContainer />
         </form>
         <button
           type="button"

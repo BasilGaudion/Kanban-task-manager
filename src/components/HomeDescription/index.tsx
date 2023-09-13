@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import './styles.scss';
 import { LogoDark, HomeBG, HomeGradient } from '../../assets';
 import { ModalContext } from '../../utils/providers/useModalProvider';
+import { ToastContainer } from 'react-toastify';
 
 const HomeDescription = () => {
   const modalContext = useContext(ModalContext);
@@ -62,6 +63,7 @@ const HomeDescription = () => {
       >
         Register Now
       </button>
+      <ToastContainer />
     </div>
 
   );

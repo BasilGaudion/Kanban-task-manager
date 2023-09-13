@@ -69,7 +69,7 @@ export const useUserProvider = (): IUserContext => {
       return response.data;
     }
     catch (error) {
-      return null;
+      return false;
     }
   };
 

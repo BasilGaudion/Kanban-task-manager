@@ -30,9 +30,10 @@
     display: flex;
     flex-direction: column;
     gap: 50px;
+    align-items: center;
 
     img {
-      max-width: 100%;
+      max-width: 80%;
       z-index: 15;
     }
   }
@@ -135,10 +136,18 @@
 
     &__image {
       height: 700px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      img {
+        max-width: 50%;
+        z-index: 15;
+      }
     }
 
     &__title {
-      font-size: 2.5rem;
+      font-size: 2rem;
       line-height: 50px;
 
       span {
@@ -147,12 +156,11 @@
     }
 
     &__intro {
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       line-height: 35px;
     }
   
     &__register {
-      bottom: -250px;
       width: 416px;
       height: 50px;
     }
