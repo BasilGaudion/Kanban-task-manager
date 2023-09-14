@@ -10,11 +10,12 @@ const AppRoutes = () => (
     <Route path="/" element={<Navigate to="/home" />} index />
     <Route element={<PrivateRoutes />}>
       <Route path="/boards" element={<Board />} />
+      <Route path="*" element={<Navigate to="/boards" />} />
     </Route>
     <Route element={<PublicRoutes />}>
       <Route path="/home" element={<HomePage />} />
+      <Route path="*" element={<HomePage />} />
     </Route>
-    {/* <Route path="*" element={<Board />} /> */}
   </Routes>
 );
 

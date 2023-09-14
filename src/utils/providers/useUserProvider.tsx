@@ -18,19 +18,18 @@ interface IUserContext {
 // Context Initialization
 export const UserContext = createContext<IUserContext | undefined>(undefined);
 
-// Custom Hook
 export const useUserProvider = (): IUserContext => {
   const getLocalStorage = (key: string, initialValue: unknown): unknown => {
     const value = window.localStorage.getItem(key);
-    return value ?? initialValue; // If value is null or undefined, return initialValue
+    return value ?? initialValue;
   };
 
   const [isConnected, setIsConnected] = useState(() => getLocalStorage('isConnected', false) as boolean);
-  const [token, setToken] = useState<string | null>(null); // Initialize to null
+  const [token, setToken] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    window.localStorage.setItem('isConnected', String(isConnected)); // Convert boolean to string
+    window.localStorage.setItem('isConnected', String(isConnected));
   }, [isConnected]);
 
   const login = async (userData: { emailLogin: string; passwordLogin: string }) => {
