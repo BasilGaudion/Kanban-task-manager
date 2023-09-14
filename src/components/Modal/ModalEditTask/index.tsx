@@ -71,19 +71,6 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
       });
       return;
     }
-    if (!editingTask.description) {
-      toast.error('You need to define a description', {
-        position: 'top-right',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'colored',
-      });
-      return;
-    }
     if (!editingTask.status) {
       toast.error('You need to define a status', {
         position: 'top-right',
@@ -272,7 +259,7 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
           <h3 className="et__title">Subtasks</h3>
           <ul className="et__subtasks">
             {editingTask?.subtasks.map((subtask, key) => (
-              <li className="et__subtask">
+              <li className="et__subtask" key={key}>
                 <label htmlFor="et__subtask1" className="visuallyhidden">Enter the first subtask</label>
                 <input
                   type="text"
@@ -311,14 +298,13 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
           >
             <option
               value={currentColumnData._id}
-              selected
             >
               {currentColumnData.name}
             </option>
             {currentBoardData.columns
               .filter((column) => column._id !== currentColumnData._id)
-              .map((column, key) => (
-                <option key={key} value={column._id}>{column.name}</option>
+              .map((column) => (
+                <option key={column._id} value={column._id}>{column.name}</option>
               ))}
           </select>
         </div>

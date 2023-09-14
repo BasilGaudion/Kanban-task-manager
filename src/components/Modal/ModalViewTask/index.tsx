@@ -202,7 +202,6 @@ const ModalViewTask: React.FC<ModalViewTaskProps> = ({ handleClose, isOpen }) =>
           >
             <option
               value={currentColumnData._id}
-              selected
             >
               {currentColumnData.name}
             </option>

@@ -143,7 +143,7 @@ const ModalEditBoard: React.FC<ModalEditBoardProps> = ({ handleClose, isOpen }) 
           <h3 className="eb__title">Board Columns</h3>
           <ul className="eb__columns">
             {editingBoard?.columns.map((column, key) => (
-              <li className="eb__column">
+              <li className="eb__column" key={key}>
                 <label htmlFor="eb__column1" className="visuallyhidden">Enter the first subtask</label>
                 <input
                   type="text"

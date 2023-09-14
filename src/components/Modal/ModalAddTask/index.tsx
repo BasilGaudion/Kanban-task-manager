@@ -168,9 +168,6 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
       setModalAnimation('modal-closed');
       setTimeout(handleClose, 300);
     }
-    else {
-      return null;
-    }
   };
 
   return (
@@ -265,7 +262,6 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
           >
             <option
               value={currentColumnData._id}
-              selected
             >
               {currentColumnData.name}
             </option>
