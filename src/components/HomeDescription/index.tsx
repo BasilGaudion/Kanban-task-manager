@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import './styles.scss';
+import { ToastContainer } from 'react-toastify';
 import { LogoDark, HomeBG, HomeGradient } from '../../assets';
 import { ModalContext } from '../../utils/providers/useModalProvider';
-import { ToastContainer } from 'react-toastify';
 
 const HomeDescription = () => {
   const modalContext = useContext(ModalContext);

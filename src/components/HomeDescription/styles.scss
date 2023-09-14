@@ -6,7 +6,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 25px 0 25px 5px;
+    padding: 25px 20px 25px 25px;
   }
 
   &__button {
@@ -116,7 +116,7 @@
     }
 
     &__header {
-      padding: 25px 10px 25px 15px;
+      padding: 25px 25px 25px 30px;
     }
 
     &__authentification {
@@ -149,6 +149,8 @@
     &__title {
       font-size: 2rem;
       line-height: 50px;
+      text-align: left;
+      margin-left: 45px;
 
       span {
         font-size: 2.7rem;
@@ -156,8 +158,11 @@
     }
 
     &__intro {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       line-height: 35px;
+      text-align: left;
+      margin-left: 45px;
+      max-width: 515px;
     }
   
     &__register {
@@ -181,8 +186,14 @@
       }
     }
 
+    &__header {
+      padding: 25px 50px 25px 40px;
+    }
+
     &__title {
       font-size: 3.5rem;
+      text-align: left;
+      margin-left: 45px;
 
       span {
         font-size: 3.7rem;
@@ -190,14 +201,17 @@
     }
 
     &__intro {
-      font-size: 1.8rem;
+      font-size: 1.7rem;
       line-height: 40px;
+      max-width: 675px;
+      text-align: left;
+      margin-left: 40px;
     }
   
     &__register {
       bottom: 50px;
-      left: 430px;
-      width: 416px;
+      left: 385px;
+      width: 370px;
       height: 50px;
     }
 
