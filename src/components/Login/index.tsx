@@ -2,7 +2,6 @@ import React, {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import './styles.scss';
-import { ToastContainer } from 'react-toastify';
 import { UserContext } from '../../utils/providers/useUserProvider';
 import { ModalContext } from '../../utils/providers/useModalProvider';
 
@@ -118,7 +117,6 @@ const Login: React.FC<LoginProps> = ({ handleClose, isOpen }) => {
             type="submit"
           >Login
           </button>
-          <ToastContainer />
         </form>
         <button
           type="button"
