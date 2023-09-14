@@ -16,10 +16,11 @@ const Register: React.FC<RegisterProps> = ({ handleClose, isOpen }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [containerAnimation, setContainerAnimation] = useState('pop-in');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
-  const [email, setEmail] = useState(''); // Initialize to null
-  const [password, setPassword] = useState(''); // Initialize to null
-  const [passwordConfirm, setPasswordConfirm] = useState(''); // Initialize to null
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const modalContext = useContext(ModalContext);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -86,6 +87,7 @@ const Register: React.FC<RegisterProps> = ({ handleClose, isOpen }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    setLoading(true);
     if (password.length < 8) {
       toast.error('Password must be at least 8 characters long.', {
         position: 'top-right',
@@ -97,6 +99,7 @@ const Register: React.FC<RegisterProps> = ({ handleClose, isOpen }) => {
         progress: undefined,
         theme: 'colored',
       });
+      setLoading(false);
       return;
     }
 
@@ -111,6 +114,7 @@ const Register: React.FC<RegisterProps> = ({ handleClose, isOpen }) => {
         progress: undefined,
         theme: 'colored',
       });
+      setLoading(false);
       return;
     }
 
@@ -126,6 +130,7 @@ const Register: React.FC<RegisterProps> = ({ handleClose, isOpen }) => {
         progress: undefined,
         theme: 'colored',
       });
+      setLoading(false);
       handleShowLogin();
     }
   };
@@ -133,54 +138,60 @@ const Register: React.FC<RegisterProps> = ({ handleClose, isOpen }) => {
   return (
     <div className={`register ${modalAnimation} 'isLightTheme'`}>
       <section className={`register__container ${containerAnimation}`} ref={ref}>
-        <form
-          className="register__form"
-          action="#"
-          method="post"
-          onSubmit={handleSubmit}
-        >
-          <label htmlFor="email"><b>Email</b></label>
-          <input
-            className="register__input"
-            type="email"
-            placeholder="Enter email"
-            name="email"
-            required
-            onChange={handleEmailChange}
-            value={email}
-          />
+        {loading
+          ? <div className="loader" />
+          : (
+            <>
+              <form
+                className="register__form"
+                action="#"
+                method="post"
+                onSubmit={handleSubmit}
+              >
+                <label htmlFor="email"><b>Email</b></label>
+                <input
+                  className="register__input"
+                  type="email"
+                  placeholder="Enter email"
+                  name="email"
+                  required
+                  onChange={handleEmailChange}
+                  value={email}
+                />
 
-          <label htmlFor="password"><b>Password</b></label>
-          <input
-            className="register__input"
-            type="password"
-            placeholder="Enter password"
-            name="password"
-            onChange={handlePasswordChange}
-            value={password}
-            required
-          />
+                <label htmlFor="password"><b>Password</b></label>
+                <input
+                  className="register__input"
+                  type="password"
+                  placeholder="Enter password"
+                  name="password"
+                  onChange={handlePasswordChange}
+                  value={password}
+                  required
+                />
 
-          <label htmlFor="passwordConfirmation"><b>Confirm password</b></label>
-          <input
-            className="register__input"
-            type="password"
-            placeholder="Enter password"
-            name="password"
-            onChange={handlePasswordConfirmChange}
-            value={passwordConfirm}
-            required
-          />
+                <label htmlFor="passwordConfirmation"><b>Confirm password</b></label>
+                <input
+                  className="register__input"
+                  type="password"
+                  placeholder="Enter password"
+                  name="password"
+                  onChange={handlePasswordConfirmChange}
+                  value={passwordConfirm}
+                  required
+                />
 
-          <button className="register__submit" type="submit">Register</button>
-        </form>
-        <button
-          type="button"
-          className="login__register"
-          onClick={handleShowLogin}
-        >
-          Already have an account?
-        </button>
+                <button className="register__submit" type="submit">Register</button>
+              </form>
+              <button
+                type="button"
+                className="login__register"
+                onClick={handleShowLogin}
+              >
+                Already have an account?
+              </button>
+            </>
+          )}
       </section>
     </div>
   );

@@ -14,9 +14,10 @@ const Login: React.FC<LoginProps> = ({ handleClose, isOpen }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [containerAnimation, setContainerAnimation] = useState('pop-in');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
-  const [emailLogin, setEmailLogin] = useState(''); // Initialize to null
-  const [passwordLogin, setPasswordLogin] = useState(''); // Initialize to null
+  const [emailLogin, setEmailLogin] = useState('');
+  const [passwordLogin, setPasswordLogin] = useState('');
   const modalContext = useContext(ModalContext);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -67,9 +68,11 @@ const Login: React.FC<LoginProps> = ({ handleClose, isOpen }) => {
     setPasswordLogin(e.target.value);
   };
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login({ emailLogin, passwordLogin });
+    setLoading(true);
+    await login({ emailLogin, passwordLogin });
+    setLoading(false);
   };
 
   const handleShowRegister = () => {
@@ -84,47 +87,53 @@ const Login: React.FC<LoginProps> = ({ handleClose, isOpen }) => {
   return (
     <div className={`login ${modalAnimation} 'isLightTheme'`}>
       <section className={`login__container ${containerAnimation}`} ref={ref}>
-        <form
-          className="login__form"
-          action="#"
-          method="post"
-          onSubmit={handleLogin}
-        >
-          <label htmlFor="emailLogin"><b>Email</b></label>
-          <input
-            className="login__input"
-            type="email"
-            placeholder="Email"
-            name="emailLogin"
-            required
-            onChange={handleEmailChangeLogin}
-            value={emailLogin}
-          />
+        {loading
+          ? <div className="loader" />
+          : (
+            <>
+              <form
+                className="login__form"
+                action="#"
+                method="post"
+                onSubmit={handleLogin}
+              >
+                <label htmlFor="emailLogin"><b>Email</b></label>
+                <input
+                  className="login__input"
+                  type="email"
+                  placeholder="Email"
+                  name="emailLogin"
+                  required
+                  onChange={handleEmailChangeLogin}
+                  value={emailLogin}
+                />
 
-          <label htmlFor="passwordLogin"><b>Password</b></label>
-          <input
-            className="login__input"
-            type="password"
-            placeholder="Password"
-            name="passwordLogin"
-            required
-            onChange={handlePasswordChangeLogin}
-            value={passwordLogin}
-          />
+                <label htmlFor="passwordLogin"><b>Password</b></label>
+                <input
+                  className="login__input"
+                  type="password"
+                  placeholder="Password"
+                  name="passwordLogin"
+                  required
+                  onChange={handlePasswordChangeLogin}
+                  value={passwordLogin}
+                />
 
-          <button
-            className="login__submit"
-            type="submit"
-          >Login
-          </button>
-        </form>
-        <button
-          type="button"
-          className="register__login"
-          onClick={handleShowRegister}
-        >
-          Not registered ?
-        </button>
+                <button
+                  className="login__submit"
+                  type="submit"
+                >Login
+                </button>
+              </form>
+              <button
+                type="button"
+                className="register__login"
+                onClick={handleShowRegister}
+              >
+                Not registered ?
+              </button>
+            </>
+          )}
       </section>
     </div>
   );
