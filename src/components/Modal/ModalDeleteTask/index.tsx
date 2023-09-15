@@ -18,6 +18,7 @@ const ModalDeleteTask: React.FC<ModalDeleteTaskProps> = ({ handleClose, isOpen }
   const ref = useRef<HTMLDivElement>(null);
   const [containerAnimation, setContainerAnimation] = useState('pop-in');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
+  const [isLoading, setIsLoading] = useState(false);
   const themeContext = useContext(ThemeContext);
   const boardContext = useContext(BoardContext);
   const modalContext = useContext(ModalContext);
@@ -71,6 +72,7 @@ const ModalDeleteTask: React.FC<ModalDeleteTaskProps> = ({ handleClose, isOpen }
 
   const handleDeleteTask = async () => {
     if (currentTaskData._id && currentColumnData._id && currentBoardData._id) {
+      setIsLoading(true);
       const deletedTask = await deleteTask(currentBoardData._id, currentColumnData._id, currentTaskData._id);
 
       if (deletedTask) {
@@ -85,10 +87,13 @@ const ModalDeleteTask: React.FC<ModalDeleteTaskProps> = ({ handleClose, isOpen }
 
           return newBoards;
         });
-
+        setIsLoading(false);
         setContainerAnimation('pop-out');
         setModalAnimation('modal-closed');
         setTimeout(handleClose, 300);
+      }
+      else {
+        setIsLoading(false);
       }
     }
   };
@@ -116,9 +121,16 @@ const ModalDeleteTask: React.FC<ModalDeleteTaskProps> = ({ handleClose, isOpen }
             type="button"
             className="dt__button dt__button--delete"
             onClick={handleDeleteTask}
+            disabled={isLoading}
           >Delete
           </button>
-          <button type="button" className="dt__button dt__button--cancel" onClick={handleCancel}>Cancel</button>
+          <button
+            type="button"
+            className="dt__button dt__button--cancel"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
         </div>
       </section>
     </div>

@@ -20,6 +20,7 @@ const ModalAddColumn: React.FC<ModalAddColumnProps> = ({ handleClose, isOpen }) 
   const [modalAnimation, setModalAnimation] = useState('modal-open');
   const themeContext = useContext(ThemeContext);
   const boardContext = useContext(BoardContext);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedColor, setSelectedColor] = useState<string>('#f44336');
 
   const colors: string[] = [
@@ -81,6 +82,7 @@ const ModalAddColumn: React.FC<ModalAddColumnProps> = ({ handleClose, isOpen }) 
       return;
     }
     if (currentBoardData._id) {
+      setIsLoading(true);
       const newColumn = await createNewColumn(currentBoardData._id, inCreationColumn);
       if (newColumn) {
         setCurrentBoardData((prev) => {
@@ -88,7 +90,10 @@ const ModalAddColumn: React.FC<ModalAddColumnProps> = ({ handleClose, isOpen }) 
           newBoard.columns.push(newColumn);
           return newBoard;
         });
-
+        setIsLoading(false);
+      }
+      else {
+        setIsLoading(false);
       }
       setContainerAnimation('pop-out');
       setModalAnimation('modal-closed');
@@ -164,6 +169,7 @@ const ModalAddColumn: React.FC<ModalAddColumnProps> = ({ handleClose, isOpen }) 
           type="button"
           className="ac__button ac__button--create"
           onClick={handleCreateColumn}
+          disabled={isLoading}
         >
           Create New Column
         </button>

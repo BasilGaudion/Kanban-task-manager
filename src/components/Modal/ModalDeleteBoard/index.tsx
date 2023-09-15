@@ -17,6 +17,7 @@ const ModalDeleteBoard: React.FC<ModalDeleteBoardProps> = ({ handleClose, isOpen
   const [containerAnimation, setContainerAnimation] = useState('pop-in');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
   const [isDeleted, setIsDeleted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const themeContext = useContext(ThemeContext);
   const boardContext = useContext(BoardContext);
 
@@ -66,9 +67,14 @@ const ModalDeleteBoard: React.FC<ModalDeleteBoardProps> = ({ handleClose, isOpen
 
   const handleDeleteBoard = async () => {
     if (currentBoardData._id) {
+      setIsLoading(true);
       const deletedBoard = await deleteBoard(currentBoardData._id);
       if (deletedBoard) {
         setIsDeleted(true);
+        setIsLoading(false);
+      }
+      else {
+        setIsLoading(false);
       }
       setContainerAnimation('pop-out');
       setModalAnimation('modal-closed');
@@ -114,10 +120,17 @@ const ModalDeleteBoard: React.FC<ModalDeleteBoardProps> = ({ handleClose, isOpen
             type="button"
             className="db__button db__button--delete"
             onClick={handleDeleteBoard}
+            disabled={isLoading}
           >
             Delete
           </button>
-          <button type="button" className="db__button db__button--cancel" onClick={handleCancel}>Cancel</button>
+          <button
+            type="button"
+            className="db__button db__button--cancel"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
         </div>
       </section>
     </div>

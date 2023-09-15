@@ -29,6 +29,7 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
   const [isPickerVisible, setPickerVisibility] = useState(false);
   const [containerAnimation, setContainerAnimation] = useState('pop-in');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedColor, setSelectedColor] = useState<string>('');
   const boardContext = useContext(BoardContext);
 
@@ -155,6 +156,7 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
       return;
     }
     if (currentBoardData._id && currentColumnData._id) {
+      setIsLoading(true);
       const newTask = await createNewTask(currentBoardData._id, currentColumnData._id, inCreationtask);
 
       if (newTask) {
@@ -163,6 +165,10 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
           newColumn.tasks.push(newTask);
           return newColumn;
         });
+        setIsLoading(false);
+      }
+      else {
+        setIsLoading(false);
       }
       setContainerAnimation('pop-out');
       setModalAnimation('modal-closed');
@@ -276,6 +282,7 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
           type="button"
           className="at__button at__button--create"
           onClick={handleCreateTask}
+          disabled={isLoading}
         >
           Create Task
         </button>

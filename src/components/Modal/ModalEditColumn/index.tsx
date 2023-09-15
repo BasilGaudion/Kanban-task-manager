@@ -19,6 +19,7 @@ const ModalEditColumn: React.FC<ModalEditColumnProps> = ({ handleClose, isOpen }
   const ref = useRef<HTMLDivElement>(null);
   const [containerAnimation, setContainerAnimation] = useState('pop-in');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
+  const [isLoading, setIsLoading] = useState(false);
   const themeContext = useContext(ThemeContext);
   const boardContext = useContext(BoardContext);
   const modalContext = useContext(ModalContext);
@@ -87,6 +88,7 @@ const ModalEditColumn: React.FC<ModalEditColumnProps> = ({ handleClose, isOpen }
       return;
     }
     if (editingColumn._id && editingColumn && currentBoardData._id) {
+      setIsLoading(true);
       const updatedColumn = await editColumn(currentBoardData._id, editingColumn);
       if (updatedColumn) {
         setAllBoardsData((prev) => {
@@ -96,6 +98,10 @@ const ModalEditColumn: React.FC<ModalEditColumnProps> = ({ handleClose, isOpen }
           newBoards[boardIndex].columns[columnIndex] = editingColumn;
           return newBoards;
         });
+        setIsLoading(false);
+      }
+      else {
+        setIsLoading(false);
       }
       setContainerAnimation('pop-out');
       setModalAnimation('modal-closed');
@@ -187,6 +193,7 @@ const ModalEditColumn: React.FC<ModalEditColumnProps> = ({ handleClose, isOpen }
             type="button"
             className="ec__button ec__button--create"
             onClick={handleEditColumn}
+            disabled={isLoading}
           >
             Edit Column
           </button>
