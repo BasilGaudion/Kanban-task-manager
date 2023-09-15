@@ -28,6 +28,7 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
   const [isPickerVisible, setPickerVisibility] = useState(false);
   const [containerAnimation, setContainerAnimation] = useState('pop-in');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
+  const [isLoading, setIsLoading] = useState(false);
   const modalContext = useContext(ModalContext);
   const boardContext = useContext(BoardContext);
 
@@ -85,6 +86,7 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
       return;
     }
     if (editingTask._id && editingTask && currentBoardData._id && currentColumnData._id) {
+      setIsLoading(true);
       const updatedBoard = await editTask(currentBoardData._id, currentColumnData._id, editingTask);
       if (!updatedBoard) return;
 
@@ -100,6 +102,10 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
         return newBoards;
       });
       setCurrentTaskData(updatedBoard.columns.find((column: Column) => column.tasks.some((taskInColumn) => taskInColumn._id === currentTaskData._id))!.tasks.find((task: Task) => task._id === currentTaskData._id)!);
+      setIsLoading(false);
+    }
+    else {
+      setIsLoading(false);
     }
     setContainerAnimation('pop-out');
     setModalAnimation('modal-closed');
@@ -308,7 +314,14 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
               ))}
           </select>
         </div>
-        <button type="button" className="et__button et__button--create" onClick={handleEditTask}>Edit Task</button>
+        <button
+          type="button"
+          className="et__button et__button--create"
+          onClick={handleEditTask}
+          disabled={isLoading}
+        >
+          Edit Task
+        </button>
       </section>
     </div>
   );

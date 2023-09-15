@@ -17,6 +17,7 @@ const ModalEditBoard: React.FC<ModalEditBoardProps> = ({ handleClose, isOpen }) 
   const ref = useRef<HTMLDivElement>(null);
   const [containerAnimation, setContainerAnimation] = useState('pop-in');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
+  const [isLoading, setIsLoading] = useState(false);
 
   const themeContext = useContext(ThemeContext);
 
@@ -65,6 +66,7 @@ const ModalEditBoard: React.FC<ModalEditBoardProps> = ({ handleClose, isOpen }) 
 
   const handleEditBoard = async () => {
     if (editingBoard && editingBoard._id) {
+      setIsLoading(true);
       const updatedBoard = await updateBoard(editingBoard._id, editingBoard);
       if (updatedBoard) {
         setCurrentBoardData(editingBoard);
@@ -74,6 +76,10 @@ const ModalEditBoard: React.FC<ModalEditBoardProps> = ({ handleClose, isOpen }) 
           }
           return board;
         }));
+        setIsLoading(false);
+      }
+      else {
+        setIsLoading(false);
       }
       setContainerAnimation('pop-out');
       setModalAnimation('modal-closed');
@@ -170,6 +176,7 @@ const ModalEditBoard: React.FC<ModalEditBoardProps> = ({ handleClose, isOpen }) 
           type="button"
           className="eb__button eb__button--create"
           onClick={handleEditBoard}
+          disabled={isLoading}
         >
           Edit Board
         </button>

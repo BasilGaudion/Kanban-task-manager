@@ -18,6 +18,7 @@ const ModalAddBoard: React.FC<ModalAddBoardProps> = ({ handleClose, isOpen }) =>
   const ref = useRef<HTMLDivElement>(null);
   const [containerAnimation, setContainerAnimation] = useState('pop-in');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
+  const [isLoading, setIsLoading] = useState(false);
   const boardContext = useContext(BoardContext);
 
   if (!boardContext) {
@@ -76,10 +77,15 @@ const ModalAddBoard: React.FC<ModalAddBoardProps> = ({ handleClose, isOpen }) =>
       });
       return;
     }
+    setIsLoading(true);
     const newBoard = await createNewBoard(inCreationBoard);
     if (newBoard) {
       setCurrentBoardData(newBoard);
       setAllBoardsData([...allBoardsData, newBoard]);
+      setIsLoading(false);
+    }
+    else {
+      setIsLoading(false);
     }
     handleClose();
   };
@@ -172,6 +178,7 @@ const ModalAddBoard: React.FC<ModalAddBoardProps> = ({ handleClose, isOpen }) =>
           type="button"
           className="ab__button ab__button--create"
           onClick={handleCreateBoard}
+          disabled={isLoading}
         >Create New Board
         </button>
       </section>

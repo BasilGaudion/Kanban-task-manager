@@ -16,6 +16,7 @@ const ModalDeleteColumn: React.FC<ModalDeleteColumnProps> = ({ handleClose, isOp
   const ref = useRef<HTMLDivElement>(null);
   const [containerAnimation, setContainerAnimation] = useState('pop-in');
   const [modalAnimation, setModalAnimation] = useState('modal-open');
+  const [isLoading, setIsLoading] = useState(false);
   const themeContext = useContext(ThemeContext);
   const boardContext = useContext(BoardContext);
   const modalContext = useContext(ModalContext);
@@ -73,6 +74,7 @@ const ModalDeleteColumn: React.FC<ModalDeleteColumnProps> = ({ handleClose, isOp
 
   const handleDeleteColumn = async () => {
     if (currentBoardData._id && currentColumnData._id) {
+      setIsLoading(true);
       const deletedColumn = await deleteColumn(currentBoardData._id, currentColumnData._id);
       if (deletedColumn) {
         setAllBoardsData((prev) => {
@@ -81,6 +83,10 @@ const ModalDeleteColumn: React.FC<ModalDeleteColumnProps> = ({ handleClose, isOp
           newBoards[boardIndex].columns = newBoards[boardIndex].columns.filter((column) => column._id !== currentColumnData._id);
           return newBoards;
         });
+        setIsLoading(false);
+      }
+      else {
+        setIsLoading(false);
       }
       setContainerAnimation('pop-out');
       setModalAnimation('modal-closed');
@@ -111,10 +117,17 @@ const ModalDeleteColumn: React.FC<ModalDeleteColumnProps> = ({ handleClose, isOp
             type="button"
             className="dc__button dc__button--delete"
             onClick={handleDeleteColumn}
+            disabled={isLoading}
           >
             Delete
           </button>
-          <button type="button" className="dc__button dc__button--cancel" onClick={handleCancel}>Cancel</button>
+          <button
+            type="button"
+            className="dc__button dc__button--cancel"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
         </div>
       </section>
     </div>
