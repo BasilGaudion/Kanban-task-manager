@@ -58,6 +58,7 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
   const handleColorSet = (color: ColorResult) => {
     setSelectedColor(color.hex);
     setInCreationTask((prev) => ({ ...prev!, color: color.hex }));
+    setPickerVisibility(false);
   };
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -176,6 +177,12 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
     }
   };
 
+  const handleRemoveColor = () => {
+    setSelectedColor('');
+    setInCreationTask((prev) => ({ ...prev!, color: '' }));
+    setPickerVisibility(false);
+  };
+
   return (
     <div className={`at ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
       <section className={`at__container ${containerAnimation}`} ref={ref}>
@@ -198,6 +205,7 @@ const ModalAddTask: React.FC<ModalAddTaskProps> = ({ handleClose, isOpen }) => {
               colors={colors}
               onChangeComplete={handleColorSet}
             />
+            <p className="at__delete-color" onClick={handleRemoveColor}>Remove color</p>
           </div>
         </div>
         <div className="at__title-group">

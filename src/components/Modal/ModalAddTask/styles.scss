@@ -32,6 +32,19 @@
         }
     }
 
+    &__delete-color {
+        margin-top: 10px;
+        text-align: center;
+        color: var(--title);
+        transition: color 0.2s ease;
+        cursor: pointer;
+
+        &:hover {
+            color: var(--main-purple, #635FC7);
+        }
+
+    }
+
     &__color {
         min-width: 22px;
         height: 22px;

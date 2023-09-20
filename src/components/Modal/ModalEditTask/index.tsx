@@ -150,6 +150,7 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
   const handleColorSet = (color: ColorResult) => {
     setSelectedColor(color.hex);
     setEditingTask((prev) => ({ ...prev!, color: color.hex }));
+    setPickerVisibility(false);
   };
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -213,6 +214,12 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
     }));
   };
 
+  const handleRemoveColor = () => {
+    setSelectedColor('');
+    setEditingTask((prev) => ({ ...prev!, color: '' }));
+    setPickerVisibility(false);
+  };
+
   return (
     <div className={`et ${modalAnimation} ${isDarkTheme ? 'isDarkTheme' : 'isLightTheme'}`}>
       <section className={`et__container ${containerAnimation}`} ref={ref}>
@@ -234,6 +241,7 @@ const ModalEditTask: React.FC<ModalEditTaskProps> = ({ handleClose, isOpen }) =>
               colors={colors}
               onChangeComplete={handleColorSet}
             />
+            <p className="et__delete-color" onClick={handleRemoveColor}>Remove color</p>
           </div>
         </div>
         <div className="et__title-group">
