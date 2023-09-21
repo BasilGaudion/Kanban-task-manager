@@ -120,16 +120,6 @@ const Register: React.FC<RegisterProps> = ({ handleClose, isOpen }) => {
 
     const success = await signIn({ email, password });
     if (success !== null) {
-      toast.success('You are registered !', {
-        position: 'top-right',
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'colored',
-      });
       setLoading(false);
       handleShowLogin();
     }

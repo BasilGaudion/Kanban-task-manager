@@ -65,6 +65,18 @@ export const useUserProvider = (): IUserContext => {
         email: userData.email,
         password: userData.password,
       });
+      if (response.data) {
+        toast.success('You are registered !', {
+          position: 'top-right',
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'colored',
+        });
+      }
       return response.data;
     }
     catch (error) {
