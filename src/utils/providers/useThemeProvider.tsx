@@ -1,4 +1,3 @@
-// useModalProvider.tsx
 import React, { useState, createContext } from 'react';
 
 interface IThemeContext {
@@ -9,7 +8,10 @@ interface IThemeContext {
 export const ThemeContext = createContext<IThemeContext | undefined>(undefined);
 
 export const useThemeProvider = (): IThemeContext => {
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(() => {
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme ? savedTheme === 'dark' : false;
+  });
 
   return {
     isDarkTheme,

@@ -19,6 +19,7 @@
         font-weight: 700;
         line-height: normal;
         transition: color 0.2s ease;
+        overflow-wrap: break-word;
     }
 
     &:hover &__title {

@@ -8,8 +8,8 @@ import 'react-toastify/dist/ReactToastify.css';
 interface IUserContext {
   isConnected: boolean;
   setIsConnected: React.Dispatch<React.SetStateAction<boolean>>;
-  token: string | null; // Explicitly allow null
-  setToken: React.Dispatch<React.SetStateAction<string | null>>; // Explicitly allow null
+  token: string | null;
+  setToken: React.Dispatch<React.SetStateAction<string | null>>;
   login: (userData: { emailLogin: string; passwordLogin: string }) => void;
   signIn: (userData: { email: string; password: string }) => void;
   logout: () => void;
@@ -68,7 +68,16 @@ export const useUserProvider = (): IUserContext => {
       return response.data;
     }
     catch (error) {
-      return false;
+      toast.error('This email already exist', {
+        position: 'top-right',
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
     }
   };
 
